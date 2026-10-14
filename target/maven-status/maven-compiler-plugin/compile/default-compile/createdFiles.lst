@@ -1,7 +1,6 @@
 com\floreantpos\model\ShopTableStatus.class
 com\floreantpos\model\PaymentType$1.class
 com\floreantpos\ui\TicketListView$2.class
-com\floreantpos\model\DiscountType.class
 com\floreantpos\report\CustomPaymentReportView.class
 com\floreantpos\swing\ScrollableFlowPanel$ScrollableFlowLayout.class
 com\floreantpos\ui\views\OrderInfoDialog$2.class
@@ -29,7 +28,6 @@ com\floreantpos\model\KitchenTicket.class
 com\floreantpos\util\DiscountUtil$2.class
 com\floreantpos\ui\ticket\TicketItemRowCreator.class
 com\floreantpos\swing\ButtonUI.class
-com\floreantpos\ui\views\payment\ManualCardEntryDialog$3.class
 com\floreantpos\ui\views\CookingInstructionSelectionView$3.class
 com\floreantpos\ui\views\payment\PaymentView$6.class
 com\floreantpos\ui\forms\CustomerForm$1.class
@@ -112,7 +110,6 @@ com\floreantpos\Messages$1.class
 com\floreantpos\ui\model\PizzaItemForm$10.class
 com\floreantpos\model\dao\DeliveryInstructionDAO.class
 com\floreantpos\model\PizzaPrice.class
-com\floreantpos\ui\views\order\actions\OtherViewListener.class
 com\floreantpos\ui\dialog\DiscountListDialog$1.class
 com\floreantpos\ui\views\payment\GroupPaymentView$9.class
 com\floreantpos\model\dao\TicketItemDAO.class
@@ -160,7 +157,6 @@ com\floreantpos\ui\views\order\OrderView$1.class
 com\floreantpos\ui\views\order\modifier\TicketItemModifierTableView.class
 com\floreantpos\model\base\BaseVoidReason.class
 com\floreantpos\model\base\BaseInventoryLocation.class
-com\floreantpos\util\ShiftException.class
 com\floreantpos\report\MenuUsageReportView.class
 com\floreantpos\model\dao\BaseRestaurantDAO.class
 com\floreantpos\ui\views\LoginView.class
@@ -175,7 +171,6 @@ com\floreantpos\report\SalesExceptionReport$DiscountTableModel.class
 com\floreantpos\swing\event\KeypadEvent.class
 com\floreantpos\model\Ticket$1.class
 com\floreantpos\model\OrderType.class
-com\floreantpos\ui\dialog\DateChoserDialog$3.class
 com\floreantpos\ui\views\order\multipart\PizzaModifierSelectionDialog$2.class
 com\floreantpos\ui\model\MenuGroupForm$2.class
 com\floreantpos\util\DateTimePicker.class
@@ -192,7 +187,6 @@ com\floreantpos\report\InventoryOnHandReportView$1.class
 com\floreantpos\model\base\BaseCardTransaction.class
 com\floreantpos\model\base\BaseOrderType.class
 com\floreantpos\swing\ScrollableFlowPanel.class
-com\floreantpos\report\CustomPaymentReportModel.class
 com\floreantpos\ui\views\payment\MercuryPayProcessor.class
 com\floreantpos\model\dao\InventoryMetaCodeDAO.class
 com\floreantpos\dal\PosSessionFactory.class
@@ -216,7 +210,6 @@ com\floreantpos\model\base\BaseInventoryUnit.class
 com\jstatcom\component\CardPanel.class
 com\floreantpos\main\SetUpWindow.class
 com\floreantpos\model\dao\BaseCookingInstructionDAO.class
-com\floreantpos\ui\dialog\TicketItemDiscountSelectionDialog$TicketItemButton.class
 com\floreantpos\ui\tableselection\TableSelector.class
 com\floreantpos\model\TicketItem$PIZZA_SECTION_MODE.class
 com\floreantpos\swing\QwertyKeyPad$1.class
@@ -239,7 +232,6 @@ com\floreantpos\report\SalesBalanceReport.class
 com\floreantpos\model\dao\BaseTableBookingInfoDAO.class
 com\floreantpos\swing\MessageDialog.class
 com\floreantpos\model\dao\BaseMenuModifierDAO.class
-com\floreantpos\ui\dialog\GuestCheckTktFirstOpenDialog$2.class
 com\floreantpos\ui\model\ModifierPriceByOrderTypeDialog$2.class
 com\floreantpos\model\dao\BaseUserTypeDAO.class
 com\floreantpos\ui\TitlePanel.class
@@ -318,7 +310,6 @@ com\floreantpos\model\TipsCashoutReport.class
 com\floreantpos\ui\dialog\DiscountSelectionDialog.class
 com\floreantpos\ui\model\CouponForm$1.class
 com\floreantpos\model\dao\TicketDiscountDAO.class
-com\floreantpos\ui\dialog\GuestCheckTktFirstOpenDialog$1.class
 com\floreantpos\model\dao\BasePizzaPriceDAO.class
 com\floreantpos\model\TransactionType.class
 com\floreantpos\model\TicketItemCookingInstruction.class
@@ -343,7 +334,6 @@ com\floreantpos\model\dao\CashDrawerResetHistoryDAO.class
 com\floreantpos\ui\dialog\ManagerDialog$5.class
 com\floreantpos\ui\model\MenuCategoryForm$1.class
 com\floreantpos\model\CashDropTransaction.class
-com\floreantpos\model\dao\SalesSummaryDAO.class
 com\floreantpos\model\base\BaseMenuGroup.class
 com\floreantpos\ui\views\LoginView$2.class
 com\floreantpos\model\dao\BaseModifierMultiplierPriceDAO.class
@@ -402,7 +392,6 @@ com\floreantpos\model\MenuItemShift.class
 com\floreantpos\report\SalesReport$1.class
 com\floreantpos\ui\views\NumberSelectionView.class
 com\floreantpos\config\ui\PrintConfigurationView$1.class
-com\floreantpos\report\InventoryOnHandReportModel.class
 com\floreantpos\report\JournalReportView.class
 com\floreantpos\report\SalesStatistics$ShiftwiseSalesTableData.class
 com\floreantpos\ui\views\OrderInfoDialog$4.class
@@ -411,7 +400,6 @@ com\floreantpos\ui\dialog\UserListDialog$1.class
 com\floreantpos\customer\DefaultCustomerListView$9.class
 com\floreantpos\ui\views\order\OrderController.class
 com\floreantpos\ui\views\payment\AuthorizationDialog$1.class
-com\mercurypay\ws\sdk\MercuryResponse.class
 com\floreantpos\customer\DefaultCustomerListView$3.class
 com\floreantpos\swing\OrderTypeButton.class
 com\floreantpos\model\dao\BaseVoidReasonDAO.class
@@ -428,7 +416,6 @@ com\floreantpos\ui\views\order\modifier\ModifierViewerTableCellRenderer.class
 com\floreantpos\model\dao\DiscountDAO.class
 com\floreantpos\ui\dialog\DrawerPullReportDialog$2.class
 com\floreantpos\ui\BookingBeanEditor.class
-com\floreantpos\ui\views\payment\ManualCardEntryDialog$1.class
 com\floreantpos\model\base\BaseDebitCardTransaction.class
 com\floreantpos\model\dao\DrawerPullReportDAO.class
 com\floreantpos\ui\views\PayOutView$3.class
@@ -458,7 +445,6 @@ com\floreantpos\ui\model\PizzaItemForm$4.class
 com\floreantpos\ui\dialog\TableSelectionView$1.class
 com\floreantpos\ui\views\order\modifier\ModifierView$MultiplierButton.class
 com\floreantpos\ui\views\SwitchboardView.class
-com\floreantpos\swing\TouchScrollHandler.class
 com\floreantpos\model\PizzaModifierPrice.class
 com\floreantpos\ui\views\payment\PaymentView$10.class
 com\floreantpos\ui\dialog\POSBackofficeDialog.class
@@ -482,11 +468,9 @@ com\floreantpos\demo\KitchenTicketView$4.class
 com\floreantpos\ui\model\PizzaItemForm$1.class
 com\floreantpos\model\InventoryUnit.class
 com\floreantpos\ui\dialog\MultiCurrencyTenderDialog.class
-com\floreantpos\extension\InventoryPlugin.class
 com\floreantpos\ui\views\SwitchboardOtherFunctionsDialog.class
 com\floreantpos\ui\ticket\MultiLineTableCellRenderer.class
 com\floreantpos\ui\views\order\OrderTypeSelectionDialog$2.class
-com\floreantpos\ui\views\payment\AuthorizeDotNetProcessor.class
 com\floreantpos\model\dao\BaseMenuGroupDAO.class
 com\floreantpos\swing\TitledView.class
 com\floreantpos\ui\views\actions\SwitchboardListener.class
@@ -542,7 +526,6 @@ com\floreantpos\ui\views\order\multipart\PizzaModifierSelectionDialog.class
 com\floreantpos\ui\tableselection\TableSelectorDialog.class
 com\floreantpos\model\dao\ShopTableTypeDAO.class
 com\floreantpos\ui\views\payment\CustomPaymentSelectionDialog$1.class
-com\floreantpos\ui\views\payment\ManualCardEntryDialog$4.class
 com\floreantpos\model\dao\PayoutRecepientDAO.class
 com\floreantpos\ui\dialog\PasswordEntryDialog$6.class
 com\floreantpos\ui\views\payment\GroupSettleTicketDialog$1.class
@@ -570,6 +553,7 @@ com\floreantpos\ui\views\payment\PaymentView$3.class
 com\floreantpos\report\SalesAnalysisReportModel$SalesAnalysisData.class
 com\floreantpos\ui\model\ShiftEntryDialog$3.class
 com\floreantpos\ui\views\payment\SplitedTicketSelectionDialog$3.class
+com\floreantpos\config\ui\DatabaseConfigurationDialog$1.class
 com\floreantpos\ui\views\LoginPasswordEntryView$1.class
 com\floreantpos\model\base\BaseGuestCheckPrint.class
 com\floreantpos\customer\DefaultCustomerListView.class
@@ -577,7 +561,6 @@ com\floreantpos\model\dao\ModifierDAO.class
 com\floreantpos\ui\views\OrderInfoDialog.class
 com\floreantpos\model\UserType.class
 com\floreantpos\ui\dialog\LicenseDialog.class
-com\floreantpos\report\PayrollReportModel.class
 com\floreantpos\ui\views\payment\PaymentView$8.class
 com\floreantpos\report\ServerProductivityReportView.class
 com\floreantpos\ui\dialog\PasswordEntryDialog$2.class
@@ -594,7 +577,6 @@ com\floreantpos\model\dao\BaseCurrencyDAO.class
 com\floreantpos\util\IntegerIdGenerator.class
 com\floreantpos\ui\views\order\multipart\PizzaModifierView.class
 com\floreantpos\ui\views\CashierSwitchBoardView.class
-com\floreantpos\ui\views\order\CashierModeNextActionDialog.class
 com\floreantpos\util\PanelTester.class
 com\floreantpos\model\dao\BaseInventoryVendorDAO.class
 com\floreantpos\ui\views\payment\PaymentView$7.class
@@ -640,7 +622,6 @@ com\floreantpos\demo\KitchenTicketView$KitchenTicketTableModel.class
 com\floreantpos\ui\views\order\OrderView$7.class
 com\floreantpos\ui\views\SwitchboardOtherFunctionsView$1.class
 com\floreantpos\ui\dialog\AutomatedWeightInputDialog$1.class
-com\floreantpos\ui\dialog\GuestCheckTktFirstOpenDialog.class
 com\floreantpos\extension\OrderServiceFactory.class
 com\floreantpos\model\dao\BaseTicketItemModifierDAO.class
 com\floreantpos\swing\POSTextField.class
@@ -696,6 +677,7 @@ com\floreantpos\ui\model\PizzaItemForm$7.class
 com\floreantpos\model\base\BaseInventoryVendor.class
 com\floreantpos\report\service\ReportService.class
 com\floreantpos\model\base\BaseInventoryItem.class
+com\floreantpos\config\ui\DatabaseConfigurationDialog.class
 com\floreantpos\model\base\BaseDiscount.class
 com\floreantpos\swing\PosUIManager.class
 com\floreantpos\report\JournalReportModel$JournalReportTableModel.class
@@ -711,7 +693,6 @@ com\floreantpos\ui\TicketListView$TaskLastUpdateCheck.class
 com\floreantpos\swing\CheckBoxList.class
 com\floreantpos\ui\OrderFilterPanel.class
 com\floreantpos\ui\views\order\OrderView$13.class
-com\floreantpos\ui\dialog\DateChoserDialog$4.class
 com\floreantpos\ui\model\PizzaItemPriceDialog$1.class
 com\floreantpos\ui\dialog\BeanEditorDialog$2.class
 com\floreantpos\ui\dialog\SelectCookongInstructionDialog.class
@@ -752,7 +733,6 @@ com\floreantpos\model\dao\PayOutTransactionDAO.class
 com\floreantpos\model\dao\ZipCodeVsDeliveryChargeDAO.class
 com\floreantpos\model\dao\CardTransactionDAO.class
 com\floreantpos\model\Ticket.class
-com\floreantpos\ui\views\payment\ManualCardEntryDialog$2.class
 com\floreantpos\ui\views\SplitTicketDialog$4.class
 com\floreantpos\model\dao\BaseInventoryLocationDAO.class
 com\floreantpos\model\dao\_BaseRootDAO$TransactionRunnable.class
@@ -828,6 +808,7 @@ com\floreantpos\model\DrawerPullVoidTicketEntry.class
 com\floreantpos\ui\views\LoginView$1.class
 com\floreantpos\demo\KitchenFilterDialog.class
 com\floreantpos\ui\model\MenuModifierForm.class
+com\floreantpos\config\ui\DatabaseConfigurationView$1.class
 com\floreantpos\swing\TransparentPanelUI.class
 com\mercurypay\ws\sdk\MercuryWebRequest.class
 com\floreantpos\model\dao\ShopTableDAO.class
@@ -888,11 +869,9 @@ com\floreantpos\swing\PaginatedTableModel.class
 com\floreantpos\report\PayrollReportData.class
 com\floreantpos\ui\tableselection\TableSelectorFactory.class
 com\floreantpos\ui\dialog\DiscountSelectionDialog$2.class
-com\floreantpos\report\AttendanceReportModel.class
 com\floreantpos\ui\views\order\OrderView$9.class
 com\floreantpos\util\TicketAlreadyExistsException.class
 com\floreantpos\model\TerminalPrinters.class
-com\floreantpos\ui\dialog\GuestCheckTktFirstOpenDialog$3.class
 com\floreantpos\ui\views\order\modifier\ModifierGroupView$1.class
 com\floreantpos\model\dao\BaseDrawerAssignedHistoryDAO.class
 com\floreantpos\model\dao\BaseMenuItemShiftDAO.class
@@ -901,7 +880,6 @@ com\floreantpos\ui\model\PizzaItemPriceDialog$4.class
 com\floreantpos\util\DataExporter.class
 com\floreantpos\ui\views\payment\AuthorizationCodeDialog$1.class
 com\floreantpos\customer\DefaultCustomerListView$12.class
-com\floreantpos\main\Main.class
 com\floreantpos\report\PayrollReportView$LaborReportData.class
 com\floreantpos\report\SalesExceptionReport$VoidData.class
 com\floreantpos\ui\tableselection\BarTabSelectionView.class
@@ -911,7 +889,6 @@ com\floreantpos\ui\forms\CustomerForm$2.class
 com\floreantpos\ui\model\CouponForm$2.class
 com\floreantpos\ui\views\order\DefaultOrderServiceExtension.class
 com\floreantpos\model\dao\TaxGroupDAO.class
-com\floreantpos\ui\dialog\DateChoserDialog$1.class
 com\floreantpos\model\dao\BaseInventoryGroupDAO.class
 com\floreantpos\model\dao\DeliveryAddressDAO.class
 com\floreantpos\ui\model\ModifierPriceByOrderTypeDialog$1.class
@@ -962,7 +939,6 @@ com\floreantpos\model\base\BaseMenuModifier.class
 com\floreantpos\ui\dialog\AboutDialog.class
 com\floreantpos\ui\dialog\SeatSelectionDialog.class
 com\floreantpos\ui\views\order\TicketView$3.class
-com\floreantpos\report\PurchaseReportData.class
 com\floreantpos\model\dao\TerminalDAO.class
 com\floreantpos\ui\dialog\TaxSelectionDialog$1.class
 com\floreantpos\model\dao\BaseCustomPaymentDAO.class
@@ -976,6 +952,7 @@ com\floreantpos\ui\dialog\ItemSearchDialog$1.class
 com\floreantpos\model\dao\DataUpdateInfoDAO.class
 com\floreantpos\model\ShopTable.class
 com\floreantpos\util\AESencrp.class
+com\floreantpos\config\ui\DatabaseConfigurationView.class
 com\floreantpos\report\AttendanceReportData.class
 com\floreantpos\ui\views\order\modifier\ModifierView$ModifierButton.class
 com\floreantpos\ui\views\payment\SwipeCardDialog$4.class
@@ -988,7 +965,6 @@ com\floreantpos\ui\views\payment\GroupPaymentView$1.class
 com\floreantpos\bo\ui\ModelBrowser$1.class
 com\floreantpos\ui\views\order\TicketView$8.class
 com\floreantpos\model\KitchenTicket$1.class
-com\floreantpos\ui\dialog\DateChoserDialog$2.class
 com\floreantpos\swing\PaginatedListModel.class
 com\floreantpos\model\dao\BaseTicketItemDAO.class
 com\floreantpos\ui\dialog\OkCancelOptionDialog.class
@@ -1029,7 +1005,6 @@ com\floreantpos\model\base\BaseGiftCertificateTransaction.class
 com\floreantpos\model\base\BaseTicketCookingInstruction.class
 com\floreantpos\ui\TicketListView$5.class
 com\floreantpos\ui\model\MenuItemForm$ShiftTableModel.class
-com\floreantpos\report\CreditCardReportView$1.class
 com\floreantpos\table\ShowTableBrowserAction.class
 com\floreantpos\model\User.class
 com\floreantpos\model\base\BaseShopFloor.class
@@ -1082,14 +1057,12 @@ com\floreantpos\ui\ticket\TodoTicketViewerTableModel.class
 com\floreantpos\ui\views\SwitchboardView$5.class
 com\floreantpos\model\MenuGroup.class
 com\floreantpos\model\OrderFilter.class
-com\floreantpos\util\DatabaseUtil.class
 com\floreantpos\ui\forms\UserForm$1.class
 com\floreantpos\ui\views\order\OrderTypeSelectionDialog2.class
 com\floreantpos\ui\views\SwitchboardView$6.class
 com\floreantpos\model\VoidReason.class
 com\floreantpos\ui\views\order\CategoryView$CategoryButton$1.class
 com\floreantpos\model\DeliveryInstruction.class
-com\floreantpos\ui\dialog\DateChoserDialog.class
 com\floreantpos\model\util\DateUtil.class
 com\floreantpos\model\InventoryMetaCode.class
 com\floreantpos\ui\views\CookingInstructionSelectionView$1.class
@@ -1101,10 +1074,8 @@ com\floreantpos\model\base\BaseGratuity.class
 com\floreantpos\model\util\ZipCodeUtil.class
 com\floreantpos\ui\model\MenuItemForm$3.class
 com\floreantpos\model\CustomPayment.class
-com\floreantpos\report\ReceiptPrintService.class
 com\floreantpos\ui\dialog\PaymentTypeSelectionDialog.class
 com\floreantpos\model\AttendenceHistory.class
-com\floreantpos\swing\IntegerDocument.class
 com\floreantpos\ui\forms\CustomerForm$MyOwnFocusTraversalPolicy.class
 com\floreantpos\model\CustomPaymentTransaction.class
 com\floreantpos\model\base\BasePosTransaction.class
@@ -1121,7 +1092,6 @@ com\floreantpos\model\base\BaseShopFloorTemplate.class
 com\floreantpos\model\TicketDiscount.class
 com\floreantpos\demo\KitchenPrinterView.class
 com\floreantpos\ui\dialog\ComboItemSelectionDialog.class
-com\orocube\floreantpos\mqtt\service\DataServiceDao.class
 com\floreantpos\ui\dialog\GuestChkBillDialog$3.class
 com\floreantpos\report\CardReportModel.class
 com\floreantpos\ui\model\PizzaModifierPriceDialog$3.class
@@ -1140,7 +1110,6 @@ com\floreantpos\model\PizzaCrust.class
 com\floreantpos\ui\model\MenuItemForm$6.class
 com\floreantpos\report\SalesExceptionReport$VoidTableModel.class
 com\floreantpos\report\JournalReportView$1.class
-com\floreantpos\ui\dialog\TicketItemDiscountSelectionDialog.class
 com\floreantpos\ui\views\payment\AuthorizableTicketBrowser$1.class
 com\floreantpos\ui\dialog\CouponAndDiscountDialog.class
 com\floreantpos\ui\dialog\TicketDetailDialog.class
@@ -1167,7 +1136,6 @@ com\floreantpos\model\CashTransaction.class
 com\floreantpos\ui\dialog\TaxSelectionDialog$5.class
 com\orocube\floreantpos\mqtt\ui\NotificationPanel$1.class
 com\floreantpos\ui\views\payment\SwipeCardDialog$1.class
-com\floreantpos\report\CreditCardReportView.class
 com\floreantpos\ui\tableselection\DefaultTableSelectionView$2.class
 com\floreantpos\ui\views\payment\CardInputProcessor.class
 com\floreantpos\ui\model\PizzaItemForm$14.class
@@ -1219,7 +1187,6 @@ com\floreantpos\ui\views\order\multipart\PizzaModifierView$1.class
 com\floreantpos\model\DeliveryConfiguration.class
 com\floreantpos\model\dao\BaseRefundTransactionDAO.class
 com\floreantpos\ui\dialog\OkCancelOptionDialog$2.class
-com\floreantpos\dal\POSDao.class
 com\floreantpos\model\dao\BaseEmployeeInOutHistoryDAO.class
 com\floreantpos\swing\IUpdatebleView.class
 com\floreantpos\model\base\BaseDrawerPullVoidTicketEntry.class
@@ -1244,7 +1211,6 @@ com\floreantpos\model\Shift.class
 com\floreantpos\ui\dialog\OpenTicketsListDialog$2.class
 com\floreantpos\model\GlobalConfig.class
 com\floreantpos\ui\dialog\OkCancelOptionDialog$1.class
-com\floreantpos\ui\views\payment\ManualCardEntryDialog.class
 com\floreantpos\model\TableBookingInfo.class
 com\floreantpos\model\CookingInstruction.class
 com\floreantpos\ui\views\order\TicketView$5.class
