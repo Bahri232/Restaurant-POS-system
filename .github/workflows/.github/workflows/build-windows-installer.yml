@@ -1,0 +1,213 @@
+name: Build Windows Installer
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Standalone Windows Installer
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java JDK 8 (Eclipse Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'maven'
+
+      - name: Build Project with Maven
+        run: |
+          if (Test-Path "settings.xml") {
+            mvn clean package -DskipTests -B -s settings.xml
+          } else {
+            mvn clean package -DskipTests -B
+          }
+
+      - name: Prepare Distribution and Bundle Portable JRE
+        run: |
+          Write-Host "Creating distribution directories..."
+          New-Item -ItemType Directory -Force -Path "dist\App"
+          New-Item -ItemType Directory -Force -Path "dist\Installer"
+
+          Write-Host "Locating compiled JAR in target/..."
+          $appJar = Get-ChildItem -Path "target\*.jar" | Where-Object { $_.Name -notmatch "original|sources|javadoc" } | Select-Object -First 1
+          if (-not $appJar) {
+              throw "Could not locate compiled application jar in target/"
+          }
+          Write-Host "Found compiled application jar: $($appJar.FullName)"
+          Copy-Item -Path $appJar.FullName -Destination "dist\App\renesspos.jar" -Force
+
+          # Copy dependency libraries
+          if (Test-Path "lib") {
+              Write-Host "Copying lib/ from repository root..."
+              Copy-Item -Path "lib" -Destination "dist\App\" -Recurse -Force
+          } elseif (Test-Path "target\floreantpos-bin\floreantpos\lib") {
+              Write-Host "Copying lib/ from Maven assembly output..."
+              Copy-Item -Path "target\floreantpos-bin\floreantpos\lib" -Destination "dist\App\" -Recurse -Force
+          } elseif (Test-Path "target\lib") {
+              Write-Host "Copying lib/ from target\lib..."
+              Copy-Item -Path "target\lib" -Destination "dist\App\" -Recurse -Force
+          }
+
+          # Remove duplicate main app jars inside dist\App\lib to prevent classpath conflicts
+          Get-ChildItem -Path "dist\App\lib" -Filter "*floreantpos*.jar" -ErrorAction SilentlyContinue | Remove-Item -Force
+
+          # Copy plugins
+          if (Test-Path "plugins") {
+              Write-Host "Copying plugins/ from repository root..."
+              Copy-Item -Path "plugins" -Destination "dist\App\" -Recurse -Force
+          } elseif (Test-Path "target\floreantpos-bin\floreantpos\plugins") {
+              Write-Host "Copying plugins/ from Maven assembly output..."
+              Copy-Item -Path "target\floreantpos-bin\floreantpos\plugins" -Destination "dist\App\" -Recurse -Force
+          }
+
+          # Copy configuration files and templates
+          if (Test-Path "config") {
+              Write-Host "Copying config/ from repository root..."
+              Copy-Item -Path "config" -Destination "dist\App\" -Recurse -Force
+          }
+          if (Test-Path "target\floreantpos-bin\floreantpos\config") {
+              Write-Host "Merging config/ from Maven assembly output..."
+              if (-not (Test-Path "dist\App\config")) {
+                  New-Item -ItemType Directory -Force -Path "dist\App\config"
+              }
+              Copy-Item -Path "target\floreantpos-bin\floreantpos\config\*" -Destination "dist\App\config\" -Recurse -Force
+          }
+
+          # Copy Derby database folders
+          if (Test-Path "derby-db") {
+              Write-Host "Copying derby-db/ from repository root..."
+              Copy-Item -Path "derby-db" -Destination "dist\App\" -Recurse -Force
+          }
+          if (Test-Path "database") {
+              Write-Host "Copying database/ from repository root..."
+              Copy-Item -Path "database" -Destination "dist\App\" -Recurse -Force
+          } elseif (Test-Path "target\floreantpos-bin\floreantpos\database") {
+              Write-Host "Copying database/ from Maven assembly output..."
+              Copy-Item -Path "target\floreantpos-bin\floreantpos\database" -Destination "dist\App\" -Recurse -Force
+          }
+
+          # Copy i18n localization resources
+          if (Test-Path "i18n") {
+              Write-Host "Copying i18n/ from repository..."
+              Copy-Item -Path "i18n" -Destination "dist\App\" -Recurse -Force
+          }
+
+          # Copy root properties and application icons
+          Get-ChildItem -Path "." -Filter "*.properties" | ForEach-Object {
+              Copy-Item $_.FullName "dist\App\" -Force
+          }
+          if (Test-Path "resources\icons\icon.ico") {
+              Copy-Item "resources\icons\icon.ico" "dist\App\icon.ico" -Force
+          } elseif (Test-Path "images\icon.ico") {
+              Copy-Item "images\icon.ico" "dist\App\icon.ico" -Force
+          }
+
+          # Download and bundle portable OpenJDK 8 JRE for Windows x64 from Adoptium Temurin
+          $jreDownloadUrl = "https://api.adoptium.net/v3/binary/latest/8/ga/windows/x64/jre/hotspot/normal/eclipse"
+          Write-Host "Downloading portable Adoptium Temurin OpenJDK 8 JRE for Windows x64 from $jreDownloadUrl..."
+          curl.exe -L -o jre.zip $jreDownloadUrl
+          if ($LASTEXITCODE -ne 0 -or -not (Test-Path "jre.zip")) {
+              throw "Failed to download JRE from $jreDownloadUrl"
+          }
+
+          Write-Host "Extracting portable JRE..."
+          Expand-Archive -Path "jre.zip" -DestinationPath "jre_temp" -Force
+          $extractedJre = Get-ChildItem -Directory -Path "jre_temp" | Select-Object -First 1
+          if (-not $extractedJre) {
+              throw "Could not locate extracted JRE directory"
+          }
+          Move-Item -Path $extractedJre.FullName -Destination "dist\App\jre" -Force
+          Remove-Item -Recurse -Force "jre_temp", "jre.zip"
+
+          if (-not (Test-Path "dist\App\jre\bin\javaw.exe")) {
+              throw "javaw.exe not found at dist\App\jre\bin\javaw.exe"
+          }
+          Write-Host "Bundled portable JRE successfully configured at dist\App\jre"
+
+      - name: Install Inno Setup
+        run: |
+          choco install innosetup -y --no-progress
+          "C:\Program Files (x86)\Inno Setup 6" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Generate Inno Setup Script (setup.iss)
+        run: |
+          $hasIcon = Test-Path "dist\App\icon.ico"
+          $setupIconLine = if ($hasIcon) { "SetupIconFile=dist\App\icon.ico" } else { "" }
+          $iconParam = if ($hasIcon) { '; IconFilename: "{app}\icon.ico"' } else { "" }
+
+          $lines = @(
+              '[Setup]',
+              'AppName=RenessPOS',
+              'AppVersion=1.0',
+              'DefaultDirName={pf}\RenessPOS',
+              'DefaultGroupName=RenessPOS',
+              'OutputDir=dist\Installer',
+              'OutputBaseFilename=RenessPOS_Setup',
+              'Compression=lzma2',
+              'SolidCompression=yes',
+              'ArchitecturesInstallIn64BitMode=x64',
+              'DisableProgramGroupPage=yes',
+              'PrivilegesRequired=admin'
+          )
+
+          if ($setupIconLine) {
+              $lines += $setupIconLine
+          }
+
+          $lines += @(
+              '',
+              '[Tasks]',
+              'Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"',
+              '',
+              '[Files]',
+              'Source: "dist\App\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs',
+              '',
+              '[Dirs]',
+              'Name: "{app}"; Permissions: users-modify',
+              '',
+              '[Icons]',
+              ('Name: "{group}\RenessPOS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar """"{app}\renesspos.jar"""""; WorkingDir: "{app}"' + $iconParam),
+              ('Name: "{commondesktop}\RenessPOS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar """"{app}\renesspos.jar"""""; WorkingDir: "{app}"; Tasks: desktopicon' + $iconParam),
+              '',
+              '[Run]',
+              'Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar """"{app}\renesspos.jar"""""; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,RenessPOS}"; Flags: nowait postinstall skipifsilent'
+          )
+
+          $content = $lines -join "`r`n"
+          Set-Content -Path "setup.iss" -Value $content -Encoding ASCII
+          Write-Host "Generated setup.iss content:"
+          Get-Content -Path "setup.iss"
+
+      - name: Compile Windows Installer with Inno Setup
+        run: |
+          $iscc = if (Get-Command iscc.exe -ErrorAction SilentlyContinue) {
+              "iscc.exe"
+          } elseif (Test-Path "C:\Program Files (x86)\Inno Setup 6\ISCC.exe") {
+              "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          } else {
+              throw "Inno Setup Compiler (ISCC.exe) not found"
+          }
+          Write-Host "Compiling setup.iss using $iscc..."
+          & $iscc setup.iss
+
+          if (-not (Test-Path "dist\Installer\RenessPOS_Setup.exe")) {
+              throw "Installer executable not found at dist\Installer\RenessPOS_Setup.exe"
+          }
+          Write-Host "Windows Installer successfully generated: dist\Installer\RenessPOS_Setup.exe"
+
+      - name: Upload Installer Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RenessPOS_Setup
+          path: dist/Installer/RenessPOS_Setup.exe
+          if-no-files-found: error
