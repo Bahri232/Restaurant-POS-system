@@ -17,6 +17,7 @@
  */
 package com.floreantpos.util;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -74,6 +75,7 @@ import com.floreantpos.model.dao._RootDAO;
 @SuppressWarnings("deprecation")
 public class DatabaseUtil {
 	private static Log logger = LogFactory.getLog(DatabaseUtil.class);
+	public static String lastErrorMessage = null;
 
 	public static void checkConnection(String connectionString, String hibernateDialect, String hibernateConnectionDriverClass, String user, String password)
 			throws DatabaseConnectionException {
@@ -144,7 +146,40 @@ public class DatabaseUtil {
 
 	public static boolean createDatabase(String connectionString, String hibernateDialect, String hibernateConnectionDriverClass, String user, String password,
 			boolean exportSampleData) {
+		lastErrorMessage = null;
 		try {
+			if (connectionString != null && connectionString.startsWith("jdbc:derby:") && !connectionString.contains("//")) {
+				try {
+					try {
+						_RootDAO.closeSessionFactory();
+					} catch (Throwable ignored) {
+					}
+
+					String sub = connectionString;
+					int semi = sub.indexOf(';');
+					String baseDb = semi > 0 ? sub.substring(0, semi) : sub;
+					try {
+						java.sql.DriverManager.getConnection(baseDb + ";shutdown=true");
+					} catch (Throwable ignored) {
+					}
+					System.gc();
+
+					String path = baseDb.substring("jdbc:derby:".length());
+					File dbFolder = new File(path);
+					if (dbFolder.exists()) {
+						boolean deleted = deleteDirectory(dbFolder);
+						if (!deleted && dbFolder.exists()) {
+							throw new Exception("The database directory at '" + path + "' is currently locked by another running program or terminal.\nPlease close any other running instances of Floreant POS / Reness POS and try again.");
+						}
+					}
+				} catch (Exception ex) {
+					PosLog.error(DatabaseUtil.class, ex.getMessage());
+					if (ex.getMessage() != null && ex.getMessage().contains("locked by another")) {
+						throw ex;
+					}
+				}
+			}
+
 			Configuration configuration = _RootDAO.getNewConfiguration(null);
 
 			configuration = configuration.setProperty("hibernate.dialect", hibernateDialect);
@@ -493,6 +528,7 @@ public class DatabaseUtil {
 
 			return true;
 		} catch (Exception e) {
+			lastErrorMessage = e.getMessage();
 			PosLog.error(DatabaseUtil.class, e.getMessage());
 			logger.error(e);
 			return false;
@@ -573,5 +609,22 @@ public class DatabaseUtil {
 		for (Ticket ticket : list) {
 			TicketDAO.getInstance().delete(ticket);
 		}
+	}
+
+	private static boolean deleteDirectory(File dir) {
+		if (dir == null || !dir.exists()) {
+			return true;
+		}
+		File[] files = dir.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (file.isDirectory()) {
+					deleteDirectory(file);
+				} else {
+					file.delete();
+				}
+			}
+		}
+		return dir.delete();
 	}
 }

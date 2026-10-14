@@ -419,7 +419,11 @@ public class SetUpWindow extends JFrame implements ActionListener {
 					connectionSuccess = true;
 				}
 				else {
-					JOptionPane.showMessageDialog(SetUpWindow.this, Messages.getString("DatabaseConfigurationDialog.36")); //$NON-NLS-1$
+					String msg = Messages.getString("DatabaseConfigurationDialog.36");
+					if (DatabaseUtil.lastErrorMessage != null && !DatabaseUtil.lastErrorMessage.trim().isEmpty()) {
+						msg += "\n\n" + DatabaseUtil.lastErrorMessage;
+					}
+					JOptionPane.showMessageDialog(SetUpWindow.this, msg);
 				}
 			}
 			else if (SAVE.equalsIgnoreCase(command)) {

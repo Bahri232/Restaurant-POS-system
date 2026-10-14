@@ -286,7 +286,11 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 					connectionSuccess = true;
 				}
 				else {
-					JOptionPane.showMessageDialog(DatabaseConfigurationDialog.this, Messages.getString("DatabaseConfigurationDialog.36")); //$NON-NLS-1$
+					String msg = Messages.getString("DatabaseConfigurationDialog.36");
+					if (DatabaseUtil.lastErrorMessage != null && !DatabaseUtil.lastErrorMessage.trim().isEmpty()) {
+						msg += "\n\n" + DatabaseUtil.lastErrorMessage;
+					}
+					JOptionPane.showMessageDialog(DatabaseConfigurationDialog.this, msg);
 				}
 			}
 			else if (SAVE.equalsIgnoreCase(command)) {
