@@ -27,15 +27,15 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 
-public class ListComboBoxModel extends AbstractListModel implements MutableComboBoxModel, Serializable, ListDataListener {
-	private List dataList;
+public class ListComboBoxModel<E> extends AbstractListModel<E> implements MutableComboBoxModel<E>, Serializable, ListDataListener {
+	private List<E> dataList;
 	private Object selectedObject;
 
 	public ListComboBoxModel() {
-		this(new ArrayList());
+		this(new ArrayList<E>());
 	}
 
-	public ListComboBoxModel(List list) {
+	public ListComboBoxModel(List<E> list) {
 		setDataList(list);
 		
 		if (getSize() > 0) {
@@ -43,7 +43,7 @@ public class ListComboBoxModel extends AbstractListModel implements MutableCombo
 		}
 	}
 	
-	public void setDataList(List list) {
+	public void setDataList(List<E> list) {
 		dataList = list;
 	}
 
@@ -71,7 +71,7 @@ public class ListComboBoxModel extends AbstractListModel implements MutableCombo
 	}
 
 	// implements javax.swing.ListModel
-	public Object getElementAt(int index) {
+	public E getElementAt(int index) {
 		if (index >= 0 && index < dataList.size())
 			return dataList.get(index);
 		else
@@ -90,7 +90,7 @@ public class ListComboBoxModel extends AbstractListModel implements MutableCombo
 	}
 
 	// implements javax.swing.MutableComboBoxModel
-	public void addElement(Object anObject) {
+	public void addElement(E anObject) {
 		dataList.add(anObject);
 		fireIntervalAdded(this, dataList.size() - 1, dataList.size() - 1);
 		if (dataList.size() == 1 && selectedObject == null && anObject != null) {
@@ -99,7 +99,7 @@ public class ListComboBoxModel extends AbstractListModel implements MutableCombo
 	}
 
 	// implements javax.swing.MutableComboBoxModel
-	public void insertElementAt(Object anObject, int index) {
+	public void insertElementAt(E anObject, int index) {
 		dataList.add(index, anObject);
 		fireIntervalAdded(this, index, index);
 	}

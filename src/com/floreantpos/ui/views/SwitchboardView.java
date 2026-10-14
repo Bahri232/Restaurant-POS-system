@@ -154,14 +154,17 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 	private void initComponents() {
 		setLayout(new java.awt.BorderLayout(10, 10));
 
-		javax.swing.JPanel centerPanel = new javax.swing.JPanel(new java.awt.BorderLayout(5, 5));
-		javax.swing.JPanel ticketsAndActivityPanel = new javax.swing.JPanel(new java.awt.BorderLayout(5, 5));
+		javax.swing.JPanel centerPanel = new javax.swing.JPanel(new java.awt.BorderLayout(10, 10));
+		javax.swing.JPanel ticketsAndActivityPanel = new javax.swing.JPanel(new java.awt.BorderLayout(10, 10));
 
-		ticketsListPanelBorder = BorderFactory.createTitledBorder(null, POSConstants.OPEN_TICKETS_AND_ACTIVITY, TitledBorder.CENTER,
-				TitledBorder.DEFAULT_POSITION);
+		lblTicketsAndActivity = new javax.swing.JLabel(POSConstants.OPEN_TICKETS_AND_ACTIVITY, javax.swing.JLabel.CENTER);
+		lblTicketsAndActivity.setFont(new java.awt.Font(lblTicketsAndActivity.getFont().getName(), java.awt.Font.BOLD, 16));
+		lblTicketsAndActivity.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-		ticketsAndActivityPanel.setBorder(new CompoundBorder(ticketsListPanelBorder, new EmptyBorder(2, 2, 2, 2)));
+		ticketsAndActivityPanel.setBorder(new CompoundBorder(BorderFactory.createLineBorder(java.awt.Color.decode("#D1D5DB"), 1), new EmptyBorder(5, 5, 5, 5)));
+		ticketsAndActivityPanel.setBackground(java.awt.Color.WHITE);
 
+		ticketsAndActivityPanel.add(lblTicketsAndActivity, java.awt.BorderLayout.NORTH);
 		ticketsAndActivityPanel.add(ticketList, java.awt.BorderLayout.CENTER);
 
 		JPanel activityPanel = createActivityPanel();
@@ -182,11 +185,12 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 		centerPanel.add(ticketsAndActivityPanel, java.awt.BorderLayout.CENTER);
 
-		JPanel rightPanel = new JPanel(new BorderLayout(20, 20));
-		TitledBorder titledBorder2 = BorderFactory.createTitledBorder(null, "-", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION); //$NON-NLS-1$
-		rightPanel.setBorder(new CompoundBorder(titledBorder2, new EmptyBorder(2, 2, 6, 2)));
+		JPanel rightPanel = new JPanel(new BorderLayout(10, 10));
+		rightPanel.setBorder(new CompoundBorder(BorderFactory.createLineBorder(java.awt.Color.decode("#D1D5DB"), 1), new EmptyBorder(10, 10, 10, 10)));
+		rightPanel.setBackground(java.awt.Color.WHITE);
 
-		orderPanel = new JPanel(new MigLayout("ins 2 2 0 2, fill, hidemode 3, flowy", "fill, grow", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		orderPanel = new JPanel(new MigLayout("ins 10, fill, hidemode 3, flowy, gapy 10", "fill, grow", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		orderPanel.setOpaque(false);
 
 		rendererOrderPanel();
 
@@ -789,7 +793,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 	//private PosBlinkButton btnRefreshTicketList = new PosBlinkButton(Messages.getString(Messages.getString("SwitchboardView.21"))); //NON-NLS-1$ //$NON-NLS-1$
 
 	private com.floreantpos.ui.TicketListView ticketList = new com.floreantpos.ui.TicketListView();
-	private TitledBorder ticketsListPanelBorder;
+	private javax.swing.JLabel lblTicketsAndActivity;
 	private JPanel innerActivityPanel;
 
 	@Override
@@ -864,7 +868,9 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		String orderTypeFilter = TerminalConfig.getOrderTypeFilter();
 		String title = POSConstants.OPEN_TICKETS_AND_ACTIVITY + " [ FILTERS: " + paymentStatusFilter + ", " + orderTypeFilter + " ]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		ticketsListPanelBorder.setTitle(title);
+		if (lblTicketsAndActivity != null) {
+			lblTicketsAndActivity.setText(title);
+		}
 
 	}
 

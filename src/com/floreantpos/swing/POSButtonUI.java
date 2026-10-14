@@ -48,15 +48,24 @@ public class POSButtonUI extends PlasticButtonUI {
 				g.fillRect(0, 0, c.getWidth(), c.getHeight());
 
 				if (is3D(b)) {
-					Color color1 = c.getBackground();// UIManager.getColor("control");
-					Color color2 = color1.brighter();
+					Color color1 = java.awt.Color.decode("#B8731A"); // Warm Amber
+					Color color2 = java.awt.Color.decode("#E5A01E"); // Gold
+					
+					// Keep original background if explicitly colored (not a UIResource)
+					if (c.getBackground() != null && !(c.getBackground() instanceof javax.swing.plaf.UIResource)) {
+						color1 = c.getBackground();
+						color2 = color1.brighter();
+					} else {
+						// Crisp high-contrast text for Amber gradient
+						c.setForeground(java.awt.Color.decode("#3D1E06")); // Deep bronze
+					}
 					
 					int x = 0;
 					int y = 0;
 					int width = c.getWidth();
 					int height = c.getHeight();
 					
-					GradientPaint gp = new GradientPaint(x, y, color2, width - 2, height - 2 , color1, true);
+					GradientPaint gp = new GradientPaint(x, y, color2, x, height, color1, true); // vertical gradient
 					Graphics2D g2 = (Graphics2D) g;
 					g2.setPaint(gp);
 					g2.fillRect(x, y, width, height);

@@ -56,7 +56,7 @@ public class ServerTipsAction extends PosAction {
 			JXDatePicker toDatePicker = UiUtil.getCurrentMonthEnd();
 
 			panel.add(new JLabel(com.floreantpos.POSConstants.SELECT_USER + ":"), "grow"); //$NON-NLS-1$ //$NON-NLS-2$
-			JComboBox userCombo = new JComboBox(new ListComboBoxModel(users));
+			JComboBox<User> userCombo = new JComboBox<User>(new ListComboBoxModel<User>(users));
 			panel.add(userCombo, "grow, wrap"); //$NON-NLS-1$
 			panel.add(new JLabel(com.floreantpos.POSConstants.FROM + ":"), "grow"); //$NON-NLS-1$ //$NON-NLS-2$
 			panel.add(fromDatePicker, "wrap"); //$NON-NLS-1$

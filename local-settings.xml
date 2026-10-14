@@ -1,0 +1,1 @@
+<settings><mirrors><mirror><id>maven-default-http-blocker</id><mirrorOf>dummy</mirrorOf><name>Dummy mirror to override default HTTP blocker</name><url>http://0.0.0.0/</url><blocked>true</blocked></mirror></mirrors></settings>

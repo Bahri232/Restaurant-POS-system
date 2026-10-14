@@ -62,8 +62,8 @@ public class GroupPaymentView extends JPanel {
 
 	private com.floreantpos.swing.PosButton btnCancel;
 	private com.floreantpos.swing.PosButton btnCash;
-	private com.floreantpos.swing.PosButton btnCreditCard;
-	private com.floreantpos.swing.PosButton btnGift;
+	private com.floreantpos.swing.PosButton btnOrangeMoney;
+	private com.floreantpos.swing.PosButton btnAfriMoney;
 	private com.floreantpos.swing.PosButton btnOther;
 
 	private com.floreantpos.swing.TransparentPanel calcButtonPanel;
@@ -408,19 +408,19 @@ public class GroupPaymentView extends JPanel {
 			}
 		});
 
-		btnCreditCard = new PosButton(Messages.getString("PaymentView.33")); //$NON-NLS-1$
-		actionButtonPanel.add(btnCreditCard, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$ 
-		btnCreditCard.addActionListener(new ActionListener() {
+		btnOrangeMoney = new PosButton("ORANGE MONEY"); //$NON-NLS-1$
+		actionButtonPanel.add(btnOrangeMoney, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$ 
+		btnOrangeMoney.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				groupSettleTicketView.doGroupSettle(PaymentType.CREDIT_CARD);
+				groupSettleTicketView.doGroupSettle(PaymentType.ORANGE_MONEY);
 			}
 		});
 
-		btnGift = new PosButton(Messages.getString("PaymentView.35")); //$NON-NLS-1$
-		actionButtonPanel.add(btnGift, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$ 
-		btnGift.addActionListener(new ActionListener() {
+		btnAfriMoney = new PosButton("AFRIMONEY"); //$NON-NLS-1$
+		actionButtonPanel.add(btnAfriMoney, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$ 
+		btnAfriMoney.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				groupSettleTicketView.doGroupSettle(PaymentType.GIFT_CERTIFICATE);
+				groupSettleTicketView.doGroupSettle(PaymentType.AFRIMONEY);
 			}
 		});
 

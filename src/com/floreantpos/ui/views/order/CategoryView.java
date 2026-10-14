@@ -188,10 +188,61 @@ public class CategoryView extends SelectionView implements ActionListener {
 
 	private static class CategoryButton extends POSToggleButton {
 		MenuCategory foodCategory;
+		private boolean isHovered = false;
 
 		CategoryButton(CategoryView view, MenuCategory menuCategory) {
 			updateView(menuCategory);
 			addActionListener(view);
+			
+			setMargin(new java.awt.Insets(8, 8, 8, 8));
+			setOpaque(false);
+			setContentAreaFilled(false);
+			setFocusPainted(false);
+			setBorderPainted(false);
+			
+			addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseEntered(java.awt.event.MouseEvent e) {
+					isHovered = true;
+					repaint();
+				}
+				public void mouseExited(java.awt.event.MouseEvent e) {
+					isHovered = false;
+					repaint();
+				}
+			});
+		}
+		
+		@Override
+		protected void paintComponent(java.awt.Graphics g) {
+			java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+			g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+			
+			// Shadow
+			g2.setColor(new java.awt.Color(0, 0, 0, 35));
+			g2.fillRoundRect(3, 3, getWidth() - 4, getHeight() - 4, 10, 10);
+			
+			// Background
+			if (isSelected() || isHovered) {
+				g2.setColor(java.awt.Color.decode("#B8731A")); // Warm Amber
+			} else {
+				g2.setColor(getBackground() != null ? getBackground() : java.awt.Color.WHITE);
+			}
+			g2.fillRoundRect(0, 0, getWidth() - 4, getHeight() - 4, 10, 10);
+			
+			super.paintComponent(g);
+			g2.dispose();
+		}
+		
+		@Override
+		protected void paintBorder(java.awt.Graphics g) {
+			if (isSelected() || isHovered) {
+				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setColor(java.awt.Color.decode("#E5A01E")); // Gold border
+				g2.setStroke(new java.awt.BasicStroke(1.5f));
+				g2.drawRoundRect(0, 0, getWidth() - 5, getHeight() - 5, 10, 10);
+				g2.dispose();
+			}
 		}
 
 		public void updateView(MenuCategory menuCategory) {

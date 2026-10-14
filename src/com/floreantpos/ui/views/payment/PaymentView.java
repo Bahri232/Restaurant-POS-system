@@ -71,9 +71,8 @@ public class PaymentView extends JPanel {
 	private com.floreantpos.swing.PosButton btnCancel;
 	private com.floreantpos.swing.PosButton btnCash;
 	private com.floreantpos.swing.PosButton btnPrint;
-	private com.floreantpos.swing.PosButton btnCreditCard;
-	private com.floreantpos.swing.PosButton btnDebitCard;
-	private com.floreantpos.swing.PosButton btnGift;
+	private com.floreantpos.swing.PosButton btnOrangeMoney;
+	private com.floreantpos.swing.PosButton btnAfriMoney;
 	private com.floreantpos.swing.PosButton btnOther;
 
 	private com.floreantpos.swing.TransparentPanel calcButtonPanel;
@@ -448,12 +447,12 @@ public class PaymentView extends JPanel {
 			}
 		});
 
-		btnCreditCard = new PosButton("CREDIT CARD"); //$NON-NLS-1$
-		actionButtonPanel.add(btnCreditCard, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$
-		btnCreditCard.addActionListener(new ActionListener() {
+		btnOrangeMoney = new PosButton("ORANGE MONEY"); //$NON-NLS-1$
+		actionButtonPanel.add(btnOrangeMoney, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$
+		btnOrangeMoney.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					ticketProcessor.doSettle(PaymentType.CREDIT_CARD, getTenderedAmount());
+					ticketProcessor.doSettle(PaymentType.ORANGE_MONEY, getTenderedAmount());
 				} catch (StaleStateException x) {
 					POSMessageDialog.showMessageDialogWithReloadButton(POSUtil.getFocusedWindow(), refreshableView);
 				} catch (Exception e1) {
@@ -463,29 +462,17 @@ public class PaymentView extends JPanel {
 			}
 		});
 
-		btnDebitCard = new PosButton("DEBIT CARD");
-		actionButtonPanel.add(btnDebitCard, "grow, w " + width + "!");
-		btnDebitCard.addActionListener(new ActionListener() {
+		btnAfriMoney = new PosButton("AFRIMONEY");
+		actionButtonPanel.add(btnAfriMoney, "grow, w " + width + "!");
+		btnAfriMoney.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					ticketProcessor.doSettle(PaymentType.DEBIT_CARD, getTenderedAmount());
+					ticketProcessor.doSettle(PaymentType.AFRIMONEY, getTenderedAmount());
 				} catch (StaleStateException x) {
 					POSMessageDialog.showMessageDialogWithReloadButton(POSUtil.getFocusedWindow(), refreshableView);
 				} catch (Exception exception) {
 					POSMessageDialog.showError(POSUtil.getFocusedWindow(), exception.getMessage());
-				}
-			}
-		});
-
-		btnGift = new PosButton(Messages.getString("PaymentView.35")); //$NON-NLS-1$
-		actionButtonPanel.add(btnGift, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$
-		btnGift.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					ticketProcessor.doSettle(PaymentType.GIFT_CERTIFICATE, getTenderedAmount());
-				} catch (Exception e1) {
-					PosLog.error(PaymentView.class, e1.getMessage().toString());
 				}
 			}
 		});

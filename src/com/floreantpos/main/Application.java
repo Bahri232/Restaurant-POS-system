@@ -123,7 +123,9 @@ public class Application {
 		applicationIcon = IconFactory.getIcon("/ui_icons/","icon.png"); //$NON-NLS-1$
 		posWindow = new PosWindow();
 		posWindow.setTitle(getTitle());
-		posWindow.setIconImage(applicationIcon.getImage());
+		if (applicationIcon != null) {
+			posWindow.setIconImage(applicationIcon.getImage());
+		}
 		posWindow.setupSizeAndLocation();
 		posWindow.setVisibleWelcomeHeader(true);
 		if (TerminalConfig.isFullscreenMode()) {
@@ -134,8 +136,6 @@ public class Application {
 		posWindow.getContentPane().add(rootView);
 		initializeSystem();
 		posWindow.setVisibleWelcomeHeader(false);
-		
-		PosWebService.get().doSendHeartBeat();
 	}
 
 	/*private void initializeTouchScroll() {
@@ -144,9 +144,28 @@ public class Application {
 
 	private void setApplicationLook() {
 		try {
-			PlasticXPLookAndFeel.setPlasticTheme(new ExperienceBlue());
-			UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
+			com.formdev.flatlaf.FlatLightLaf.setup();
 			initializeFont();
+			
+			// Custom Primary Canvas Color: Clean Off-White
+			java.awt.Color cleanOffWhite = java.awt.Color.decode("#F5F7FA");
+			UIManager.put("Panel.background", cleanOffWhite);
+			UIManager.put("OptionPane.background", cleanOffWhite);
+			UIManager.put("Viewport.background", cleanOffWhite);
+			UIManager.put("ScrollPane.background", cleanOffWhite);
+			UIManager.put("Table.background", java.awt.Color.WHITE);
+			
+			// Custom Accent Color
+			UIManager.put("Component.accentColor", "#B8731A");
+			UIManager.put("Table.selectionBackground", java.awt.Color.decode("#E5A01E"));
+			UIManager.put("Table.selectionForeground", java.awt.Color.WHITE);
+			
+			// Floating Card UI for buttons
+			UIManager.put("Button.arc", 12);
+			UIManager.put("Component.focusWidth", 1);
+			UIManager.put("Button.hoverBackground", java.awt.Color.decode("#E5A01E"));
+			UIManager.put("Button.borderWidth", 1);
+			UIManager.put("Button.borderColor", java.awt.Color.decode("#D1D5DB"));
 		} catch (Exception ignored) {
 		}
 	}
@@ -161,7 +180,7 @@ public class Application {
 			posWindow.updateView();
 			
 			if (!AppConfig.getBoolean(LicenseDialog.PROP_LICENSE_AGREED, Boolean.FALSE) || !AppConfig.getBoolean(LicenseDialog.PROP_DO_NOT_SHOW_LICENSE, Boolean.FALSE)) {				
-				licenseDialog();
+				// licenseDialog();
 			}
 
 			DatabaseUtil.checkConnection(DatabaseUtil.initialize());
@@ -564,7 +583,7 @@ public class Application {
 	}
 
 	public static String getTitle() {
-		return AppProperties.getAppName() + " " + VERSION; //$NON-NLS-1$
+		return "Reness POS v1.0"; //$NON-NLS-1$
 	}
 
 	public static ImageIcon getApplicationIcon() {

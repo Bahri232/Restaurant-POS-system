@@ -34,6 +34,7 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
 
+@SuppressWarnings({"unchecked", "rawtypes", "deprecation"})
 public abstract class _BaseRootDAO {
 
 	protected static Map<String, SessionFactory> sessionFactoryMap;

@@ -64,7 +64,7 @@ public class NewBarTabAction extends AbstractAction implements CardInputListener
 	private OrderType orderType;
 	private List<ShopTable> selectedTables;
 
-	public NewBarTabAction(OrderType orderType, List selectedTables, Component parentComponent) {
+	public NewBarTabAction(OrderType orderType, List<ShopTable> selectedTables, Component parentComponent) {
 		this.orderType = orderType;
 		this.selectedTables = selectedTables;
 		this.parentComponent = parentComponent;

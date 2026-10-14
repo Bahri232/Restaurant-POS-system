@@ -176,18 +176,58 @@ public class MenuItemView extends SelectionView {
 	public class ItemButton extends PosButton implements ActionListener, MouseListener {
 		private int BUTTON_SIZE = 100;
 		MenuItem foodItem;
+		private boolean isHovered = false;
 
 		ItemButton(MenuItem menuItem) {
 			setFocusable(false);
 			setVerticalTextPosition(SwingConstants.BOTTOM);
 			setHorizontalTextPosition(SwingConstants.CENTER);
 			BUTTON_SIZE = PosUIManager.getSize(100);
+			
+			setMargin(new java.awt.Insets(8, 8, 8, 8));
+			setOpaque(false);
+			setContentAreaFilled(false);
+			setFocusPainted(false);
+			setBorderPainted(false);
 
 			updateView(menuItem);
 
 			setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
 			addActionListener(this);
 			addMouseListener(this);
+		}
+		
+		@Override
+		protected void paintComponent(java.awt.Graphics g) {
+			java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+			g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+			
+			// Shadow
+			g2.setColor(new java.awt.Color(0, 0, 0, 35));
+			g2.fillRoundRect(3, 3, getWidth() - 4, getHeight() - 4, 10, 10);
+			
+			// Background
+			if (isSelected() || isHovered) {
+				g2.setColor(java.awt.Color.decode("#B8731A")); // Warm Amber
+			} else {
+				g2.setColor(getBackground() != null ? getBackground() : java.awt.Color.WHITE);
+			}
+			g2.fillRoundRect(0, 0, getWidth() - 4, getHeight() - 4, 10, 10);
+			
+			super.paintComponent(g);
+			g2.dispose();
+		}
+		
+		@Override
+		protected void paintBorder(java.awt.Graphics g) {
+			if (isSelected() || isHovered) {
+				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setColor(java.awt.Color.decode("#E5A01E")); // Gold border
+				g2.setStroke(new java.awt.BasicStroke(1.5f));
+				g2.drawRoundRect(0, 0, getWidth() - 5, getHeight() - 5, 10, 10);
+				g2.dispose();
+			}
 		}
 
 		private void updateView(MenuItem menuItem) {
@@ -258,10 +298,14 @@ public class MenuItemView extends SelectionView {
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
+			isHovered = true;
+			repaint();
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
+			isHovered = false;
+			repaint();
 		}
 	}
 

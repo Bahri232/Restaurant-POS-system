@@ -59,6 +59,7 @@
 				<configuration>
 					<doCheck>false</doCheck>
 					<doUpdate>false</doUpdate>
+					<revisionOnScmFailure>unknown</revisionOnScmFailure>
 					<providerImplementations>
 						<svn>javasvn</svn>
 					</providerImplementations>
@@ -122,6 +123,64 @@
 					<!-- <descriptor>resources/META-INF/mvn-assembly.xml</descriptor> -->
 					<descriptor>profiles/${build.profile.id}/mvn-assembly.xml</descriptor>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.akathist.maven.plugins.launch4j</groupId>
+				<artifactId>launch4j-maven-plugin</artifactId>
+				<version>2.5.2</version>
+				<executions>
+					<execution>
+						<id>l4j-gui</id>
+						<phase>package</phase>
+						<goals>
+							<goal>launch4j</goal>
+						</goals>
+						<configuration>
+							<headerType>gui</headerType>
+							<jar>${project.build.finalName}.jar</jar>
+							<outfile>${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/${project.build.finalName}.exe</outfile>
+							<errTitle>Reness POS</errTitle>
+							<chdir>.</chdir>
+							<dontWrapJar>true</dontWrapJar>
+							<downloadUrl>http://java.com/download</downloadUrl>
+							<classPath>
+								<mainClass>com.floreantpos.main.Main</mainClass>
+								<addDependencies>false</addDependencies>
+							</classPath>
+							<icon>resources/icons/icon.ico</icon>
+							<jre>
+								<path>jre</path>
+								<minVersion>1.8.0</minVersion>
+							</jre>
+						</configuration>
+					</execution>
+					<execution>
+						<id>l4j-gui-reness</id>
+						<phase>package</phase>
+						<goals>
+							<goal>launch4j</goal>
+						</goals>
+						<configuration>
+							<headerType>gui</headerType>
+							<jar>${project.build.finalName}.jar</jar>
+							<outfile>${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/RenessPOS.exe</outfile>
+							<errTitle>Reness POS</errTitle>
+							<chdir>.</chdir>
+							<dontWrapJar>true</dontWrapJar>
+							<downloadUrl>http://java.com/download</downloadUrl>
+							<classPath>
+								<mainClass>com.floreantpos.main.Main</mainClass>
+								<addDependencies>false</addDependencies>
+							</classPath>
+							<icon>resources/icons/icon.ico</icon>
+							<jre>
+								<path>jre</path>
+								<minVersion>1.8.0</minVersion>
+							</jre>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
@@ -303,6 +362,12 @@
 			<groupId>com.jgoodies</groupId>
 			<artifactId>looks</artifactId>
 			<version>2.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.formdev</groupId>
+			<artifactId>flatlaf</artifactId>
+			<version>3.2.1</version>
 		</dependency>
 
 		<dependency>
@@ -620,6 +685,37 @@
 								<goals>
 									<goal>run</goal>
 								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.akathist.maven.plugins.launch4j</groupId>
+						<artifactId>launch4j-maven-plugin</artifactId>
+						<version>2.5.2</version>
+						<executions>
+							<execution>
+								<id>l4j-clui</id>
+								<phase>package</phase>
+								<goals>
+									<goal>launch4j</goal>
+								</goals>
+								<configuration>
+									<headerType>gui</headerType>
+									<jar>${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/${project.build.finalName}.jar</jar>
+									<outfile>${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/${project.build.finalName}.exe</outfile>
+									<downloadUrl>http://java.com/download</downloadUrl>
+									<classPath>
+										<mainClass>com.floreantpos.main.Main</mainClass>
+										<addDependencies>false</addDependencies>
+									</classPath>
+									<icon>resources/icons/icon.ico</icon>
+									<jre>
+										<path>jre</path>
+										<minVersion>1.8.0</minVersion>
+										<jdkPreference>preferJre</jdkPreference>
+										<runtimeBits>64/32</runtimeBits>
+									</jre>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>

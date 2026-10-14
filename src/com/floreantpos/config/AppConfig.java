@@ -53,7 +53,22 @@ public class AppConfig {
 			config.setAutoSave(true);
 
 		} catch (Exception e) {
-			PosLog.error(AppConfig.class, e.getMessage());
+			PosLog.error(AppConfig.class, "Error initializing config in working dir: " + e.getMessage());
+			try {
+				File userDir = new File(System.getProperty("user.home"), ".floreantpos");
+				if (!userDir.exists()) {
+					userDir.mkdirs();
+				}
+				File configFile = new File(userDir, "floreantpos.config.properties");
+				if(!configFile.exists()) {
+					configFile.createNewFile();
+				}
+				config = new PropertiesConfiguration(configFile);
+				config.setAutoSave(true);
+			} catch (Exception ex) {
+				PosLog.error(AppConfig.class, "Error initializing config in user home: " + ex.getMessage());
+				config = new PropertiesConfiguration();
+			}
 		}
 	}
 	

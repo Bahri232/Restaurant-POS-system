@@ -49,6 +49,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+@SuppressWarnings("restriction")
 public class DejavooProxyServer implements HttpHandler {
 	com.sun.net.httpserver.HttpServer server;
 	private String authKey;

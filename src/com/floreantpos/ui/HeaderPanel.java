@@ -31,6 +31,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.Timer;
+import javax.swing.ImageIcon;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 import com.floreantpos.IconFactory;
 import com.floreantpos.Messages;
@@ -67,6 +74,7 @@ public class HeaderPanel extends JPanel {
 	private String terminalString = Messages.getString("TERMINAL_LABEL"); //$NON-NLS-1$
 
 	private JLabel logoffLabel;
+	private JLabel userProfileLabel;
 	private PosButton btnHomeScreen;
 	private POSToggleButton btnMaintainance;
 	private PosButton btnOthers;
@@ -93,7 +101,12 @@ public class HeaderPanel extends JPanel {
 		//	add(logoLabel);
 		add(logoLabel, BorderLayout.WEST);
 
-		TransparentPanel statusPanel = new TransparentPanel(new MigLayout("hidemode 3, fill, ins 0, gap 0")); //$NON-NLS-1$
+		TransparentPanel statusPanel = new TransparentPanel(new MigLayout("hidemode 3, fill, ins 0, gap 10")); //$NON-NLS-1$
+		
+		userProfileLabel = new JLabel();
+		userProfileLabel.setFont(userProfileLabel.getFont().deriveFont(Font.BOLD, 18f));
+		statusPanel.add(userProfileLabel, "gapleft 20");
+		
 		logoffLabel = new JLabel();
 		logoffLabel.setFont(logoffLabel.getFont().deriveFont(Font.BOLD));
 		logoffLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -173,6 +186,53 @@ public class HeaderPanel extends JPanel {
 				&& (currentUser.isAdministrator() || currentUser.hasPermission(UserPermission.QUICK_MAINTENANCE));
 		btnMaintainance.setVisible(hasPermission);
 		quickMaintenancePanel.setVisible(btnMaintainance.isSelected() && hasPermission);
+		
+		if (currentUser != null) {
+			userProfileLabel.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+			userProfileLabel.setIcon(getCircularAvatar(currentUser.getAvatarPath(), 40));
+		} else {
+			userProfileLabel.setText("");
+			userProfileLabel.setIcon(null);
+		}
+	}
+	
+	public static ImageIcon getCircularAvatar(String imagePath, int size) {
+		try {
+			if (imagePath == null || imagePath.trim().isEmpty()) {
+				return null; // Fallback to default or no icon
+			}
+			File imgFile = new File(Application.getWorkingDir(), imagePath);
+			if (!imgFile.exists()) return null;
+			
+			BufferedImage original = ImageIO.read(imgFile);
+			if (original == null) return null;
+			
+			BufferedImage circleBuffer = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2 = circleBuffer.createGraphics();
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			
+			// Fill a circle with white
+			g2.fillOval(0, 0, size, size);
+			
+			// Use SRC_IN to draw the image only where the circle is
+			g2.setComposite(AlphaComposite.SrcIn);
+			
+			// Determine scaling to cover the circle
+			int w = original.getWidth();
+			int h = original.getHeight();
+			int cropSize = Math.min(w, h);
+			int x = (w - cropSize) / 2;
+			int y = (h - cropSize) / 2;
+			
+			BufferedImage cropped = original.getSubimage(x, y, cropSize, cropSize);
+			g2.drawImage(cropped, 0, 0, size, size, null);
+			g2.dispose();
+			
+			return new ImageIcon(circleBuffer);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override

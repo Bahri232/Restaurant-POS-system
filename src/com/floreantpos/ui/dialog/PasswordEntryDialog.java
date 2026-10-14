@@ -61,9 +61,11 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 	private JLabel statusLabel;
 
 	private PosButton btnClear;
-	private PosButton btnClearAll;
+	private PosButton btnEnter;
 	private boolean autoLogOffMode;
 	private User user;
+	private User selectedUser;
+	private javax.swing.JButton selectedUserBtn;
 
 	public PasswordEntryDialog() {
 		super(Application.getPosWindow(), true);
@@ -80,17 +82,100 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 		btnClear = new PosButton();
 		btnClear.setText(Messages.getString("PasswordEntryDialog.11"));
 
-		btnClearAll = new PosButton();
-		btnClearAll.setText(Messages.getString("PasswordEntryDialog.12"));
+		btnEnter = new PosButton();
+		btnEnter.setText("ENTER");
 
 		JPanel contentPane = new JPanel(new BorderLayout(10, 10));
 		getContentPanel().add(contentPane);
 
+		JPanel usersPanel = createUsersPanel();
+		contentPane.add(usersPanel, BorderLayout.NORTH);
+
 		JPanel inputPanel = createInputPanel();
-		contentPane.add(inputPanel, BorderLayout.NORTH);
+		contentPane.add(inputPanel, BorderLayout.CENTER);
 
 		JPanel keyboardPanel = createKeyboardPanel();
-		contentPane.add(keyboardPanel);
+		contentPane.add(keyboardPanel, BorderLayout.SOUTH);
+	}
+	
+	private JPanel createUsersPanel() {
+		JPanel usersPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
+		usersPanel.setOpaque(false);
+		
+		final javax.swing.border.Border defaultBorder = new javax.swing.border.LineBorder(new java.awt.Color(200, 200, 200), 2, true);
+		final javax.swing.border.Border selectedBorder = new javax.swing.border.LineBorder(new java.awt.Color(30, 144, 255), 3, true);
+
+		try {
+			java.util.List<User> users = UserDAO.getInstance().findAll();
+			for (final User u : users) {
+				if (!u.isActive()) continue;
+				
+				final javax.swing.JButton btn = new javax.swing.JButton();
+				btn.setFocusable(false);
+				btn.setContentAreaFilled(true);
+				btn.setOpaque(true);
+				btn.setBackground(java.awt.Color.WHITE);
+				btn.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+				btn.setToolTipText(u.getFirstName() + " (" + (u.getType() != null ? u.getType().getName() : "") + ")");
+				btn.setBorder(defaultBorder);
+				btn.setPreferredSize(new java.awt.Dimension(100, 100));
+
+				if (u.getAvatarPath() != null && !u.getAvatarPath().isEmpty()) {
+					javax.swing.ImageIcon avatarIcon = com.floreantpos.ui.HeaderPanel.getCircularAvatar(u.getAvatarPath(), 90);
+					if (avatarIcon != null) {
+						btn.setIcon(avatarIcon);
+					} else {
+						btn.setText(u.getFirstName());
+						btn.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 15));
+						btn.setBackground(new java.awt.Color(230, 230, 230));
+					}
+				} else {
+					btn.setText(u.getFirstName());
+					btn.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 15));
+					btn.setBackground(new java.awt.Color(230, 230, 230));
+				}
+				
+				btn.addActionListener(new java.awt.event.ActionListener() {
+					public void actionPerformed(java.awt.event.ActionEvent e) {
+						if (selectedUser != null && selectedUser.getUserId().equals(u.getUserId())) {
+							selectedUser = null;
+							btn.setBorder(defaultBorder);
+							selectedUserBtn = null;
+							tfPassword.setText("");
+							statusLabel.setForeground(java.awt.Color.DARK_GRAY);
+							statusLabel.setText("");
+						} else {
+							if (selectedUserBtn != null) {
+								selectedUserBtn.setBorder(defaultBorder);
+							}
+							selectedUser = u;
+							selectedUserBtn = btn;
+							btn.setBorder(selectedBorder);
+							tfPassword.setText("");
+							statusLabel.setForeground(new java.awt.Color(0, 102, 204));
+							statusLabel.setText("Enter PIN for " + u.getFirstName());
+						}
+						tfPassword.requestFocus();
+					}
+				});
+				usersPanel.add(btn);
+			}
+		} catch (Exception ex) {
+			org.apache.commons.logging.LogFactory.getLog(PasswordEntryDialog.class).error("Error loading users for login", ex);
+		}
+		
+		javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(usersPanel);
+		scrollPane.setBorder(null);
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setPreferredSize(new java.awt.Dimension(600, 130));
+		scrollPane.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		JPanel wrapper = new JPanel(new BorderLayout());
+		wrapper.setOpaque(false);
+		wrapper.add(scrollPane, BorderLayout.CENTER);
+		return wrapper;
 	}
 
 	private JPanel createInputPanel() {
@@ -101,6 +186,12 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 		tfPassword.setFocusable(true);
 		tfPassword.requestFocus();
 		tfPassword.setBackground(Color.WHITE);
+		tfPassword.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				doOk();
+			}
+		});
 		tfPassword.addKeyListener(new KeyListener() {
 
 			@Override
@@ -110,9 +201,11 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 
 			@Override
 			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					return;
+				}
 				String secretKey = getPasswordAsString();
 				if (secretKey != null && secretKey.length() == TerminalConfig.getDefaultPassLen()) {
-					statusLabel.setText(""); //$NON-NLS-1$
 					if (checkLogin(secretKey)) {
 						setCanceled(false);
 						dispose();
@@ -122,11 +215,15 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					doOk();
+				}
 			}
 		});
 		inputPanel.add(tfPassword, BorderLayout.NORTH);
 
-		statusLabel = new JLabel();
+		statusLabel = new JLabel(" ");
+		statusLabel.setFont(statusLabel.getFont().deriveFont(Font.BOLD, 14f));
 		statusLabel.setHorizontalAlignment(JLabel.CENTER);
 		inputPanel.add(statusLabel);
 
@@ -148,6 +245,7 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 
 				PosButton posButton = new PosButton();
 				posButton.setAction(loginAction);
+				posButton.setFocusable(false);
 				ImageIcon icon = com.floreantpos.IconFactory.getIcon("/ui_icons/", iconNames[i][j]); //$NON-NLS-1$
 				if (icon != null) {
 					posButton.setIcon(icon);
@@ -163,15 +261,25 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 			}
 		}
 		ImageIcon clearIcon = com.floreantpos.IconFactory.getIcon("/ui_icons/", "clear.png"); //$NON-NLS-1$
-		btnClear.setIcon(clearIcon);
+		if (clearIcon != null) {
+			btnClear.setIcon(clearIcon);
+		}
+		btnClear.setText("CLEAR");
 		btnClear.setIconTextGap(0);
+		btnClear.setPreferredSize(size);
+		btnClear.setFocusable(false);
 
-		ImageIcon clearAllIcon = com.floreantpos.IconFactory.getIcon("/ui_icons/", "clear.png"); //$NON-NLS-1$
-		btnClearAll.setIcon(clearAllIcon);
-		btnClearAll.setIconTextGap(0);
+		ImageIcon enterIcon = com.floreantpos.IconFactory.getIcon("/ui_icons/", "log_in.png"); //$NON-NLS-1$
+		if (enterIcon != null) {
+			btnEnter.setIcon(enterIcon);
+		}
+		btnEnter.setText("ENTER");
+		btnEnter.setIconTextGap(0);
+		btnEnter.setPreferredSize(size);
+		btnEnter.setFocusable(false);
 
 		buttonPanel.add(btnClear);
-		buttonPanel.add(btnClearAll);
+		buttonPanel.add(btnEnter);
 
 		btnClear.addActionListener(new ActionListener() {
 
@@ -181,11 +289,11 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 			}
 		});
 
-		btnClearAll.addActionListener(new ActionListener() {
+		btnEnter.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				doClearAll();
+				doOk();
 			}
 		});
 
@@ -194,24 +302,14 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 
 	@Override
 	public void doOk() {
-		//		char[] password = tfPassword.getPassword();
-		//
-		//		if (password == null || password.length == 0) {
-		//			POSMessageDialog.showError(this, "Please enter password");
-		//			return;
-		//		}
-		//
-		//		boolean validPassword = POSUtil.isValidPassword(password);
-		//		if (!validPassword) {
-		//			//POSMessageDialog.showError(this, "The password is not valid. Password can only contain digit.");
-		//			
-		//			return;
-		//		}
-		//
-		//		setCanceled(false);
-		//		dispose();
-
-		if (checkLogin(getPasswordAsString())) {
+		if (!isVisible()) return;
+		String secretKey = getPasswordAsString();
+		if (StringUtils.isEmpty(secretKey)) {
+			statusLabel.setForeground(Color.RED);
+			statusLabel.setText(Messages.getString("PasswordEntryDialog.30"));
+			return;
+		}
+		if (checkLogin(secretKey)) {
 			setCanceled(false);
 			dispose();
 		}
@@ -220,6 +318,8 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 	@Override
 	public void doCancel() {
 		user = null;
+		selectedUser = null;
+		selectedUserBtn = null;
 		setCanceled(true);
 		dispose();
 	}
@@ -306,27 +406,48 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 		return dialog2.getUser();
 	}
 
-	/*private synchronized boolean checkLogin(String secretKey) {
-		user = UserDAO.getInstance().findUserBySecretKey(secretKey);
-		if(user == null) {
-			statusLabel.setText(Messages.getString("PasswordEntryDialog.30")); //$NON-NLS-1$
+	private synchronized boolean checkLogin(String secretKey) {
+		if (StringUtils.isEmpty(secretKey)) {
+			statusLabel.setForeground(Color.RED);
+			statusLabel.setText(Messages.getString("PasswordEntryDialog.30"));
+			tfPassword.setText("");
 			return false;
 		}
 
-		return true;
-	}*/
-
-	private synchronized boolean checkLogin(String secretKey) {
-		user = UserDAO.getInstance().findUserBySecretKey(secretKey);
+		if (selectedUser != null) {
+			String userPass = selectedUser.getPassword();
+			String userIdStr = String.valueOf(selectedUser.getUserId());
+			if (secretKey.equals(userPass) || secretKey.equals(userIdStr)) {
+				user = selectedUser;
+			} else {
+				statusLabel.setForeground(Color.RED);
+				statusLabel.setText("Incorrect PIN for " + selectedUser.getFirstName());
+				tfPassword.setText("");
+				return false;
+			}
+		} else {
+			user = UserDAO.getInstance().findUserBySecretKey(secretKey);
+		}
 
 		if (user == null) {
+			statusLabel.setForeground(Color.RED);
 			statusLabel.setText(Messages.getString("PasswordEntryDialog.30")); //$NON-NLS-1$
+			tfPassword.setText("");
+			return false;
+		}
+
+		if (!user.isActive()) {
+			statusLabel.setForeground(Color.RED);
+			statusLabel.setText("User account is inactive");
+			tfPassword.setText("");
 			return false;
 		}
 
 		if (LoginView.getInstance().isBackOfficeLogin()) {
 			if (!user.hasPermission(UserPermission.VIEW_BACK_OFFICE)) {
+				statusLabel.setForeground(Color.RED);
 				statusLabel.setText("user has no permission to access this view");
+				tfPassword.setText("");
 				return false;
 			}
 			return true;
@@ -338,19 +459,17 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 
 			if (viewName.equals(TableMapView.VIEW_NAME)) {
 				if (!user.hasPermission(UserPermission.CREATE_TICKET)) {
+					statusLabel.setForeground(Color.RED);
 					statusLabel.setText("user has no permission to access this view");
+					tfPassword.setText("");
 					return false;
 				}
-			}/*
-				else if (viewName.equals(SwitchboardView.VIEW_NAME)) {
-				if (!user.hasPermission(UserPermission.VIEW_ALL_OPEN_TICKETS)) {
-					statusLabel.setText("user has no permission to access this view");
-					return false;
-				}
-				}*/
+			}
 			else if (viewName.equals(SwitchboardOtherFunctionsView.VIEW_NAME)) {
 				if (!user.hasPermission(UserPermission.ALL_FUNCTIONS)) {
+					statusLabel.setForeground(Color.RED);
 					statusLabel.setText("user has no permission to access this view");
+					tfPassword.setText("");
 					return false;
 				}
 			}
@@ -358,14 +477,18 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 				if (!OrderView.getInstance().getCurrentTicket().getOwner().getUserId().equals(user.getUserId())) {
 					if (!user.hasPermission(UserPermission.CREATE_TICKET)
 							|| (!user.hasPermission(UserPermission.PERFORM_ADMINISTRATIVE_TASK) && !user.hasPermission(UserPermission.PERFORM_MANAGER_TASK))) {
+						statusLabel.setForeground(Color.RED);
 						statusLabel.setText("user has no permission to access this view");
+						tfPassword.setText("");
 						return false;
 					}
 				}
 			}
 			else if (viewName.equals(KitchenDisplayView.VIEW_NAME)) {
 				if (!user.hasPermission(UserPermission.KITCHEN_DISPLAY)) {
+					statusLabel.setForeground(Color.RED);
 					statusLabel.setText("user has no permission to access this view");
+					tfPassword.setText("");
 					return false;
 				}
 			}
@@ -376,38 +499,19 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 				for (OrderType orderType : orderTypes) {
 					if (TerminalConfig.getDefaultView().equals(orderType.getName())) {
 						if (!user.hasPermission(UserPermission.CREATE_TICKET)) {
+							statusLabel.setForeground(Color.RED);
 							statusLabel.setText("user has no permission to access this view");
+							tfPassword.setText("");
 							return false;
 						}
 					}
 				}
 			}
-			/*if (TerminalConfig.getDefaultView().equals(OrderType.DINE_IN.toString())) {
-				if (!user.hasPermission(UserPermission.CREATE_TICKET)) {
-					statusLabel.setText("user has no permission to access this view");
-					return false;
-				}
-			}
-			else if (TerminalConfig.getDefaultView().equals(OrderType.TAKE_OUT.toString())) {
-				if (!user.hasPermission(UserPermission.CREATE_TICKET)) {
-					statusLabel.setText("user has no permission to access this view");
-					return false;
-				}
-			}else if (TerminalConfig.getDefaultView().equals(OrderType.RETAIL.toString())) {
-				if (!user.hasPermission(UserPermission.CREATE_TICKET)) {
-					statusLabel.setText("user has no permission to access this view");
-					return false;
-				}
-			}else if (TerminalConfig.getDefaultView().equals(OrderType.FOR_HERE.toString())) {
-				if (!user.hasPermission(UserPermission.CREATE_TICKET)) {
-					statusLabel.setText("user has no permission to access this view");
-					return false;
-				}
-			}
-			else */
 			if (TerminalConfig.getDefaultView().equals(KitchenDisplayView.VIEW_NAME)) {
 				if (!user.hasPermission(UserPermission.KITCHEN_DISPLAY)) {
+					statusLabel.setForeground(Color.RED);
 					statusLabel.setText("user has no permission to access this view");
+					tfPassword.setText("");
 					return false;
 				}
 			}
@@ -423,7 +527,6 @@ public class PasswordEntryDialog extends OkCancelOptionDialog implements ActionL
 
 			String secretKey = getPasswordAsString();
 			if (secretKey != null && secretKey.length() == TerminalConfig.getDefaultPassLen()) {
-				statusLabel.setText(""); //$NON-NLS-1$
 				if (checkLogin(secretKey)) {
 					setCanceled(false);
 					dispose();

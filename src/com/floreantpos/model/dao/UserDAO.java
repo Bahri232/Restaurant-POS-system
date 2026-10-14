@@ -108,16 +108,37 @@ public class UserDAO extends BaseUserDAO {
 	}
 
 	public User findUserBySecretKey(String secretKey) {
+		if (secretKey == null || secretKey.trim().isEmpty()) {
+			return null;
+		}
 		Session session = null;
 
 		try {
-
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
-			criteria.add(Restrictions.eq(User.PROP_PASSWORD, secretKey));
+			criteria.add(Restrictions.eq(User.PROP_PASSWORD, secretKey.trim()));
 
-			Object result = criteria.uniqueResult();
-			return (User) result;
+			List list = criteria.list();
+			if (list != null && !list.isEmpty()) {
+				return (User) list.get(0);
+			}
+
+			// Fallback: check if secretKey matches a user's User ID (employee number)
+			try {
+				int userId = Integer.parseInt(secretKey.trim());
+				Criteria idCriteria = session.createCriteria(getReferenceClass());
+				idCriteria.add(Restrictions.eq(User.PROP_USER_ID, userId));
+				List idList = idCriteria.list();
+				if (idList != null && !idList.isEmpty()) {
+					return (User) idList.get(0);
+				}
+			} catch (Exception ignored) {
+			}
+
+			return null;
+		} catch (Exception ex) {
+			PosLog.error(getClass(), "Error finding user by secret key", ex);
+			return null;
 		} finally {
 			if (session != null) {
 				closeSession(session);

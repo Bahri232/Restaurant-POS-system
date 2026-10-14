@@ -1,9 +1,17 @@
-eclipse.preferences.version=1
-org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.8
+#Sat Sep 19 11:24:48 GMT 2026
+encoding/src/test/java=UTF-8
+encoding/filters=UTF-8
+encoding/i18n=UTF-8
 org.eclipse.jdt.core.compiler.compliance=1.8
-org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures=disabled
-org.eclipse.jdt.core.compiler.problem.forbiddenReference=warning
-org.eclipse.jdt.core.compiler.problem.reportPreviewFeatures=ignore
-org.eclipse.jdt.core.compiler.processAnnotations=disabled
 org.eclipse.jdt.core.compiler.release=disabled
+encoding/profiles/default=UTF-8
+org.eclipse.jdt.core.compiler.problem.forbiddenReference=warning
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.8
+org.eclipse.jdt.core.compiler.problem.reportPreviewFeatures=ignore
+eclipse.preferences.version=1
+encoding/resources=UTF-8
+encoding/src/test/resources=UTF-8
+encoding/src=UTF-8
 org.eclipse.jdt.core.compiler.source=1.8
+org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures=disabled
+org.eclipse.jdt.core.compiler.processAnnotations=disabled

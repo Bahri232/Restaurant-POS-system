@@ -43,7 +43,7 @@ public class POSUtil {
 			}
 		}
 
-		return null;
+		return BackOfficeWindow.getInstance();
 	}
 
 	public static boolean isBlankOrNull(String str) {

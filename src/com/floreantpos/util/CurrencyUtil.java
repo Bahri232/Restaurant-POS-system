@@ -73,7 +73,7 @@ public class CurrencyUtil {
 			currencyName = mainCurrency.getName();
 		}
 		else {
-			currencyName = "USD"; //$NON-NLS-1$
+			currencyName = "Leone"; //$NON-NLS-1$
 		}
 		return currencyName;
 	}
@@ -84,7 +84,7 @@ public class CurrencyUtil {
 			currencySymbol = mainCurrency.getSymbol();
 		}
 		else {
-			currencySymbol = "$"; //$NON-NLS-1$
+			currencySymbol = "Le"; //$NON-NLS-1$
 		}
 		return currencySymbol;
 	}

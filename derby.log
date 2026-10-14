@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Wed Oct 14 01:24:28 GMT 2026:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-01a1-3802-c4e3-000005857670 
+on database directory C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\database\derby-single\posdb  with class loader sun.misc.Launcher$AppClassLoader@53bd815b 
+Loaded from file:/C:/Users/BAHRI/Desktop/Reness%20POS%201/floreantpos-code-r1966-trunk/target/floreantpos-bin/floreantpos/lib/derby-10.8.1.2.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_503-b01
+user.dir=C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

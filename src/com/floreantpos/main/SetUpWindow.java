@@ -64,6 +64,7 @@ import com.floreantpos.swing.PosUIManager;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.util.DatabaseConnectionException;
 import com.floreantpos.util.DatabaseUtil;
+import com.floreantpos.util.SeedMenu;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.looks.plastic.theme.ExperienceBlue;
 import com.jidesoft.swing.JideScrollPane;
@@ -382,7 +383,18 @@ public class SetUpWindow extends JFrame implements ActionListener {
 			}
 			saveConfig(selectedDb, providerName, databaseURL, databasePort, databaseName, user, pass, connectionString, hibernateDialect);
 			if (CREATE_SAMPLE_DATA.equals(command)) {
-				DataImportAction.importMenuItems(DatabaseUtil.class.getResourceAsStream("/floreantpos-menu-items.xml")); //$NON-NLS-1$
+				try {
+					setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+					DatabaseUtil.initialize();
+					SeedMenu.seedMenu();
+					JOptionPane.showMessageDialog(this, "Sample menu items created successfully.");
+				} catch (Exception ex) {
+					PosLog.error(getClass(), ex);
+					JOptionPane.showMessageDialog(this, "Failed to create sample menu items: " + ex.getMessage());
+				} finally {
+					setCursor(Cursor.getDefaultCursor());
+				}
+				return;
 			}
 			else if (CREATE_DATABASE.equals(command)) {
 				int i = JOptionPane.showConfirmDialog(this,

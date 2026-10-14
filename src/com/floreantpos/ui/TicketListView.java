@@ -119,12 +119,16 @@ public class TicketListView extends JPanel implements ITicketList {
 		table.setColumnControlVisible(true);
 		table.setModel(tableModel = new TicketListTableModel());
 		tableModel.setPageSize(25);
-		table.setRowHeight(PosUIManager.getSize(60));
+		table.setRowHeight(PosUIManager.getSize(70));
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		boolean hasOnlineOrderPlugin = ExtensionManager.getPlugin(OnlineOrderPlugin.class) != null;
 		table.setDefaultRenderer(Object.class, new PosTableRenderer(hasOnlineOrderPlugin));
-		table.setGridColor(Color.LIGHT_GRAY);
-		table.getTableHeader().setPreferredSize(new Dimension(100, PosUIManager.getSize(40)));
+		table.setGridColor(java.awt.Color.decode("#E5E7EB"));
+		table.setShowVerticalLines(false);
+		table.setIntercellSpacing(new java.awt.Dimension(0, 1));
+		table.getTableHeader().setPreferredSize(new Dimension(100, PosUIManager.getSize(50)));
+		table.getTableHeader().setBackground(java.awt.Color.WHITE);
+		table.getTableHeader().setFont(new java.awt.Font(table.getTableHeader().getFont().getName(), java.awt.Font.BOLD, 14));
 
 		columnModel = (TableColumnModelExt) table.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(hasOnlineOrderPlugin ? 40 : 30);

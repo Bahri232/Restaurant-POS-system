@@ -34,14 +34,7 @@ import com.floreantpos.actions.ActionCommand;
 import com.floreantpos.actions.PosAction;
 
 public class PosButton extends JButton {
-	public static Border border = new LineBorder(Color.BLACK, 1);
-	static Insets margin = new Insets(1, 5, 1, 5);
-
-	static POSButtonUI ui = new POSButtonUI();
-
-	static {
-		UIManager.put("PosButtonUI", "com.floreantpos.swing.POSButtonUI"); //$NON-NLS-1$ //$NON-NLS-2$
-	}
+	static Insets margin = new Insets(10, 15, 10, 15);
 
 	public PosButton() {
 		this(""); //$NON-NLS-1$
@@ -102,10 +95,7 @@ public class PosButton extends JButton {
 		setFocusPainted(false);
 	}
 
-	@Override
-	public String getUIClassID() {
-		return "PosButtonUI"; //$NON-NLS-1$
-	}
+
 
 	@Override
 	public Dimension getPreferredSize() {
@@ -113,9 +103,6 @@ public class PosButton extends JButton {
 
 		if (isPreferredSizeSet()) {
 			return super.getPreferredSize();
-		}
-		else if (ui != null) {
-			size = ui.getPreferredSize(this);
 		}
 
 		if (size == null) {

@@ -114,7 +114,10 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 
 	/** Creates new form BackOfficeWindow */
 	public BackOfficeWindow() {
-		setIconImage(Application.getApplicationIcon().getImage());
+		instance = this;
+		if (Application.getApplicationIcon() != null) {
+			setIconImage(Application.getApplicationIcon().getImage());
+		}
 
 		initComponents();
 
@@ -185,8 +188,6 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		}
 
 		JMenu helpMenu = new JMenu(Messages.getString("BackOfficeWindow.0")); //$NON-NLS-1$
-		helpMenu.add(new UpdateAction());
-		helpMenu.add(new PluginsAction());
 		helpMenu.add(new AboutAction());
 		menuBar.add(helpMenu);
 

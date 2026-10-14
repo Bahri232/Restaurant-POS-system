@@ -61,6 +61,7 @@ public class DataExportAction extends AbstractAction {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent e) {
 		Session session = null;
 		FileWriter fileWriter = null;

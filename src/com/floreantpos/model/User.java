@@ -33,6 +33,7 @@ public class User extends BaseUser {
 	private static final long serialVersionUID = 1L;
 	private String id;
 	private boolean root;
+	private String avatarPath;
 
 	/*[CONSTRUCTOR MARKER BEGIN]*/
 	public User() {
@@ -197,5 +198,13 @@ public class User extends BaseUser {
 
 	public void setRoot(boolean root) {
 		this.root = root;
+	}
+
+	public String getAvatarPath() {
+		return avatarPath;
+	}
+
+	public void setAvatarPath(String avatarPath) {
+		this.avatarPath = avatarPath;
 	}
 }

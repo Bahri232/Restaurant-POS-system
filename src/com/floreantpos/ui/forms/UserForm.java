@@ -63,6 +63,50 @@ public class UserForm extends BeanEditor {
 
 		chkDriver = new JCheckBox(Messages.getString("UserForm.0")); //$NON-NLS-1$
 		add(chkDriver, "cell 1 9"); //$NON-NLS-1$
+		
+		lblAvatarPreview = new JLabel("No Avatar");
+		lblAvatarPreview.setHorizontalAlignment(JLabel.CENTER);
+		lblAvatarPreview.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.GRAY));
+		add(lblAvatarPreview, "cell 1 10, width 200!, height 200!");
+		
+		btnChooseAvatar = new javax.swing.JButton("Choose Photo...");
+		btnChooseAvatar.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				chooseAvatar();
+			}
+		});
+		add(btnChooseAvatar, "cell 1 11, alignx left");
+	}
+	
+	private void chooseAvatar() {
+		javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+		fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Image Files", "jpg", "png", "jpeg"));
+		int result = fileChooser.showOpenDialog(this);
+		if (result == javax.swing.JFileChooser.APPROVE_OPTION) {
+			java.io.File selectedFile = fileChooser.getSelectedFile();
+			try {
+				java.io.File avatarDir = new java.io.File(com.floreantpos.main.Application.getWorkingDir(), "avatars");
+				if (!avatarDir.exists()) {
+					avatarDir.mkdirs();
+				}
+				String ext = "";
+				int i = selectedFile.getName().lastIndexOf('.');
+				if (i > 0) ext = selectedFile.getName().substring(i);
+				String newName = "avatar_" + System.currentTimeMillis() + ext;
+				java.io.File targetFile = new java.io.File(avatarDir, newName);
+				
+				java.nio.file.Files.copy(selectedFile.toPath(), targetFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+				
+				avatarPath = "avatars/" + newName;
+				
+				java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(targetFile);
+				java.awt.Image scaled = img.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
+				lblAvatarPreview.setIcon(new javax.swing.ImageIcon(scaled));
+				lblAvatarPreview.setText("");
+			} catch (Exception ex) {
+				POSMessageDialog.showError(this, "Failed to load image: " + ex.getMessage());
+			}
+		}
 	}
 
 	/**
@@ -172,6 +216,9 @@ public class UserForm extends BeanEditor {
 	private JLabel lblPhone;
 	private FixedLengthTextField tfPhone;
 	private JCheckBox chkDriver;
+	private JLabel lblAvatarPreview;
+	private javax.swing.JButton btnChooseAvatar;
+	private String avatarPath;
 
 	@Override
 	public boolean save() {
@@ -271,6 +318,7 @@ public class UserForm extends BeanEditor {
 		user.setPhoneNo(tfPhone.getText());
 		user.setPassword(secretKey1);
 		user.setDriver(chkDriver.isSelected());
+		user.setAvatarPath(avatarPath);
 
 		setBean(user);
 		return true;
@@ -312,6 +360,28 @@ public class UserForm extends BeanEditor {
 		
 		tfCostPerHour.setText(String.valueOf(costPerHour));
 		chkDriver.setSelected(data.isDriver());
+		
+		avatarPath = data.getAvatarPath();
+		if (avatarPath != null && !avatarPath.trim().isEmpty()) {
+			try {
+				java.io.File imgFile = new java.io.File(com.floreantpos.main.Application.getWorkingDir(), avatarPath);
+				if (imgFile.exists()) {
+					java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(imgFile);
+					java.awt.Image scaled = img.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
+					lblAvatarPreview.setIcon(new javax.swing.ImageIcon(scaled));
+					lblAvatarPreview.setText("");
+				} else {
+					lblAvatarPreview.setIcon(null);
+					lblAvatarPreview.setText("No Avatar");
+				}
+			} catch (Exception e) {
+				lblAvatarPreview.setIcon(null);
+				lblAvatarPreview.setText("No Avatar");
+			}
+		} else {
+			lblAvatarPreview.setIcon(null);
+			lblAvatarPreview.setText("No Avatar");
+		}
 	}
 
 	public boolean isEditMode() {

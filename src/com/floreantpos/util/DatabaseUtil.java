@@ -71,6 +71,7 @@ import com.floreantpos.model.dao.UserDAO;
 import com.floreantpos.model.dao.UserTypeDAO;
 import com.floreantpos.model.dao._RootDAO;
 
+@SuppressWarnings("deprecation")
 public class DatabaseUtil {
 	private static Log logger = LogFactory.getLog(DatabaseUtil.class);
 
@@ -162,12 +163,13 @@ public class DatabaseUtil {
 
 			Restaurant restaurant = new Restaurant();
 			restaurant.setId(Integer.valueOf(1));
-			restaurant.setName("Sample Restaurant");
-			restaurant.setAddressLine1("Somewhere");
-			restaurant.setTelephone("+0123456789");
+			restaurant.setName("Reness Delight Restaurant");
+			restaurant.setAddressLine1("32 Peninsular Road, Ogoo Farm");
+			restaurant.setTelephone("+232 72 333332 / +232 31 828380");
 			restaurant.setAppVersion(AppProperties.getAppVersion());
 			restaurant.setAppNumericVersion(AppProperties.getAppNumericVersion());
 			restaurant.setAppDbVersion(DatabaseVersionHistory.DATABASE_VERSION);
+			restaurant.addProperty("Capacity", "17 tables");
 			RestaurantDAO.getInstance().saveOrUpdate(restaurant);
 
 			Tax tax = new Tax();
@@ -177,8 +179,8 @@ public class DatabaseUtil {
 
 			Shift shift = new Shift();
 			shift.setName(com.floreantpos.POSConstants.GENERAL);
-			java.util.Date shiftStartTime = ShiftUtil.buildShiftStartTime(0, 0, 0, 11, 59, 1);
-			java.util.Date shiftEndTime = ShiftUtil.buildShiftEndTime(0, 0, 0, 11, 59, 1);
+			java.util.Date shiftStartTime = ShiftUtil.buildShiftStartTime(0, 0, 0, 10, 0, 1);
+			java.util.Date shiftEndTime = ShiftUtil.buildShiftEndTime(0, 0, 0, 23, 0, 1);
 
 			shift.setStartTime(shiftStartTime);
 			shift.setEndTime(shiftEndTime);
@@ -363,9 +365,9 @@ public class DatabaseUtil {
 			cashDrawer.setTerminal(terminal);
 
 			Currency currency = new Currency();
-			currency.setName("USD");
-			currency.setCode("USD");
-			currency.setSymbol("$");
+			currency.setName("Leone");
+			currency.setCode("SLL");
+			currency.setSymbol("Le");
 			currency.setExchangeRate(1.0);
 			currency.setMain(true);
 			CurrencyDAO.getInstance().save(currency);
@@ -478,7 +480,12 @@ public class DatabaseUtil {
 				return true;
 			}
 
-			DataImportAction.importMenuItems(DatabaseUtil.class.getResourceAsStream("/floreantpos-menu-items.xml"));
+			try {
+				SeedMenu.seedMenu();
+			} catch (Exception ex) {
+				PosLog.error(DatabaseUtil.class, "Error seeding menu items: " + ex.getMessage());
+				logger.error(ex);
+			}
 
 			return true;
 		} catch (Exception e) {

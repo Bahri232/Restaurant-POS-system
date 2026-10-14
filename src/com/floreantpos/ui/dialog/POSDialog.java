@@ -40,7 +40,9 @@ public class POSDialog extends JDialog {
 		super(owner, modal);
 		
 		initUI();
-		setIconImage(Application.getPosWindow().getIconImage());
+		if (Application.getPosWindow() != null) {
+			setIconImage(Application.getPosWindow().getIconImage());
+		}
 	}
 
 //	public POSDialog(Window owner) {

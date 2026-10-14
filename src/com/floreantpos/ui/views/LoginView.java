@@ -118,7 +118,11 @@ public class LoginView extends ViewPanel {
 		//		lblTerminalId.setFont(new Font("Dialog", Font.BOLD, PosUIManager.getFontSize(18))); //$NON-NLS-1$
 		//		lblTerminalId.setHorizontalAlignment(SwingConstants.CENTER);
 
-		lblRestaurantName = new JLabel(Application.getInstance().getRestaurant().getName());
+		String restName = "";
+		if (Application.getInstance().getRestaurant() != null) {
+			restName = Application.getInstance().getRestaurant().getName();
+		}
+		lblRestaurantName = new JLabel(restName);
 		lblRestaurantName.setPreferredSize(new Dimension(1000, 100));
 		lblRestaurantName.setForeground(Color.BLACK);
 		lblRestaurantName.setFont(new Font("Dialog", Font.BOLD, PosUIManager.getFontSize(28)));
@@ -151,10 +155,13 @@ public class LoginView extends ViewPanel {
 		if (TerminalConfig.isShowKitchenBtnOnLoginScreen()) {
 			panel3.add(btnKitchenDisplay);
 		}
-		OrderServiceExtension orderService = (OrderServiceExtension) ExtensionManager.getPlugin(OrderServiceExtension.class);
-		if (orderService != null) {
-			panel3.add(btnDriverView);
-			btnDriverView.setVisible(false);
+		try {
+			OrderServiceExtension orderService = (OrderServiceExtension) ExtensionManager.getPlugin(OrderServiceExtension.class);
+			if (orderService != null) {
+				panel3.add(btnDriverView);
+				btnDriverView.setVisible(false);
+			}
+		} catch (Exception ignored) {
 		}
 		centerPanel.add(panel3, "cell 0 2, wrap, w " + width + "px, h " + height + "px, grow");
 
