@@ -159,13 +159,17 @@ public class DatabaseUtil {
 			SchemaExport schemaExport = new SchemaExport(configuration);
 			schemaExport.create(true, true);
 
-			_RootDAO.initialize();
+			_RootDAO.initialize(null, configuration);
 
 			Restaurant restaurant = new Restaurant();
 			restaurant.setId(Integer.valueOf(1));
 			restaurant.setName("Reness Delight Restaurant");
 			restaurant.setAddressLine1("32 Peninsular Road, Ogoo Farm");
-			restaurant.setTelephone("+232 72 333332 / +232 31 828380");
+			String telephone = "+232 72 333332 / +232 31 828380";
+			if (telephone != null && telephone.length() > 60) {
+				telephone = telephone.substring(0, 60);
+			}
+			restaurant.setTelephone(telephone);
 			restaurant.setAppVersion(AppProperties.getAppVersion());
 			restaurant.setAppNumericVersion(AppProperties.getAppNumericVersion());
 			restaurant.setAppDbVersion(DatabaseVersionHistory.DATABASE_VERSION);
@@ -511,7 +515,7 @@ public class DatabaseUtil {
 			SchemaUpdate schemaUpdate = new SchemaUpdate(configuration);
 			schemaUpdate.execute(true, true);
 
-			_RootDAO.initialize();
+			_RootDAO.initialize(null, configuration);
 
 			doUpdateRestaurant(true);
 

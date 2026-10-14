@@ -122,6 +122,12 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 	 */
 
 	public static void initialize(String configFileName, Configuration configuration) {
+		if (sessionFactory != null) {
+			try {
+				sessionFactory.close();
+			} catch (Exception ignored) {
+			}
+		}
 		com.floreantpos.model.dao._RootDAO.setSessionFactory(configuration.buildSessionFactory());
 	}
 

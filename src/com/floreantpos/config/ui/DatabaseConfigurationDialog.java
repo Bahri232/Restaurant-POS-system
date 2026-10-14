@@ -272,6 +272,8 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
+				saveConfig(selectedDb, providerName, databaseURL, databasePort, databaseName, user, pass, connectionString, hibernateDialect);
+
 				String createDbConnectString = selectedDb.getCreateDbConnectString(databaseURL, databasePort, databaseName);
 
 				boolean databaseCreated = DatabaseUtil.createDatabase(createDbConnectString, hibernateDialect, driverClass, user, pass, generateSampleData);

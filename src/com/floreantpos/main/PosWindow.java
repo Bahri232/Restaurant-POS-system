@@ -106,7 +106,7 @@ public class PosWindow extends JFrame implements WindowListener {
 		//		ImageIcon icon = IconFactory.getIcon("/ui_icons/", "footer-logo.png");
 		//		statusLabel.setIcon(icon);
 
-		statusLabel.setText("A Product by BAHRI.");
+		statusLabel.setText("A POS system by BAHRI.");
 		statusLabel.addMouseListener(new MouseListener() {
 
 			@Override
