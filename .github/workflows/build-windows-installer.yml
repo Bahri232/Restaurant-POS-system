@@ -12,13 +12,15 @@ jobs:
   build-installer:
     name: Build Standalone Windows Installer
     runs-on: windows-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Set up Java JDK 8 (Eclipse Temurin)
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '8'
@@ -207,7 +209,7 @@ jobs:
           Write-Host "Windows Installer successfully generated: dist/Installer/RenessPOS_Setup.exe"
 
       - name: Upload Installer Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: RenessPOS_Setup
           path: dist/Installer/RenessPOS_Setup.exe
