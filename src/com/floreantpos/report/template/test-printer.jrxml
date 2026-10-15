@@ -133,7 +133,7 @@
 			<staticText>
 				<reportElement positionType="Float" x="0" y="266" width="226" height="20"/>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[Floreant POS www.floreant.org]]></text>
+				<text><![CDATA[Reness POS]]></text>
 			</staticText>
 			<line>
 				<reportElement positionType="Float" x="0" y="73" width="226" height="1" forecolor="#CCCCCC"/>

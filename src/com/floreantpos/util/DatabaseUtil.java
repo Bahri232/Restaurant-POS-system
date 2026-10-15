@@ -169,7 +169,7 @@ public class DatabaseUtil {
 					if (dbFolder.exists()) {
 						boolean deleted = deleteDirectory(dbFolder);
 						if (!deleted && dbFolder.exists()) {
-							throw new Exception("The database directory at '" + path + "' is currently locked by another running program or terminal.\nPlease close any other running instances of Floreant POS / Reness POS and try again.");
+							throw new Exception("The database directory at '" + path + "' is currently locked by another running program or terminal.\nPlease close any other running instances of Reness POS and try again.");
 						}
 					}
 				} catch (Exception ex) {

@@ -53,7 +53,7 @@ public class PosWebService {
 			MultivaluedMap<String, String> map = new MultivaluedMapImpl();
 
 			map.add("productId", "819278037"); //$NON-NLS-1$ //$NON-NLS-2$
-			map.add("productName", "Floreant POS"); //$NON-NLS-1$ //$NON-NLS-2$
+			map.add("productName", "Reness POS"); //$NON-NLS-1$ //$NON-NLS-2$
 			map.add("terminalKey", TerminalUtil.getSystemUID()); //$NON-NLS-1$
 
 			Restaurant restaurant = RestaurantDAO.getRestaurant();

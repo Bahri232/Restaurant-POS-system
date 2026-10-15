@@ -183,7 +183,7 @@ public class PrinterGroupView extends JPanel {
 					String data = terminalPrinter.getPrinterName() + "-" + terminalPrinter.getVirtualPrinter().getName(); //$NON-NLS-1$
 					data += "\n Terminal : " + Application.getInstance().getTerminal().getName(); //$NON-NLS-1$
 					data += "\n Current User : " + Application.getCurrentUser().getFirstName(); //$NON-NLS-1$
-					data += "\n Floreant Version : " + Application.VERSION; //$NON-NLS-1$
+					data += "\n Reness POS Version : " + Application.VERSION; //$NON-NLS-1$
 					data += "\n Database Name : " + AppConfig.getDatabaseName() + AppConfig.getDatabaseHost() + AppConfig.getDatabasePort(); //$NON-NLS-1$
 					ReceiptPrintService.testPrinter(terminalPrinter.getPrinterName(), title, data);
 

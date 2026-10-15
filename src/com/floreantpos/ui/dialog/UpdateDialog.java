@@ -64,7 +64,7 @@ public class UpdateDialog extends POSDialog {
 		JLabel logoLabel = new JLabel(IconFactory.getIcon("/icons/", "fp_logo128x128.png")); //$NON-NLS-1$ //$NON-NLS-2$
 		panel.add(logoLabel, "cell 0 0 0 2");
 
-		JLabel l = new JLabel("<html><h1>Floreant POS</h1><h4>Current Version " + Application.VERSION + "</h4></html>"); //$NON-NLS-1$ //$NON-NLS-2$
+		JLabel l = new JLabel("<html><h1>Reness POS</h1><h4>Current Version " + Application.VERSION + "</h4></html>"); //$NON-NLS-1$ //$NON-NLS-2$
 		panel.add(l, "cell 0 2");
 
 		String version = "";
