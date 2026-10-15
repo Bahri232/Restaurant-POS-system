@@ -175,11 +175,11 @@ jobs:
               'Name: "{app}"; Permissions: users-modify',
               '',
               '[Icons]',
-              ('Name: "{group}\RenessPOS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar """{app}\renesspos.jar"""; WorkingDir: "{app}"' + $iconParam),
-              ('Name: "{autodesktop}\RenessPOS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar """{app}\renesspos.jar"""; WorkingDir: "{app}"; Tasks: desktopicon' + $iconParam),
+              ('Name: "{group}\RenessPOS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"' + $iconParam),
+              ('Name: "{autodesktop}\RenessPOS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Tasks: desktopicon' + $iconParam),
               '',
               '[Run]',
-              'Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar """{app}\renesspos.jar"""; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,RenessPOS}"; Flags: nowait postinstall skipifsilent'
+              'Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,RenessPOS}"; Flags: nowait postinstall skipifsilent'
           )
 
           $lines | Out-File -FilePath "setup.iss" -Encoding utf8

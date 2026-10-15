@@ -594,9 +594,11 @@
 			<url>file://${project.basedir}/local-lib</url>
 			<releases>
 				<enabled>true</enabled>
+				<checksumPolicy>ignore</checksumPolicy>
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
+				<checksumPolicy>ignore</checksumPolicy>
 			</snapshots>
 		</repository>
 	</repositories>
