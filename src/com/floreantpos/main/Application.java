@@ -132,6 +132,7 @@ public class Application {
 			posWindow.enterFullScreenMode();
 		}
 		posWindow.setVisible(true);
+		SingleInstanceManager.setMainWindow(posWindow);
 		rootView = RootView.getInstance();
 		posWindow.getContentPane().add(rootView);
 		initializeSystem();

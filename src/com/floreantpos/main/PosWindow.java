@@ -207,6 +207,27 @@ public class PosWindow extends JFrame implements WindowListener {
 		window.setFullScreenWindow(null);
 	}
 
+	public void restoreAndBringToFront() {
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				int state = getExtendedState();
+				if ((state & JFrame.ICONIFIED) != 0) {
+					setExtendedState(state & ~JFrame.ICONIFIED);
+				}
+				setVisible(true);
+				toFront();
+				requestFocus();
+				try {
+					setAlwaysOnTop(true);
+					toFront();
+					requestFocus();
+					setAlwaysOnTop(false);
+				} catch (Exception ignored) {}
+			}
+		});
+	}
+
 	public void saveSizeAndLocation() {
 		int width = getWidth();
 		int height = getHeight();

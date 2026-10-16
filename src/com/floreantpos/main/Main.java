@@ -39,6 +39,13 @@ public class Main {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
+		if (!SingleInstanceManager.acquireLock()) {
+			SingleInstanceManager.notifyAndFocusExistingInstance();
+			SingleInstanceManager.showAlreadyRunningDialog();
+			System.exit(0);
+			return;
+		}
+
 		Options options = new Options();
 		options.addOption(DEVELOPMENT_MODE, true, "State if this is developmentMode"); //$NON-NLS-1$
 		CommandLineParser parser = new BasicParser();
@@ -59,6 +66,8 @@ public class Main {
 	}
 
 	public static void restart() throws IOException, InterruptedException, URISyntaxException {
+		SingleInstanceManager.releaseLock();
+
 		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		//		Properties properties = System.getProperties();
