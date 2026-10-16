@@ -111,9 +111,30 @@ public class DatabaseUtil {
 	public static void updateLegacyDatabase() {
 		try {
 			dropModifiedTimeColumn();
+			checkAndUpdateServerSchema();
 			doUpdateRestaurant(false);
 		} catch (SQLException e) {
 			logger.error(e);
+		}
+	}
+
+	private static void checkAndUpdateServerSchema() {
+		GenericDAO dao = new GenericDAO();
+		Session session = null;
+		try {
+			session = dao.createNewSession();
+			Connection connection = session.connection();
+			try {
+				Statement statement = connection.createStatement();
+				statement.execute("ALTER TABLE TICKET ADD COLUMN SERVER_ID INTEGER");
+				connection.commit();
+			} catch (Exception ignored) {
+			}
+		} catch (Exception e) {
+		} finally {
+			if (session != null) {
+				dao.closeSession(session);
+			}
 		}
 	}
 

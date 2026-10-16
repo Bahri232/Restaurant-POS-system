@@ -43,6 +43,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BaseGratuity.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\dialog\TicketDetailDialog.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\config\ui\OtherConfigurationView.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\Server.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\BaseTableBookingInfoDAO.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\ZipCodeVsDeliveryChargeDAO.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\VoidReason.java
@@ -137,6 +138,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BasePosTransaction.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\util\UiUtil.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\bo\actions\PizzaModifierExplorerAction.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\bo\ui\explorer\ServerExplorer.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\model\MenuItemModifierGroupForm.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\BaseCustomPaymentTransactionDAO.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\report\PurchaseReportData.java
@@ -195,6 +197,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\views\payment\AuthorizationDialog.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\main\Main.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\BaseDeliveryAddressDAO.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\bo\actions\ServerExplorerAction.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\swing\ItemCheckBoxList.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\PrinterConfiguration.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\HibernateProjectionsUtil.java
@@ -229,6 +232,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\dialog\BeanEditorDialog.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\views\DateEntryView.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\TicketItemDiscountDAO.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\ServerDAO.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\actions\ManageTableLayoutAction.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\actions\ShutDownAction.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\TicketItemCookingInstruction.java
@@ -502,6 +506,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\actions\DrawerPullAction.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\BaseShopFloorDAO.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\report\AttendanceReportView.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\forms\ServerForm.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\views\order\TicketForSplitView.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BaseActionHistory.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\ZipCodeVsDeliveryCharge.java
@@ -599,6 +604,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\model\MenuItemSizeForm.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\customer\DefaultCustomerListView.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BaseMenuGroup.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\ServerSalesSummary.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BaseCashDrawerResetHistory.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\config\ui\MultiPrinterPane.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\swing\FixedLengthDocument.java
@@ -701,6 +707,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\CashDrawerResetHistoryDAO.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\views\payment\PaymentProcessWaitDialog.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\TipsCashoutReport.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\dialog\ServerSelectionDialog.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\views\payment\CustomPaymentSelectionDialog.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\report\SalesDetailReportView.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\bo\actions\CategoryExplorerAction.java
@@ -914,6 +921,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\report\SalesStatistics.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\BaseTicketItemModifierDAO.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\MenuItemSize.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\dialog\QuickAddServerDialog.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\views\order\MenuItemView.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BaseDataUpdateInfo.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\bo\actions\SalesReportAction.java

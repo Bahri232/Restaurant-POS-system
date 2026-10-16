@@ -17,9 +17,14 @@
  */
 package com.floreantpos.print;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Criteria;
@@ -40,6 +45,7 @@ import com.floreantpos.model.Gratuity;
 import com.floreantpos.model.PayOutTransaction;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.RefundTransaction;
+import com.floreantpos.model.ServerSalesSummary;
 import com.floreantpos.model.Terminal;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketDiscount;
@@ -66,6 +72,7 @@ public class DrawerpullReportService {
 
 			populateNetSales(session, terminal, report);
 			populateReceiptDifferential(session, terminal, report);
+			populateServerSales(session, terminal, report);
 
 			//			populateGiftSection(session, terminal, report);
 
@@ -344,6 +351,63 @@ public class DrawerpullReportService {
 		summary.setChangeAmount(changeAmount);
 
 		return summary;
+	}
+
+	private static void populateServerSales(Session session, Terminal terminal, DrawerPullReport report) {
+		Criteria criteria = session.createCriteria(Ticket.class);
+		criteria.add(Restrictions.gt(Ticket.PROP_PAID_AMOUNT, 0.0));
+		criteria.add(Restrictions.or(Restrictions.eq(Ticket.PROP_VOIDED, Boolean.FALSE), Restrictions.eq(Ticket.PROP_REFUNDED, Boolean.TRUE)));
+		criteria.add(Restrictions.eq(Ticket.PROP_DRAWER_RESETTED, Boolean.FALSE));
+		criteria.add(Restrictions.eq(Ticket.PROP_TERMINAL, terminal));
+
+		List<Ticket> list = criteria.list();
+		if (list == null || list.isEmpty()) {
+			return;
+		}
+
+		Map<String, ServerSalesSummary> summaryMap = new LinkedHashMap<>();
+		Map<String, Set<Integer>> serverTablesMap = new HashMap<>();
+
+		for (Ticket ticket : list) {
+			String serverName = ticket.getServerName();
+			if (serverName == null || serverName.trim().isEmpty()) {
+				serverName = "Unassigned";
+			}
+
+			ServerSalesSummary summary = summaryMap.get(serverName);
+			if (summary == null) {
+				summary = new ServerSalesSummary();
+				summary.setServerName(serverName);
+				summaryMap.put(serverName, summary);
+			}
+
+			summary.setTicketCount(summary.getTicketCount() + 1);
+
+			double ticketRevenue = ticket.getTotalAmount();
+			summary.setTotalRevenue(summary.getTotalRevenue() + ticketRevenue);
+
+			Set<Integer> tables = serverTablesMap.get(serverName);
+			if (tables == null) {
+				tables = new HashSet<>();
+				serverTablesMap.put(serverName, tables);
+			}
+			if (ticket.getTableNumbers() != null) {
+				for (Integer tableNo : ticket.getTableNumbers()) {
+					if (tableNo != null) {
+						tables.add(tableNo);
+					}
+				}
+			}
+		}
+
+		for (Map.Entry<String, ServerSalesSummary> entry : summaryMap.entrySet()) {
+			String sName = entry.getKey();
+			ServerSalesSummary summary = entry.getValue();
+			Set<Integer> tables = serverTablesMap.get(sName);
+			summary.setTableCount(tables != null ? tables.size() : 0);
+		}
+
+		report.setServerSalesSummaries(new ArrayList<>(summaryMap.values()));
 	}
 
 }

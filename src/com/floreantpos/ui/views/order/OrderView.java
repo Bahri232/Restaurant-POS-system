@@ -65,6 +65,7 @@ import com.floreantpos.model.MenuGroup;
 import com.floreantpos.model.MenuItem;
 import com.floreantpos.model.OrderType;
 import com.floreantpos.model.PosPrinters;
+import com.floreantpos.model.Server;
 import com.floreantpos.model.ShopTable;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
@@ -86,6 +87,7 @@ import com.floreantpos.ui.dialog.NumberSelectionDialog2;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.ui.dialog.PasswordEntryDialog;
 import com.floreantpos.ui.dialog.SeatSelectionDialog;
+import com.floreantpos.ui.dialog.ServerSelectionDialog;
 import com.floreantpos.ui.dialog.UserListDialog;
 import com.floreantpos.ui.tableselection.TableSelectorDialog;
 import com.floreantpos.ui.tableselection.TableSelectorFactory;
@@ -618,21 +620,19 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 			return;
 		}
 		try {
-			UserListDialog dialog = new UserListDialog();
-			dialog.setTitle("Select Server");
-			if (currentTicket.getOwner() != null) {
-				dialog.setSelectedUser(currentTicket.getOwner());
+			ServerSelectionDialog dialog = new ServerSelectionDialog();
+			if (currentTicket.getAssignedServer() != null) {
+				dialog.setSelectedServer(currentTicket.getAssignedServer());
 			}
-			dialog.pack();
 			dialog.open();
 
 			if (dialog.isCanceled()) {
 				return;
 			}
 
-			User selectedUser = dialog.getSelectedUser();
-			if (selectedUser != null) {
-				currentTicket.setOwner(selectedUser);
+			Server selectedServer = dialog.getSelectedServer();
+			if (selectedServer != null) {
+				currentTicket.setAssignedServer(selectedServer);
 				if (currentTicket.getId() != null) {
 					TicketDAO.getInstance().saveOrUpdate(currentTicket);
 				}
@@ -874,8 +874,8 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 			btnDone.setVisible(!type.isPrepaid());
 			btnSend.setEnabled(type.isShouldPrintToKitchen());
 
-			if (currentTicket.getOwner() != null) {
-				btnServer.setText("Server: " + currentTicket.getOwner().getFirstName());
+			if (currentTicket.getServerName() != null) {
+				btnServer.setText("Server: " + currentTicket.getServerName());
 			}
 			else {
 				btnServer.setText("Server");
@@ -1071,8 +1071,8 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 
 	public void updateView() {
 		btnCustomer.setText(POSConstants.CUSTOMER_SELECTION_BUTTON_TEXT);
-		if (currentTicket != null && currentTicket.getOwner() != null) {
-			btnServer.setText("Server: " + currentTicket.getOwner().getFirstName());
+		if (currentTicket != null && currentTicket.getServerName() != null) {
+			btnServer.setText("Server: " + currentTicket.getServerName());
 		}
 		else {
 			btnServer.setText("Server");

@@ -40,6 +40,7 @@ import com.floreantpos.model.MenuCategory;
 import com.floreantpos.model.PayOutTransaction;
 import com.floreantpos.model.PaymentType;
 import com.floreantpos.model.PosTransaction;
+import com.floreantpos.model.Server;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
 import com.floreantpos.model.TransactionType;
@@ -135,21 +136,37 @@ public class ReportService {
 
 			session = dao.getSession();
 
-			Criteria criteria = session.createCriteria(User.class);
-			//criteria.add(Restrictions.eq(User.PROP_USER_TYPE, User.USER_TYPE_SERVER));
-			List<User> servers = criteria.list();
+			Criteria serverCriteria = session.createCriteria(Server.class);
+			List serversList = serverCriteria.list();
+			boolean useDedicatedServers = (serversList != null && !serversList.isEmpty());
+			if (!useDedicatedServers) {
+				serversList = session.createCriteria(User.class).list();
+			}
 
-			criteria = session.createCriteria(MenuCategory.class);
+			Criteria criteria = session.createCriteria(MenuCategory.class);
 			List<MenuCategory> categories = criteria.list();
 			MenuCategory miscCategory = new MenuCategory();
 			miscCategory.setName(com.floreantpos.POSConstants.MISC_BUTTON_TEXT);
 			categories.add(miscCategory);
 
-			for (User server : servers) {
+			for (Object serverObj : serversList) {
 				ServerProductivityReportData data = new ServerProductivityReportData();
-				data.setServerName(server.getUserId() + "/" + server.toString()); //$NON-NLS-1$
+				String serverDisplayName;
+				if (serverObj instanceof Server) {
+					serverDisplayName = ((Server) serverObj).getDisplayName();
+				}
+				else {
+					User u = (User) serverObj;
+					serverDisplayName = u.getUserId() + "/" + u.toString();
+				}
+				data.setServerName(serverDisplayName);
 				criteria = session.createCriteria(Ticket.class);
-				criteria.add(Restrictions.eq(Ticket.PROP_OWNER, server));
+				if (serverObj instanceof Server) {
+					criteria.add(Restrictions.eq(Ticket.PROP_ASSIGNED_SERVER, serverObj));
+				}
+				else {
+					criteria.add(Restrictions.eq(Ticket.PROP_OWNER, serverObj));
+				}
 				criteria.add(Restrictions.eq(Ticket.PROP_PAID, Boolean.TRUE));
 				criteria.add(Restrictions.eq(Ticket.PROP_VOIDED, Boolean.FALSE)); //$NON-NLS-1$
 				criteria.add(Restrictions.eq(Ticket.PROP_REFUNDED, Boolean.FALSE)); //$NON-NLS-1$
@@ -186,7 +203,7 @@ public class ReportService {
 
 				for (MenuCategory category : categories) {
 					data = new ServerProductivityReportData();
-					data.setServerName(server.getUserId() + "/" + server.toString()); //$NON-NLS-1$
+					data.setServerName(serverDisplayName);
 
 					criteria = session.createCriteria(TicketItem.class, "item"); //$NON-NLS-1$
 					criteria.createCriteria(TicketItem.PROP_TICKET, "t"); //$NON-NLS-1$
@@ -201,7 +218,12 @@ public class ReportService {
 					criteria.add(Restrictions.eq("item." + TicketItem.PROP_CATEGORY_NAME, category.getName())); //$NON-NLS-1$
 					criteria.add(Restrictions.ge("t." + Ticket.PROP_CREATE_DATE, fromDate)); //$NON-NLS-1$
 					criteria.add(Restrictions.le("t." + Ticket.PROP_CREATE_DATE, toDate)); //$NON-NLS-1$
-					criteria.add(Restrictions.eq("t." + Ticket.PROP_OWNER, server)); //$NON-NLS-1$
+					if (serverObj instanceof Server) {
+						criteria.add(Restrictions.eq("t." + Ticket.PROP_ASSIGNED_SERVER, serverObj)); //$NON-NLS-1$
+					}
+					else {
+						criteria.add(Restrictions.eq("t." + Ticket.PROP_OWNER, serverObj)); //$NON-NLS-1$
+					}
 					criteria.add(Restrictions.eq("t." + Ticket.PROP_PAID, Boolean.TRUE)); //$NON-NLS-1$
 					criteria.add(Restrictions.eq("t." + Ticket.PROP_VOIDED, Boolean.FALSE)); //$NON-NLS-1$
 					criteria.add(Restrictions.eq("t." + Ticket.PROP_REFUNDED, Boolean.FALSE)); //$NON-NLS-1$

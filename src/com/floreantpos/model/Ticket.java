@@ -964,4 +964,14 @@ public class Ticket extends BaseTicket {
 		return (isSourceOnline() || isSourceWoocomerce()) ? getGlobalId() : String.valueOf(getId());
 	}
 
+	public String getServerName() {
+		if (getAssignedServer() != null) {
+			return getAssignedServer().getDisplayName();
+		}
+		if (getOwner() != null) {
+			return getOwner().getFirstName();
+		}
+		return "";
+	}
+
 }

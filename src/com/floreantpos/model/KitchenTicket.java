@@ -241,7 +241,7 @@ public class KitchenTicket extends BaseKitchenTicket {
 						kitchenTicket.setTableNumbers(new ArrayList<Integer>(ticket.getTableNumbers()));
 					}
 
-					kitchenTicket.setServerName(ticket.getOwner().getFirstName());
+					kitchenTicket.setServerName(ticket.getServerName());
 					kitchenTicket.setStatus(KitchenTicketStatus.WAITING.name());
 
 					if (StringUtils.isNotEmpty(ticket.getProperty(Ticket.CUSTOMER_NAME))) {

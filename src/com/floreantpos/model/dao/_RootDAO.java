@@ -79,6 +79,7 @@ import com.floreantpos.model.PurchaseOrder;
 import com.floreantpos.model.Recepie;
 import com.floreantpos.model.RecepieItem;
 import com.floreantpos.model.Restaurant;
+import com.floreantpos.model.Server;
 import com.floreantpos.model.Shift;
 import com.floreantpos.model.ShopFloor;
 import com.floreantpos.model.ShopFloorTemplate;
@@ -206,6 +207,7 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration.addClass(TaxGroup.class);
 		configuration.addClass(GuestCheckPrint.class);
 		configuration.addClass(OnlineOrder.class);
+		configuration.addClass(Server.class);
 
 		configureInventoryClasses(configuration);
 

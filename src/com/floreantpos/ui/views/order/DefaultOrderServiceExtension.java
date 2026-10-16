@@ -33,11 +33,13 @@ import com.floreantpos.extension.OrderServiceExtension;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.Customer;
 import com.floreantpos.model.OrderType;
+import com.floreantpos.model.Server;
 import com.floreantpos.model.ShopTable;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.User;
 import com.floreantpos.model.dao.TicketDAO;
 import com.floreantpos.ui.dialog.POSMessageDialog;
+import com.floreantpos.ui.dialog.ServerSelectionDialog;
 import com.floreantpos.ui.views.IView;
 import com.floreantpos.util.DrawerUtil;
 import com.floreantpos.util.POSUtil;
@@ -82,15 +84,14 @@ public class DefaultOrderServiceExtension extends OrderServiceExtension {
 			}
 		}
 
-		User server = null;
+		Server assignedServer = null;
 		if (ticketType.isShowTableSelection() || (selectedTables != null && !selectedTables.isEmpty())) {
-			server = PosGuiUtil.captureServer(Application.getCurrentUser());
-			if (server == null) {
+			ServerSelectionDialog dialog = new ServerSelectionDialog();
+			dialog.open();
+			if (dialog.isCanceled()) {
 				return;
 			}
-		}
-		else {
-			server = Application.getCurrentUser();
+			assignedServer = dialog.getSelectedServer();
 		}
 
 		Application application = Application.getInstance();
@@ -103,7 +104,8 @@ public class DefaultOrderServiceExtension extends OrderServiceExtension {
 		if (customer != null)
 			ticket.setDeliveryAddress(customer.getAddress());
 		ticket.setTerminal(application.getTerminal());
-		ticket.setOwner(server);
+		ticket.setOwner(Application.getCurrentUser());
+		ticket.setAssignedServer(assignedServer);
 		ticket.setShift(application.getCurrentShift());
 
 		if (selectedTables != null) {

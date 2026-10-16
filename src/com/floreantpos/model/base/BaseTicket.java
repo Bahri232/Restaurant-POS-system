@@ -20,6 +20,7 @@ public abstract class BaseTicket  implements Comparable, Serializable {
 	public static String PROP_NUMBER_OF_GUESTS = "numberOfGuests"; //$NON-NLS-1$
 	public static String PROP_RE_OPENED = "reOpened"; //$NON-NLS-1$
 	public static String PROP_OWNER = "owner"; //$NON-NLS-1$
+	public static String PROP_ASSIGNED_SERVER = "assignedServer"; //$NON-NLS-1$
 	public static String PROP_SUBTOTAL_AMOUNT = "subtotalAmount"; //$NON-NLS-1$
 	public static String PROP_DUE_AMOUNT = "dueAmount"; //$NON-NLS-1$
 	public static String PROP_DELIVERY_ADDRESS = "deliveryAddress"; //$NON-NLS-1$
@@ -120,6 +121,7 @@ public abstract class BaseTicket  implements Comparable, Serializable {
 	// many to one
 	private com.floreantpos.model.Shift shift;
 	private com.floreantpos.model.User owner;
+	private com.floreantpos.model.Server assignedServer;
 	private com.floreantpos.model.User assignedDriver;
 	private com.floreantpos.model.Gratuity gratuity;
 	private com.floreantpos.model.User voidedBy;
@@ -764,6 +766,14 @@ public abstract class BaseTicket  implements Comparable, Serializable {
 	 */
 	public void setOwner (com.floreantpos.model.User owner) {
 		this.owner = owner;
+	}
+
+	public com.floreantpos.model.Server getAssignedServer () {
+		return assignedServer;
+	}
+
+	public void setAssignedServer (com.floreantpos.model.Server assignedServer) {
+		this.assignedServer = assignedServer;
 	}
 
 

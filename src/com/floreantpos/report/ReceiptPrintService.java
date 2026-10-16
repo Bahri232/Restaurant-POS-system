@@ -477,9 +477,9 @@ public class ReceiptPrintService {
 		map.put(CHECK_NO, POSConstants.RECEIPT_REPORT_TICKET_NO_LABEL + ticket.getUniqueId());
 		map.put(TABLE_NO, POSConstants.RECEIPT_REPORT_TABLE_NO_LABEL + ticket.getTableNumbers());
 		map.put(GUEST_COUNT, POSConstants.RECEIPT_REPORT_GUEST_NO_LABEL + ticket.getNumberOfGuests());
-		if (ticket.getOwner() != null) {
-			map.put(SERVER_NAME, POSConstants.RECEIPT_REPORT_SERVER_LABEL + ticket.getOwner());
-		}
+		String cashierName = ticket.getOwner() != null ? ticket.getOwner().getFirstName() : "N/A";
+		String serverName = ticket.getServerName();
+		map.put(SERVER_NAME, "Cashier: " + cashierName + " | Server: " + serverName);
 		map.put(REPORT_DATE, POSConstants.RECEIPT_REPORT_DATE_LABEL + Application.formatDate(new Date()));
 
 		StringBuilder ticketHeaderBuilder = buildTicketHeader(ticket, printProperties);
@@ -657,11 +657,11 @@ public class ReceiptPrintService {
 			endRow(ticketHeaderBuilder);
 		}
 
-		if (ticket.getOwner() != null) {
-			beginRow(ticketHeaderBuilder);
-			addColumn(ticketHeaderBuilder, POSConstants.RECEIPT_REPORT_SERVER_LABEL + ticket.getOwner());
-			endRow(ticketHeaderBuilder);
-		}
+		String cashierName = ticket.getOwner() != null ? ticket.getOwner().getFirstName() : "N/A";
+		String serverName = ticket.getServerName();
+		beginRow(ticketHeaderBuilder);
+		addColumn(ticketHeaderBuilder, "Cashier: " + cashierName + " | Server: " + serverName);
+		endRow(ticketHeaderBuilder);
 
 		beginRow(ticketHeaderBuilder);
 		addColumn(ticketHeaderBuilder, POSConstants.RECEIPT_REPORT_DATE_LABEL + reportDateFormat.format(new Date()));

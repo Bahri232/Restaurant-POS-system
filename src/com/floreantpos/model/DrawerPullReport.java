@@ -130,4 +130,14 @@ public class DrawerPullReport extends BaseDrawerPullReport {
 			setTotalVoid(totalVoidAmount);
 		}
 	}
+
+	private java.util.List<ServerSalesSummary> serverSalesSummaries;
+
+	public java.util.List<ServerSalesSummary> getServerSalesSummaries() {
+		return serverSalesSummaries;
+	}
+
+	public void setServerSalesSummaries(java.util.List<ServerSalesSummary> serverSalesSummaries) {
+		this.serverSalesSummaries = serverSalesSummaries;
+	}
 }

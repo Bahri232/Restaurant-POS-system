@@ -150,6 +150,8 @@ public class ShopTableDAO extends BaseShopTableDAO {
 		List<Integer> ticketNumbers = new ArrayList<>();
 		ticketNumbers.add(ticket.getId());
 		User owner = ticket.getOwner();
+		Integer ownerId = owner != null ? owner.getAutoId() : null;
+		String serverDisplayName = ticket.getServerName();
 
 		for (Integer tableId : tableNumbers) {
 			ShopTableStatus shopTableStatus = (ShopTableStatus) ShopTableStatusDAO.getInstance().get(tableId, session);
@@ -157,7 +159,7 @@ public class ShopTableDAO extends BaseShopTableDAO {
 				shopTableStatus = new ShopTableStatus();
 				shopTableStatus.setId(tableId);
 			}
-			shopTableStatus.setTableTicket(ticket.getId(), owner.getAutoId(), owner.getFirstName());
+			shopTableStatus.setTableTicket(ticket.getId(), ownerId, serverDisplayName != null ? serverDisplayName : (owner != null ? owner.getFirstName() : ""));
 			shopTableStatus.setTableStatus(TableStatus.Seat);
 			ShopTableStatusDAO.getInstance().saveOrUpdate(shopTableStatus, session);
 		}

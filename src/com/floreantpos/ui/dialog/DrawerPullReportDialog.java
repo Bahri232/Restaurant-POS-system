@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JDialog;
@@ -56,6 +57,7 @@ import com.floreantpos.model.CashDrawer;
 import com.floreantpos.model.CurrencyBalance;
 import com.floreantpos.model.DrawerPullReport;
 import com.floreantpos.model.DrawerPullVoidTicketEntry;
+import com.floreantpos.model.ServerSalesSummary;
 import com.floreantpos.model.Terminal;
 import com.floreantpos.model.dao.CashDrawerDAO;
 import com.floreantpos.print.DrawerpullReportService;
@@ -248,6 +250,40 @@ public class DrawerPullReportDialog extends POSDialog {
 		table.addElement(tr);
 	}
 
+	void addServerTableSeparator(Table table) {
+		TR tr = new TR();
+		TD td = new TD();
+		td.addAttribute("colspan", 3);
+		td.addAttribute("align", "right");
+		HR hr = new HR();
+		hr.addAttribute("style", "border: dashed;");
+		td.addElement(hr);
+		tr.addElement(td);
+		table.addElement(tr);
+	}
+
+	void addServerTableRow(Table table, String serverName, String tablesServed, String salesAmount) {
+		TR tr = new TR();
+		TD td = new TD();
+		td.addAttribute("valign", "top");
+		td.addElement(serverName);
+		tr.addElement(td);
+
+		td = new TD();
+		td.addAttribute("valign", "top");
+		td.addAttribute("align", "center");
+		td.addElement(tablesServed);
+		tr.addElement(td);
+
+		td = new TD();
+		td.addAttribute("valign", "top");
+		td.addAttribute("align", "right");
+		td.addElement(salesAmount);
+		tr.addElement(td);
+
+		table.addElement(tr);
+	}
+
 	void addExceptionTableRow(Table table, String column1, String coulmn2, String coulmn3, String column5) {
 		TR tr = new TR();
 		TD td = new TD();
@@ -395,6 +431,28 @@ public class DrawerPullReportDialog extends POSDialog {
 		addDiscountTableRow(table, Messages.getString("DrawerPullReportDialog.117"), String.valueOf(drawerPullReport.getTotalDiscountCheckSize())); //$NON-NLS-1$
 		addDiscountTableRow(table, Messages.getString("DrawerPullReportDialog.118"), String.valueOf(" ")); //$NON-NLS-1$ //$NON-NLS-2$
 		addDiscountTableRow(table, Messages.getString("DrawerPullReportDialog.120"), String.valueOf(" ")); //$NON-NLS-1$ //$NON-NLS-2$
+
+		createSectionHeader(document, "SALES BY SERVER");
+		table = new Table();
+		table.addAttribute("width", "100%");
+		addServerTableRow(table, "<b>SERVER</b>", "<b>TABLES</b>", "<b>TOTAL REVENUE</b>");
+		addServerTableSeparator(table);
+
+		List<ServerSalesSummary> serverSales = drawerPullReport.getServerSalesSummaries();
+		if (serverSales != null && !serverSales.isEmpty()) {
+			int totalTables = 0;
+			double grandTotalServerSales = 0.0;
+			for (ServerSalesSummary s : serverSales) {
+				totalTables += s.getTableCount();
+				grandTotalServerSales += s.getTotalRevenue();
+				addServerTableRow(table, s.getServerName(), String.valueOf(s.getTableCount()), decimalFormat.format(s.getTotalRevenue()));
+			}
+			addServerTableSeparator(table);
+			addServerTableRow(table, "<b>TOTAL</b>", "<b>" + totalTables + "</b>", "<b>" + decimalFormat.format(grandTotalServerSales) + "</b>");
+		} else {
+			addTableRow(table, "No server sales for this shift", "");
+		}
+		document.appendBody(table);
 
 		return document.toString();
 	}

@@ -328,8 +328,16 @@ public class DefaultTableSelectionView extends TableSelector implements ActionLi
 
 			if (isCreateNewTicket()) {
 				doCreateNewTicket();
+				if (OrderView.VIEW_NAME.equals(RootView.getInstance().getCurrentViewName())) {
+					closeDialog(false);
+				}
+				else {
+					clearSelection();
+				}
 			}
-			closeDialog(false);
+			else {
+				closeDialog(false);
+			}
 		}
 	}
 
