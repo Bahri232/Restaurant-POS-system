@@ -124,7 +124,7 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 
 	private OrderController orderController = new OrderController(this);
 
-	private JPanel actionButtonPanel = new JPanel(new MigLayout("fill, ins 2, hidemode 3", "sg, fill", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private JPanel actionButtonPanel = new JPanel(new MigLayout("fill, ins 2, hidemode 3", "fill, grow", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	private com.floreantpos.swing.PosButton btnHold = new com.floreantpos.swing.PosButton(com.floreantpos.POSConstants.HOLD_BUTTON_TEXT);
 	private com.floreantpos.swing.PosButton btnDone = new com.floreantpos.swing.PosButton(com.floreantpos.POSConstants.SAVE_BUTTON_TEXT);
@@ -449,20 +449,20 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 			}
 		});
 
-		actionButtonPanel.add(btnOrderType);
-		actionButtonPanel.add(btnCustomer);
-		actionButtonPanel.add(btnDeliveryInfo);
-		actionButtonPanel.add(btnTableNumber);
-		actionButtonPanel.add(btnServer);
-		actionButtonPanel.add(btnGuestNo);
-		actionButtonPanel.add(btnSeatNo);
-		actionButtonPanel.add(btnCookingInstruction);
+		actionButtonPanel.add(btnOrderType, "grow, shrink 100");
+		actionButtonPanel.add(btnCustomer, "grow, shrink 100");
+		actionButtonPanel.add(btnDeliveryInfo, "grow, shrink 100");
+		actionButtonPanel.add(btnTableNumber, "grow, shrink 100");
+		actionButtonPanel.add(btnServer, "grow, shrink 100");
+		actionButtonPanel.add(btnGuestNo, "grow, shrink 100");
+		actionButtonPanel.add(btnSeatNo, "grow, shrink 100");
+		actionButtonPanel.add(btnCookingInstruction, "w " + PosUIManager.getSize(45) + "!, grow 0");
 		//		actionButtonPanel.add(btnAddOn);
-		actionButtonPanel.add(btnMisc);
-		actionButtonPanel.add(btnHold);
-		actionButtonPanel.add(btnSend);
-		actionButtonPanel.add(btnCancel);
-		actionButtonPanel.add(btnDone);
+		actionButtonPanel.add(btnMisc, "grow, shrink 100");
+		actionButtonPanel.add(btnHold, "grow, shrink 100");
+		actionButtonPanel.add(btnSend, "grow, shrink 100");
+		actionButtonPanel.add(btnCancel, "grow, shrink 100");
+		actionButtonPanel.add(btnDone, "grow, shrink 100");
 
 		btnCookingInstruction.setEnabled(false);
 		//		btnAddOn.setEnabled(false);
@@ -872,6 +872,7 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 			OrderType type = currentTicket.getOrderType();
 
 			btnDone.setVisible(!type.isPrepaid());
+			btnCancel.setVisible(true);
 			btnSend.setEnabled(type.isShouldPrintToKitchen());
 
 			if (currentTicket.getServerName() != null) {
