@@ -175,6 +175,21 @@ public class Application {
 			UIManager.put("Button.hoverBackground", java.awt.Color.decode("#E5A01E"));
 			UIManager.put("Button.borderWidth", 1);
 			UIManager.put("Button.borderColor", java.awt.Color.decode("#D1D5DB"));
+
+			// Button & ToggleButton padding to prevent text truncation
+			UIManager.put("Button.margin", new java.awt.Insets(4, 8, 4, 8));
+			UIManager.put("ToggleButton.margin", new java.awt.Insets(4, 8, 4, 8));
+
+			// TabbedPane optimizations: comfortable padding, minimum tab width, no tab label shrinking
+			UIManager.put("TabbedPane.tabInsets", new java.awt.Insets(6, 12, 6, 12));
+			UIManager.put("TabbedPane.selectedTabPadInsets", new java.awt.Insets(2, 2, 2, 2));
+			UIManager.put("TabbedPane.tabAreaInsets", new java.awt.Insets(2, 2, 2, 2));
+			UIManager.put("TabbedPane.tabHeight", 34);
+			UIManager.put("TabbedPane.minimumTabWidth", 80);
+			UIManager.put("TabbedPane.shrinkTabs", false);
+			UIManager.put("TabbedPane.tabWidthMode", "preferred");
+			UIManager.put("TabbedPane.scrollButtonsPlacement", "both");
+			UIManager.put("TabbedPane.scrollButtonsPolicy", "asNeeded");
 		} catch (Exception ignored) {
 		}
 	}

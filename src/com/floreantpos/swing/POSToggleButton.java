@@ -27,7 +27,7 @@ import com.floreantpos.POSConstants;
 
 public class POSToggleButton extends JToggleButton {
 	//public static Border border = new LineBorder(Color.BLACK, 1);
-	//static Insets margin = new Insets(0, 0, 0, 0);
+	private static java.awt.Insets margin = new java.awt.Insets(4, 6, 4, 6);
 
 	static {
 		UIManager.put("POSToggleButtonUI", "com.floreantpos.swing.POSToggleButtonUI"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -43,7 +43,7 @@ public class POSToggleButton extends JToggleButton {
 //		setFont(UIConfig.getButtonFont());
 		setFocusPainted(false);
 		setFocusable(false);
-		//setMargin(margin);
+		setMargin(margin);
 	}
 
 	@Override
@@ -53,24 +53,29 @@ public class POSToggleButton extends JToggleButton {
 
 	@Override
 	public Dimension getPreferredSize() {
-		Dimension size = null;
-
 		if (isPreferredSizeSet()) {
 			return super.getPreferredSize();
 		}
-		else if (ui != null) {
-			size = ui.getPreferredSize(this);
-		}
+
+		Dimension size = super.getPreferredSize();
+		int minWidth = PosUIManager.getSize(POSConstants.BUTTON_DEFAULT_WIDTH);
+		int minHeight = PosUIManager.getSize(POSConstants.BUTTON_DEFAULT_HEIGHT);
 
 		if (size == null) {
-			size = new Dimension(PosUIManager.getSize(POSConstants.BUTTON_DEFAULT_WIDTH, POSConstants.BUTTON_DEFAULT_HEIGHT));
-		}
-		else {
-			int width = size.width < POSConstants.BUTTON_DEFAULT_WIDTH ? POSConstants.BUTTON_DEFAULT_WIDTH : size.width;
-			int height = size.height < POSConstants.BUTTON_DEFAULT_HEIGHT ? POSConstants.BUTTON_DEFAULT_HEIGHT : size.height;
-			size.setSize(PosUIManager.getSize(width, height));
+			return new Dimension(minWidth, minHeight);
 		}
 
-		return size;
+		int width = Math.max(size.width, minWidth);
+		int height = Math.max(size.height, minHeight);
+
+		return new Dimension(width, height);
+	}
+
+	@Override
+	public Dimension getMinimumSize() {
+		if (isMinimumSizeSet()) {
+			return super.getMinimumSize();
+		}
+		return getPreferredSize();
 	}
 }

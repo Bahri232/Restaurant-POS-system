@@ -83,10 +83,12 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 
 		btnPrev = new PosButton();
 		btnPrev.setText(POSConstants.CAPITAL_PREV);
+		btnPrev.setMargin(new java.awt.Insets(2, 4, 2, 4));
 		actionButtonPanel.add(btnPrev, "grow, align center"); //$NON-NLS-1$
 
 		btnNext = new PosButton();
 		btnNext.setText(POSConstants.CAPITAL_NEXT);
+		btnNext.setMargin(new java.awt.Insets(2, 4, 2, 4));
 		actionButtonPanel.add(btnNext, "grow, align center"); //$NON-NLS-1$
 
 		add(actionButtonPanel, BorderLayout.SOUTH);

@@ -34,7 +34,7 @@ import com.floreantpos.actions.ActionCommand;
 import com.floreantpos.actions.PosAction;
 
 public class PosButton extends JButton {
-	static Insets margin = new Insets(10, 15, 10, 15);
+	static Insets margin = new Insets(4, 6, 4, 6);
 
 	public PosButton() {
 		this(""); //$NON-NLS-1$
@@ -99,22 +99,30 @@ public class PosButton extends JButton {
 
 	@Override
 	public Dimension getPreferredSize() {
-		Dimension size = null;
-
 		if (isPreferredSizeSet()) {
 			return super.getPreferredSize();
 		}
 
+		Dimension size = super.getPreferredSize();
+		int minWidth = PosUIManager.getSize(POSConstants.BUTTON_DEFAULT_WIDTH);
+		int minHeight = PosUIManager.getSize(POSConstants.BUTTON_DEFAULT_HEIGHT);
+
 		if (size == null) {
-			size = new Dimension(PosUIManager.getSize(POSConstants.BUTTON_DEFAULT_WIDTH, POSConstants.BUTTON_DEFAULT_HEIGHT));
-		}
-		else {
-			int width = size.width < POSConstants.BUTTON_DEFAULT_WIDTH ? POSConstants.BUTTON_DEFAULT_WIDTH : size.width;
-			int height = size.height < POSConstants.BUTTON_DEFAULT_HEIGHT ? POSConstants.BUTTON_DEFAULT_HEIGHT : size.height;
-			size.setSize(PosUIManager.getSize(width, height));
+			return new Dimension(minWidth, minHeight);
 		}
 
-		return size;
+		int width = Math.max(size.width, minWidth);
+		int height = Math.max(size.height, minHeight);
+
+		return new Dimension(width, height);
+	}
+
+	@Override
+	public Dimension getMinimumSize() {
+		if (isMinimumSizeSet()) {
+			return super.getMinimumSize();
+		}
+		return getPreferredSize();
 	}
 
 	@Override
