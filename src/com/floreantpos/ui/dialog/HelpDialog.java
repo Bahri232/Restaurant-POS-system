@@ -17,10 +17,14 @@
  */
 package com.floreantpos.ui.dialog;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -33,18 +37,54 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.Scrollable;
 
 import net.miginfocom.swing.MigLayout;
 
 import com.floreantpos.IconFactory;
 import com.floreantpos.main.Application;
+import com.floreantpos.swing.PosScrollPane;
+import com.floreantpos.swing.PosUIManager;
 import com.floreantpos.util.POSUtil;
 import com.orocube.common.util.TerminalUtil;
 
 public class HelpDialog extends POSDialog {
 
+	private static class ScrollableContentPanel extends JPanel implements Scrollable {
+		public ScrollableContentPanel(LayoutManager layout) {
+			super(layout);
+		}
+
+		@Override
+		public Dimension getPreferredScrollableViewportSize() {
+			return new Dimension(660, 480);
+		}
+
+		@Override
+		public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return 25;
+		}
+
+		@Override
+		public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return Math.max(visibleRect.height - 25, 25);
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return true;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportHeight() {
+			return false;
+		}
+	}
+
 	public HelpDialog() {
 		super(POSUtil.getFocusedWindow(), "Help & Technical Support");
+		setResizable(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		if (Application.getApplicationIcon() != null) {
 			setIconImage(Application.getApplicationIcon().getImage());
 		}
@@ -52,7 +92,9 @@ public class HelpDialog extends POSDialog {
 
 	@Override
 	protected void initUI() {
-		JPanel contentPanel = new JPanel(new MigLayout("fillx, insets 15", "[grow]", "[]10[]10[]10[]10[]"));
+		setLayout(new BorderLayout());
+
+		ScrollableContentPanel contentPanel = new ScrollableContentPanel(new MigLayout("fillx, insets 15", "[grow, fill]", "[]10[]10[]10[]10[]"));
 		contentPanel.setBackground(Color.WHITE);
 
 		// Top Header
@@ -142,13 +184,20 @@ public class HelpDialog extends POSDialog {
 		tipsPanel.add(new JLabel(tipsHtml), "growx");
 		contentPanel.add(tipsPanel, "wrap, growx");
 
-		contentPanel.add(new JSeparator(), "wrap, growx");
+		// Scroll pane wrapping content
+		PosScrollPane scrollPane = new PosScrollPane(contentPanel, PosScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, PosScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(null);
+		scrollPane.setWheelScrollingEnabled(true);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(25);
+		add(scrollPane, BorderLayout.CENTER);
 
-		// Footer Close Button
-		JPanel footerPanel = new JPanel(new MigLayout("fillx, insets 0", "[grow]", "[]"));
-		footerPanel.setOpaque(false);
+		// Fixed Footer Panel with Close Button
+		JPanel footerPanel = new JPanel(new MigLayout("fillx, insets 10 15 10 15", "[grow]", "[]"));
+		footerPanel.setBackground(new Color(248, 250, 252));
+		footerPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(226, 232, 240)));
 		JButton btnClose = new JButton("Close");
-		btnClose.setPreferredSize(new Dimension(110, 35));
+		btnClose.setFont(btnClose.getFont().deriveFont(Font.BOLD, 13f));
+		btnClose.setPreferredSize(PosUIManager.getSize(120, 38));
 		btnClose.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -156,8 +205,20 @@ public class HelpDialog extends POSDialog {
 			}
 		});
 		footerPanel.add(btnClose, "center");
-		contentPanel.add(footerPanel, "wrap, growx");
+		add(footerPanel, BorderLayout.SOUTH);
+	}
 
-		getContentPane().add(contentPanel);
+	@Override
+	public void open() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+		int maxAvailableWidth = screenSize.width - (insets != null ? insets.left + insets.right : 0);
+		int maxAvailableHeight = screenSize.height - (insets != null ? insets.top + insets.bottom : 0);
+
+		int targetWidth = Math.min(680, (int) (maxAvailableWidth * 0.94));
+		int targetHeight = Math.min(620, (int) (maxAvailableHeight * 0.88));
+
+		setSize(targetWidth, targetHeight);
+		super.open();
 	}
 }
