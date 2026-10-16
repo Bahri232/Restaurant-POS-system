@@ -134,6 +134,32 @@ public class SettleTicketProcessor implements CardInputListener {
 				settleTicket(transaction);
 				break;
 
+			case ORANGE_MONEY:
+			case AFRIMONEY:
+				MobilePaymentPhoneDialog phoneDialog = new MobilePaymentPhoneDialog(POSUtil.getFocusedWindow(), paymentType, tenderAmount);
+				phoneDialog.pack();
+				phoneDialog.open();
+
+				if (phoneDialog.isCanceled()) {
+					return;
+				}
+
+				if (!confirmPayment()) {
+					return;
+				}
+
+				transaction = paymentType.createTransaction();
+				transaction.setTicket(ticket);
+				transaction.setCaptured(true);
+				transaction.setCustomPaymentFieldName("Customer Phone");
+				transaction.setCustomPaymentName(paymentType.getDisplayString());
+				transaction.setCustomPaymentRef(phoneDialog.getPhoneNumber());
+				transaction.setNote(paymentType.getDisplayString() + " Phone: " + phoneDialog.getPhoneNumber());
+				setTransactionAmounts(transaction);
+
+				settleTicket(transaction);
+				break;
+
 			case CREDIT_CARD:
 			case CREDIT_VISA:
 			case CREDIT_MASTER_CARD:

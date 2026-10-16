@@ -554,6 +554,19 @@ public class ReceiptPrintService {
 					}
 					map.put("cardInformation", cardInformationForReceipt); //$NON-NLS-1$
 				}
+				if (transaction.getCustomPaymentRef() != null && !transaction.getCustomPaymentRef().isEmpty()) {
+					String fieldName = transaction.getCustomPaymentFieldName();
+					if (fieldName == null || fieldName.isEmpty()) {
+						fieldName = "Phone";
+					}
+					String extraInfo = transaction.getPaymentType() + " (" + fieldName + ": " + transaction.getCustomPaymentRef() + ")";
+					String existing = (String) map.get("additionalProperties");
+					if (existing != null && !existing.isEmpty()) {
+						map.put("additionalProperties", existing + "\n" + extraInfo);
+					} else {
+						map.put("additionalProperties", extraInfo);
+					}
+				}
 			}
 			if (TerminalConfig.isEnabledMultiCurrency()) {
 				if (Boolean.valueOf(ticket.getProperty("MULTICURRENCY_CASH"))) {//$NON-NLS-1$

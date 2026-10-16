@@ -105,6 +105,8 @@ public enum PaymentType {
 				break;
 
 			case CUSTOM_PAYMENT:
+			case ORANGE_MONEY:
+			case AFRIMONEY:
 				transaction = new CustomPaymentTransaction();
 				break;
 

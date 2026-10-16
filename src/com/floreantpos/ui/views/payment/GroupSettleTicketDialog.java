@@ -399,6 +399,30 @@ public class GroupSettleTicketDialog extends POSDialog implements CardInputListe
 					settleTicket(transaction);
 					break;
 
+				case ORANGE_MONEY:
+				case AFRIMONEY:
+					MobilePaymentPhoneDialog groupPhoneDialog = new MobilePaymentPhoneDialog(this, paymentType, totalTenderAmount);
+					groupPhoneDialog.pack();
+					groupPhoneDialog.open();
+
+					if (groupPhoneDialog.isCanceled()) {
+						return;
+					}
+
+					if (!confirmPayment()) {
+						return;
+					}
+
+					transaction = paymentType.createTransaction();
+					transaction.setCaptured(true);
+					transaction.setCustomPaymentFieldName("Customer Phone");
+					transaction.setCustomPaymentName(paymentType.getDisplayString());
+					transaction.setCustomPaymentRef(groupPhoneDialog.getPhoneNumber());
+					transaction.setNote(paymentType.getDisplayString() + " Phone: " + groupPhoneDialog.getPhoneNumber());
+
+					settleTicket(transaction);
+					break;
+
 				case CREDIT_CARD:
 				case CREDIT_VISA:
 				case CREDIT_MASTER_CARD:
