@@ -39,7 +39,7 @@ Name: "{group}\Reness POS"; Filename: "{app}\RenessPOS.exe"; IconFilename: "{app
 Name: "{commondesktop}\Reness POS"; Filename: "{app}\RenessPOS.exe"; Tasks: desktopicon; IconFilename: "{app}\icon.ico"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce
 
 [Dirs]
 Name: "{app}"; Permissions: users-modify

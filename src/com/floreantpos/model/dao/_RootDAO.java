@@ -244,11 +244,14 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		//Setting any positive value will cause the getConnection() call to time-out and break 
 		//with an SQLException after the specified number of milliseconds. 
 		configuration.setProperty("hibernate.c3p0.checkoutTimeout", "10000"); //$NON-NLS-1$ //$NON-NLS-2$
-		configuration.setProperty("hibernate.c3p0.acquireRetryAttempts", "1"); //$NON-NLS-1$ //$NON-NLS-2$
+		configuration.setProperty("hibernate.c3p0.acquireRetryAttempts", "3"); //$NON-NLS-1$ //$NON-NLS-2$
+		configuration.setProperty("hibernate.c3p0.acquireRetryDelay", "1000"); //$NON-NLS-1$ //$NON-NLS-2$
 		configuration.setProperty("hibernate.c3p0.acquireIncrement", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		configuration.setProperty("hibernate.c3p0.maxIdleTime", "3000"); //$NON-NLS-1$ //$NON-NLS-2$
+		configuration.setProperty("hibernate.c3p0.maxIdleTime", "300"); //$NON-NLS-1$ //$NON-NLS-2$
 		//idle time in seconds before a connection is automatically validated
-		configuration.setProperty("hibernate.c3p0.idle_test_period", "3000"); //$NON-NLS-1$ //$NON-NLS-2$
+		configuration.setProperty("hibernate.c3p0.idle_test_period", "60"); //$NON-NLS-1$ //$NON-NLS-2$
+		//test connection on checkout to automatically recover from dropped connections or db restarts
+		configuration.setProperty("hibernate.c3p0.testConnectionOnCheckout", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 		configuration.setProperty("hibernate.c3p0.breakAfterAcquireFailure", "false"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
