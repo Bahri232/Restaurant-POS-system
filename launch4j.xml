@@ -16,9 +16,17 @@
   <jre>
     <path></path>
     <bundledJre64Bit>false</bundledJre64Bit>
-    <minVersion>1.5.0</minVersion>
+    <minVersion>17</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
+    <opt>-Dfile.encoding=UTF-8</opt>
+    <opt>--add-opens=java.base/java.lang=ALL-UNNAMED</opt>
+    <opt>--add-opens=java.base/java.util=ALL-UNNAMED</opt>
+    <opt>--add-opens=java.base/java.text=ALL-UNNAMED</opt>
+    <opt>--add-opens=java.desktop/java.awt=ALL-UNNAMED</opt>
+    <opt>--add-opens=java.desktop/sun.awt=ALL-UNNAMED</opt>
+    <opt>--add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED</opt>
+    <opt>--add-opens=java.desktop/javax.swing=ALL-UNNAMED</opt>
   </jre>
 </launch4jConfig>

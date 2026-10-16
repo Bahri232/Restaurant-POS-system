@@ -82,6 +82,13 @@ public class Main {
 		/* Build command: java -jar application.jar */
 		final ArrayList<String> command = new ArrayList<String>();
 		command.add(javaBin);
+		command.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
+		command.add("--add-opens=java.base/java.util=ALL-UNNAMED");
+		command.add("--add-opens=java.base/java.text=ALL-UNNAMED");
+		command.add("--add-opens=java.desktop/java.awt=ALL-UNNAMED");
+		command.add("--add-opens=java.desktop/sun.awt=ALL-UNNAMED");
+		command.add("--add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED");
+		command.add("--add-opens=java.desktop/javax.swing=ALL-UNNAMED");
 		command.add("-cp"); //$NON-NLS-1$
 		command.add(classPath);
 		command.add(mainClass);

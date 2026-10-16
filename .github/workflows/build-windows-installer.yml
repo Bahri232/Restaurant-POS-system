@@ -24,11 +24,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Java JDK 8 (Eclipse Temurin)
+      - name: Set up Java JDK 17 (Eclipse Temurin)
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: '17'
           cache: 'maven'
 
       - name: Compute Dynamic Build Version
@@ -144,9 +144,9 @@ jobs:
               Copy-Item "images/icon.ico" "dist/App/icon.ico" -Force
           }
 
-          # Download portable Adoptium Temurin OpenJDK 8 JRE for Windows x64
-          $jreUrl = "https://api.adoptium.net/v3/binary/latest/8/ga/windows/x64/jre/hotspot/normal/eclipse"
-          Write-Host "Downloading portable Adoptium Temurin OpenJDK 8 JRE (Windows x64)..."
+          # Download portable Adoptium Temurin OpenJDK 17 JRE for Windows x64
+          $jreUrl = "https://api.adoptium.net/v3/binary/latest/17/ga/windows/x64/jre/hotspot/normal/eclipse"
+          Write-Host "Downloading portable Adoptium Temurin OpenJDK 17 JRE (Windows x64)..."
           curl.exe -L -f -s -S --retry 3 -o jre.zip $jreUrl
           if ($LASTEXITCODE -ne 0 -or -not (Test-Path "jre.zip")) {
               Write-Error "Failed to download JRE from $jreUrl"
@@ -244,11 +244,11 @@ jobs:
               'Name: "{app}"; Permissions: users-modify',
               '',
               '[Icons]',
-              ('Name: "{group}\Reness POS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"' + $iconParam),
-              ('Name: "{autodesktop}\Reness POS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Tasks: desktopicon' + $iconParam),
+              ('Name: "{group}\Reness POS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"' + $iconParam),
+              ('Name: "{autodesktop}\Reness POS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Tasks: desktopicon' + $iconParam),
               '',
               '[Run]',
-              'Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,Reness POS}"; Flags: nowait postinstall skipifsilent'
+              'Filename: "{app}\jre\bin\javaw.exe"; Parameters: "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,Reness POS}"; Flags: nowait postinstall skipifsilent'
           )
 
           $lines | Out-File -FilePath "setup.iss" -Encoding utf8
