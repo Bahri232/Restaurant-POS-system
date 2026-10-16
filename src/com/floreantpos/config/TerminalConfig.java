@@ -139,7 +139,14 @@ public class TerminalConfig {
 	}
 
 	public static boolean matchAdminPassword(String password) {
-		return getAdminPassword().equals(PasswordHasher.hashPassword(password));
+		String stored = getAdminPassword();
+		if (PasswordHasher.matchPassword(stored, password)) {
+			if (!stored.equals(PasswordHasher.hashPassword(password))) {
+				setAdminPassword(password);
+			}
+			return true;
+		}
+		return false;
 	}
 
 	public static void setTouchScreenButtonHeight(int height) {

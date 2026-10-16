@@ -21,6 +21,10 @@
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
     <opt>-Dfile.encoding=UTF-8</opt>
+    <opt>-XX:+UseG1GC</opt>
+    <opt>-XX:+ExplicitGCInvokesConcurrent</opt>
+    <opt>-Xms256m</opt>
+    <opt>-Xmx1024m</opt>
     <opt>--add-opens=java.base/java.lang=ALL-UNNAMED</opt>
     <opt>--add-opens=java.base/java.util=ALL-UNNAMED</opt>
     <opt>--add-opens=java.base/java.text=ALL-UNNAMED</opt>

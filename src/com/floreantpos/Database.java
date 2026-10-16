@@ -87,6 +87,13 @@ public enum Database {
 	}
 
 	public String getHibernateConnectionDriverClass() {
+		if ("com.mysql.jdbc.Driver".equals(driverClass)) {
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				return "com.mysql.cj.jdbc.Driver";
+			} catch (ClassNotFoundException ignored) {
+			}
+		}
 		return driverClass;
 	}
 

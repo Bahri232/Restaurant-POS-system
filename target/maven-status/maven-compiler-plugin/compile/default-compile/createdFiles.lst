@@ -136,6 +136,7 @@ com\floreantpos\ui\views\order\OrderTypeSelectionDialog2$1.class
 com\floreantpos\report\SalesDetailedReport$CreditCardData.class
 com\floreantpos\bo\ui\explorer\MenuItemSizeExplorer$4.class
 com\floreantpos\ui\dialog\TaxSelectionDialog$3.class
+com\floreantpos\util\DatabaseBackupUtil.class
 com\floreantpos\bo\ui\explorer\ExplorerButtonPanel.class
 com\floreantpos\config\ui\TerminalSetupDialog$SwingAction_1.class
 com\floreantpos\extension\AuthorizeNetGatewayPlugin.class
@@ -635,6 +636,7 @@ com\floreantpos\ui\dialog\DiscountListDialog$3.class
 com\floreantpos\ui\dialog\ManagerDialog$4.class
 com\floreantpos\ui\views\order\modifier\ModifierSelectionListener.class
 com\floreantpos\ui\views\OrderInfoDialog$1.class
+com\floreantpos\util\DatabaseBackupUtil$1.class
 com\floreantpos\model\dao\_BaseRootDAO$5.class
 com\floreantpos\ui\RefreshableView.class
 com\floreantpos\ui\dialog\AutomatedWeightInputDialog.class

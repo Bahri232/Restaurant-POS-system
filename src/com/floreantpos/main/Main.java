@@ -82,6 +82,10 @@ public class Main {
 		/* Build command: java -jar application.jar */
 		final ArrayList<String> command = new ArrayList<String>();
 		command.add(javaBin);
+		command.add("-XX:+UseG1GC");
+		command.add("-XX:+ExplicitGCInvokesConcurrent");
+		command.add("-Xms256m");
+		command.add("-Xmx1024m");
 		command.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
 		command.add("--add-opens=java.base/java.util=ALL-UNNAMED");
 		command.add("--add-opens=java.base/java.text=ALL-UNNAMED");

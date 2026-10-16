@@ -17,40 +17,69 @@
  */
 package com.floreantpos.util;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Hex;
 
 import com.floreantpos.PosLog;
 
 public class PasswordHasher {
+	private static final String APP_SALT = "RenessPOS_Secured_2026_"; //$NON-NLS-1$
 
 	public static void main(String[] args) throws Exception {
 		PosLog.info(PasswordHasher.class, hashPassword("123")); //$NON-NLS-1$
 	}
 
+	/**
+	 * Hashes password using salted SHA-256 for cryptographic strength.
+	 */
 	public static String hashPassword(String password) {
-		byte[] passwordBytes = null;
-		MessageDigest md = null;
-
-		try {
-			passwordBytes = password.getBytes("UTF-8"); //$NON-NLS-1$
-		} catch (UnsupportedEncodingException e) {
-			PosLog.error(PasswordHasher.class, e.getMessage());
+		if (password == null) {
+			password = "";
 		}
-
 		try {
-			md = MessageDigest.getInstance("SHA1"); //$NON-NLS-1$
-		} catch (NoSuchAlgorithmException e) {
+			MessageDigest md = MessageDigest.getInstance("SHA-256"); //$NON-NLS-1$
+			md.update(APP_SALT.getBytes(StandardCharsets.UTF_8));
+			byte[] hashBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+			return Hex.encodeHexString(hashBytes);
+		} catch (Exception e) {
 			PosLog.error(PasswordHasher.class, e.getMessage());
+			return hashPasswordSha1(password);
 		}
-
-		byte[] hashBytes = md.digest(passwordBytes);
-
-		return Hex.encodeHexString(hashBytes);
-
 	}
 
+	/**
+	 * Legacy SHA-1 hash generator used for verifying pre-existing legacy hashes.
+	 */
+	public static String hashPasswordSha1(String password) {
+		if (password == null) {
+			password = "";
+		}
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA1"); //$NON-NLS-1$
+			byte[] hashBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+			return Hex.encodeHexString(hashBytes);
+		} catch (Exception e) {
+			PosLog.error(PasswordHasher.class, e.getMessage());
+			return "";
+		}
+	}
+
+	/**
+	 * Verifies a candidate raw password against a stored hash, supporting both
+	 * modern salted SHA-256 and legacy SHA-1 hashes.
+	 */
+	public static boolean matchPassword(String storedHash, String rawPassword) {
+		if (storedHash == null || rawPassword == null) {
+			return false;
+		}
+		if (storedHash.equalsIgnoreCase(hashPassword(rawPassword))) {
+			return true;
+		}
+		if (storedHash.equalsIgnoreCase(hashPasswordSha1(rawPassword))) {
+			return true;
+		}
+		return false;
+	}
 }

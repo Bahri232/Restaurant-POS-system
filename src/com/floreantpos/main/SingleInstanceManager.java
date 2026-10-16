@@ -395,6 +395,10 @@ public class SingleInstanceManager {
 	 */
 	public static synchronized void releaseLock() {
 		try {
+			try {
+				com.floreantpos.util.DatabaseBackupUtil.shutdownDerby();
+			} catch (Throwable ignored) {}
+
 			if (serverSocket != null) {
 				try {
 					serverSocket.close();

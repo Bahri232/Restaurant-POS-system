@@ -17,6 +17,8 @@ jobs:
   build-installer:
     name: Build Standalone Windows Installer
     runs-on: windows-latest
+    permissions:
+      contents: write
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -244,11 +246,11 @@ jobs:
               'Name: "{app}"; Permissions: users-modify',
               '',
               '[Icons]',
-              ('Name: "{group}\Reness POS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"' + $iconParam),
-              ('Name: "{autodesktop}\Reness POS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Tasks: desktopicon' + $iconParam),
+              ('Name: "{group}\Reness POS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent -Xms256m -Xmx1024m --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"' + $iconParam),
+              ('Name: "{autodesktop}\Reness POS"; Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent -Xms256m -Xmx1024m --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Tasks: desktopicon' + $iconParam),
               '',
               '[Run]',
-              'Filename: "{app}\jre\bin\javaw.exe"; Parameters: "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,Reness POS}"; Flags: nowait postinstall skipifsilent'
+              'Filename: "{app}\jre\bin\javaw.exe"; Parameters: "-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent -Xms256m -Xmx1024m --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar ""{app}\renesspos.jar"""; WorkingDir: "{app}"; Description: "{cm:LaunchProgram,Reness POS}"; Flags: nowait postinstall skipifsilent'
           )
 
           $lines | Out-File -FilePath "setup.iss" -Encoding utf8
@@ -320,3 +322,16 @@ jobs:
           name: RenessPOS_Setup_v${{ env.APP_VERSION }}
           path: dist/Installer/*
           if-no-files-found: error
+
+      - name: Publish GitHub Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            dist/Installer/*.exe
+            dist/Installer/*.cer
+            dist/Installer/*.bat
+          name: Reness POS v${{ env.APP_VERSION }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true

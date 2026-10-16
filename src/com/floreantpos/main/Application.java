@@ -145,8 +145,16 @@ public class Application {
 
 	private void setApplicationLook() {
 		try {
+			System.setProperty("flatlaf.uiScale", "auto");
+			System.setProperty("flatlaf.useWindowDecorations", "false");
 			com.formdev.flatlaf.FlatLightLaf.setup();
 			initializeFont();
+			
+			// Touchscreen UI optimizations: comfortable touch scrollbars & table headers
+			UIManager.put("ScrollBar.width", 16);
+			UIManager.put("ScrollBar.thumbArc", 999);
+			UIManager.put("ScrollBar.thumbInsets", new java.awt.Insets(2, 2, 2, 2));
+			UIManager.put("TableHeader.height", 32);
 			
 			// Custom Primary Canvas Color: Clean Off-White
 			java.awt.Color cleanOffWhite = java.awt.Color.decode("#F5F7FA");
@@ -203,6 +211,7 @@ public class Application {
 			//if (hasUpdateScheduleToday())
 			//	checkAvailableUpdates();
 			setSystemInitialized(true);
+			com.floreantpos.util.DatabaseBackupUtil.triggerDailyAutoBackup();
 		} catch (DatabaseConnectionException e) {
 			e.printStackTrace();
 			PosLog.error(getClass(), e);
@@ -460,6 +469,7 @@ public class Application {
 		}
 		else if (selectedValue.equals(Messages.getString("Application.5"))) { //$NON-NLS-1$
 			posWindow.saveSizeAndLocation();
+			com.floreantpos.util.DatabaseBackupUtil.shutdownDerby();
 			System.exit(0);
 		}
 		else {
