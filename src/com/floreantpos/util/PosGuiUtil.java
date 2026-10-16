@@ -33,13 +33,16 @@ import javax.swing.table.TableColumn;
 import javax.swing.text.JTextComponent;
 
 import com.floreantpos.POSConstants;
+import com.floreantpos.PosLog;
 import com.floreantpos.customer.CustomerSelectorDialog;
 import com.floreantpos.customer.CustomerSelectorFactory;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.Customer;
 import com.floreantpos.model.OrderType;
+import com.floreantpos.model.User;
 import com.floreantpos.ui.dialog.NumberSelectionDialog2;
 import com.floreantpos.ui.dialog.POSMessageDialog;
+import com.floreantpos.ui.dialog.UserListDialog;
 
 public class PosGuiUtil {
 
@@ -73,6 +76,30 @@ public class PosGuiUtil {
 		}
 
 		return dialog.getSelectedCustomer();
+	}
+
+	public static User captureServer(User defaultUser) {
+		try {
+			UserListDialog dialog = new UserListDialog();
+			dialog.setTitle("Select Server");
+			if (defaultUser != null) {
+				dialog.setSelectedUser(defaultUser);
+			}
+			dialog.pack();
+			dialog.open();
+
+			if (dialog.isCanceled()) {
+				return null;
+			}
+
+			User selectedUser = dialog.getSelectedUser();
+			if (selectedUser != null) {
+				return selectedUser;
+			}
+		} catch (Exception e) {
+			PosLog.error(PosGuiUtil.class, e);
+		}
+		return defaultUser;
 	}
 
 	public static Double parseDouble(JTextComponent textComponent) {

@@ -35,6 +35,7 @@ import com.floreantpos.model.Customer;
 import com.floreantpos.model.OrderType;
 import com.floreantpos.model.ShopTable;
 import com.floreantpos.model.Ticket;
+import com.floreantpos.model.User;
 import com.floreantpos.model.dao.TicketDAO;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.ui.views.IView;
@@ -65,6 +66,9 @@ public class DefaultOrderServiceExtension extends OrderServiceExtension {
 
 		if (ticketType.isShowGuestSelection()) {
 			numberOfGuests = PosGuiUtil.captureGuestNumber();
+			if (numberOfGuests == -1) {
+				return;
+			}
 		}
 		
 		if (TerminalConfig.isActiveCustomerDisplay()) {
@@ -78,6 +82,17 @@ public class DefaultOrderServiceExtension extends OrderServiceExtension {
 			}
 		}
 
+		User server = null;
+		if (ticketType.isShowTableSelection() || (selectedTables != null && !selectedTables.isEmpty())) {
+			server = PosGuiUtil.captureServer(Application.getCurrentUser());
+			if (server == null) {
+				return;
+			}
+		}
+		else {
+			server = Application.getCurrentUser();
+		}
+
 		Application application = Application.getInstance();
 
 		Ticket ticket = new Ticket();
@@ -88,7 +103,7 @@ public class DefaultOrderServiceExtension extends OrderServiceExtension {
 		if (customer != null)
 			ticket.setDeliveryAddress(customer.getAddress());
 		ticket.setTerminal(application.getTerminal());
-		ticket.setOwner(Application.getCurrentUser());
+		ticket.setOwner(server);
 		ticket.setShift(application.getCurrentShift());
 
 		if (selectedTables != null) {

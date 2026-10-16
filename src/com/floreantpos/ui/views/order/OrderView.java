@@ -86,6 +86,7 @@ import com.floreantpos.ui.dialog.NumberSelectionDialog2;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.ui.dialog.PasswordEntryDialog;
 import com.floreantpos.ui.dialog.SeatSelectionDialog;
+import com.floreantpos.ui.dialog.UserListDialog;
 import com.floreantpos.ui.tableselection.TableSelectorDialog;
 import com.floreantpos.ui.tableselection.TableSelectorFactory;
 import com.floreantpos.ui.views.CookingInstructionSelectionView;
@@ -132,6 +133,7 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 	private com.floreantpos.swing.PosButton btnMisc = new com.floreantpos.swing.PosButton(POSConstants.MISC_BUTTON_TEXT);
 	private com.floreantpos.swing.PosButton btnOrderType = new com.floreantpos.swing.PosButton(POSConstants.ORDER_TYPE_BUTTON_TEXT);
 	private com.floreantpos.swing.PosButton btnTableNumber = new com.floreantpos.swing.PosButton(POSConstants.TABLE_NO_BUTTON_TEXT);
+	private com.floreantpos.swing.PosButton btnServer = new com.floreantpos.swing.PosButton("SERVER");
 	private com.floreantpos.swing.PosButton btnCustomer = new PosButton(POSConstants.CUSTOMER_SELECTION_BUTTON_TEXT);
 	private PosButton btnCookingInstruction = new PosButton(IconFactory.getIcon("/ui_icons/", "cooking-instruction.png")); //$NON-NLS-1$ //$NON-NLS-2$
 	//	private PosButton btnAddOn = new PosButton(POSConstants.ADD_ON);
@@ -369,6 +371,13 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 			}
 		});
 
+		btnServer.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				doSelectServer();
+			}
+		});
+
 		btnCookingInstruction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				doAddCookingInstruction();
@@ -442,6 +451,7 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 		actionButtonPanel.add(btnCustomer);
 		actionButtonPanel.add(btnDeliveryInfo);
 		actionButtonPanel.add(btnTableNumber);
+		actionButtonPanel.add(btnServer);
 		actionButtonPanel.add(btnGuestNo);
 		actionButtonPanel.add(btnSeatNo);
 		actionButtonPanel.add(btnCookingInstruction);
@@ -600,6 +610,40 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 			actionUpdate();
 		} catch (Exception e) {
 			PosLog.error(getClass(), e);
+		}
+	}
+
+	public void doSelectServer() {
+		if (currentTicket == null) {
+			return;
+		}
+		try {
+			UserListDialog dialog = new UserListDialog();
+			dialog.setTitle("Select Server");
+			if (currentTicket.getOwner() != null) {
+				dialog.setSelectedUser(currentTicket.getOwner());
+			}
+			dialog.pack();
+			dialog.open();
+
+			if (dialog.isCanceled()) {
+				return;
+			}
+
+			User selectedUser = dialog.getSelectedUser();
+			if (selectedUser != null) {
+				currentTicket.setOwner(selectedUser);
+				if (currentTicket.getId() != null) {
+					TicketDAO.getInstance().saveOrUpdate(currentTicket);
+				}
+				if (currentTicket.getTableNumbers() != null && !currentTicket.getTableNumbers().isEmpty()) {
+					ShopTableDAO.getInstance().occupyTables(currentTicket);
+				}
+				actionUpdate();
+			}
+		} catch (Exception e) {
+			PosLog.error(getClass(), e);
+			POSMessageDialog.showError(this, e.getMessage());
 		}
 	}
 
@@ -830,6 +874,13 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 			btnDone.setVisible(!type.isPrepaid());
 			btnSend.setEnabled(type.isShouldPrintToKitchen());
 
+			if (currentTicket.getOwner() != null) {
+				btnServer.setText("Server: " + currentTicket.getOwner().getFirstName());
+			}
+			else {
+				btnServer.setText("Server");
+			}
+
 			if (!type.isAllowSeatBasedOrder()) {
 				btnSeatNo.setVisible(false);
 			}
@@ -955,6 +1006,7 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 		btnOrderType.setVisible(false);
 		btnSeatNo.setVisible(false);
 		btnTableNumber.setVisible(false);
+		btnServer.setVisible(false);
 		btnSend.setVisible(false);
 	}
 
@@ -968,6 +1020,7 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 		btnSeatNo.setVisible(true);
 		btnSend.setVisible(true);
 		btnTableNumber.setVisible(true);
+		btnServer.setVisible(true);
 	}
 
 	private void showRetailView() {
@@ -1018,6 +1071,12 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 
 	public void updateView() {
 		btnCustomer.setText(POSConstants.CUSTOMER_SELECTION_BUTTON_TEXT);
+		if (currentTicket != null && currentTicket.getOwner() != null) {
+			btnServer.setText("Server: " + currentTicket.getOwner().getFirstName());
+		}
+		else {
+			btnServer.setText("Server");
+		}
 		if (currentTicket != null) {
 			OrderType type = currentTicket.getOrderType();
 			if (type.isRetailOrder()) {

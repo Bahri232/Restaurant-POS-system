@@ -24,7 +24,6 @@ import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 
 import com.floreantpos.bo.ui.BackOfficeWindow;
-import com.floreantpos.bo.ui.explorer.AttendanceHistoryExplorer;
 import com.floreantpos.bo.ui.explorer.PizzaExplorer;
 
 public class PizzaExplorerAction extends AbstractAction {

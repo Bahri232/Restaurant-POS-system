@@ -135,6 +135,12 @@ public class UserListDialog extends POSDialog {
     	return (User) cbUserList.getSelectedItem();
     }
     
+    public void setSelectedUser(User user) {
+    	if (user != null) {
+    		cbUserList.setSelectedItem(user);
+    	}
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.floreantpos.swing.PosButton btnCancel;
     private com.floreantpos.swing.PosButton btnOk;

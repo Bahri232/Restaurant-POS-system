@@ -17,7 +17,6 @@
  */
 package com.floreantpos.bo.ui.explorer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -34,7 +33,6 @@ import com.floreantpos.main.Application;
 import com.floreantpos.model.MenuCategory;
 import com.floreantpos.model.MenuGroup;
 import com.floreantpos.model.MenuItem;
-import com.floreantpos.model.MenuItemModifierGroup;
 import com.floreantpos.model.OrderType;
 import com.floreantpos.model.ShopTable;
 import com.floreantpos.model.dao.MenuCategoryDAO;

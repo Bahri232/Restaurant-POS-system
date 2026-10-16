@@ -17,12 +17,17 @@
  */
 package com.floreantpos.ui.dialog;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,44 +45,105 @@ import com.orocube.common.util.TerminalUtil;
 public class AboutDialog extends POSDialog {
 
 	public AboutDialog() {
-		super(POSUtil.getBackOfficeWindow(), Messages.getString("AboutDialog.0")); //$NON-NLS-1$
-		setIconImage(Application.getApplicationIcon().getImage());
+		super(POSUtil.getFocusedWindow(), Messages.getString("AboutDialog.0")); //$NON-NLS-1$
+		if (Application.getApplicationIcon() != null) {
+			setIconImage(Application.getApplicationIcon().getImage());
+		}
 	}
 
 	@Override
 	protected void initUI() {
-		JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
-		contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		JLabel logoLabel = new JLabel(IconFactory.getIcon("/icons/", "fp_logo128x128.png")); //$NON-NLS-1$ //$NON-NLS-2$
-		contentPanel.add(logoLabel, BorderLayout.WEST);
+		JPanel contentPanel = new JPanel(new MigLayout("fillx, insets 15", "[grow]", "[]10[]10[]10[]10[]"));
+		contentPanel.setBackground(Color.WHITE);
 
-		JLabel l = new JLabel("<html><center><h1>Reness POS</h1><br/><h2>Version " + Application.VERSION + "</h2></center></html>"); //$NON-NLS-1$ //$NON-NLS-2$
-		contentPanel.add(l);
+		// Header: Logo & Reness POS title
+		JPanel headerPanel = new JPanel(new MigLayout("insets 5, fillx", "[][grow]", "[]"));
+		headerPanel.setOpaque(false);
+		JLabel logoLabel = new JLabel(IconFactory.getIcon("/icons/", "fp_logo128x128.png"));
+		headerPanel.add(logoLabel, "cell 0 0, aligny center");
 
-		JPanel buttonPanel = new JPanel(new MigLayout("fill"));
-		JButton btnOk = new JButton(Messages.getString("AboutDialog.5")); //$NON-NLS-1$
+		JLabel titleLabel = new JLabel("<html><h1 style='margin:0; color:#1a365d;'>Reness POS</h1>"
+				+ "<p style='margin:2px 0; color:#4a5568; font-size:13px;'>Professional Restaurant &amp; Retail POS</p>"
+				+ "<b style='color:#2b6cb0; font-size:12px;'>Version " + Application.VERSION + "</b></html>");
+		headerPanel.add(titleLabel, "cell 1 0, gapleft 15, aligny center");
+		contentPanel.add(headerPanel, "wrap, growx");
+
+		contentPanel.add(new JSeparator(), "wrap, growx, gaptop 5, gapbottom 5");
+
+		// Developer Card Panel
+		JPanel devCard = new JPanel(new MigLayout("insets 12, fillx", "[][grow]", "[]"));
+		devCard.setBackground(new Color(248, 249, 250));
+		devCard.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(new Color(226, 232, 240), 1),
+				BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+
+		// Developer Photo
+		JLabel photoLabel = new JLabel();
+		ImageIcon devIcon = IconFactory.getIcon("/icons/", "developer.jpg");
+		if (devIcon != null && devIcon.getImage() != null) {
+			Image scaled = devIcon.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
+			photoLabel.setIcon(new ImageIcon(scaled));
+		}
+		photoLabel.setBorder(BorderFactory.createLineBorder(new Color(203, 213, 225), 1));
+		devCard.add(photoLabel, "cell 0 0, aligny top");
+
+		// Developer Details
+		String devHtml = "<html>"
+				+ "<div style='font-family:sans-serif;'>"
+				+ "<b style='font-size:14px; color:#1a202c;'>Software Developer:</b> <span style='font-size:14px; color:#1e40af; font-weight:bold;'>Abdul Malik Barrie (BAHRI)</span><br/>"
+				+ "<table style='margin-top:6px; font-size:12px; color:#4a5568;' cellpadding='2'>"
+				+ "<tr><td><b>Direct Line:</b></td><td><b style='color:#2563eb;'>+232 80 020097</b> / <b style='color:#2563eb;'>+232 76 159189</b></td></tr>"
+				+ "<tr><td><b>WhatsApp:</b></td><td><b style='color:#16a34a;'>+232 80 020097</b></td></tr>"
+				+ "<tr><td><b>Email:</b></td><td><a href='mailto:abdulmalikbarrie@gmail.com' style='color:#2563eb;'>abdulmalikbarrie@gmail.com</a></td></tr>"
+				+ "</table>"
+				+ "<p style='margin-top:8px; margin-bottom:0px; color:#059669; font-weight:bold; font-size:12px;'>&#10004; 24/7 Technical Support &amp; System Maintenance Available</p>"
+				+ "</div></html>";
+		JLabel devDetails = new JLabel(devHtml);
+		devCard.add(devDetails, "cell 1 0, gapleft 15, growx");
+		contentPanel.add(devCard, "wrap, growx");
+
+		// System Terminal UID Section
+		JPanel terminalPanel = new JPanel(new MigLayout("insets 8, fillx", "[][grow][]", "[]"));
+		terminalPanel.setBackground(new Color(241, 245, 249));
+		terminalPanel.setBorder(BorderFactory.createLineBorder(new Color(226, 232, 240), 1));
+		terminalPanel.add(new JLabel("<html><b>Terminal Key (System UID):</b></html>"), "cell 0 0");
+
+		final JTextField tfTerminalKey = new JTextField(TerminalUtil.getSystemUID());
+		tfTerminalKey.setEditable(false);
+		tfTerminalKey.setHorizontalAlignment(JTextField.CENTER);
+		tfTerminalKey.setFont(new Font("Monospaced", Font.BOLD, 14));
+		tfTerminalKey.setBackground(Color.WHITE);
+		terminalPanel.add(tfTerminalKey, "cell 1 0, growx");
+
+		final JButton btnCopy = new JButton("Copy");
+		btnCopy.setPreferredSize(new Dimension(80, 30));
+		btnCopy.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				StringSelection stringSelection = new StringSelection(tfTerminalKey.getText());
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+				btnCopy.setText("Copied!");
+			}
+		});
+		terminalPanel.add(btnCopy, "cell 2 0");
+		contentPanel.add(terminalPanel, "wrap, growx");
+
+		contentPanel.add(new JSeparator(), "wrap, growx");
+
+		// Bottom Close Button
+		JPanel footerPanel = new JPanel(new MigLayout("fillx, insets 0", "[grow]", "[]"));
+		footerPanel.setOpaque(false);
+		JButton btnOk = new JButton(Messages.getString("AboutDialog.5"));
+		btnOk.setPreferredSize(new Dimension(100, 35));
 		btnOk.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
+		footerPanel.add(btnOk, "center");
+		contentPanel.add(footerPanel, "wrap, growx");
 
-		JTextField tfTerminalKey = new JTextField();
-		tfTerminalKey.setHorizontalAlignment(JTextField.CENTER);
-		tfTerminalKey.setEditable(false);
-		tfTerminalKey.setText(TerminalUtil.getSystemUID());
-		tfTerminalKey.setBorder(null);
-		tfTerminalKey.setFont(tfTerminalKey.getFont().deriveFont(Font.BOLD, 18));
-		buttonPanel.add(new JSeparator(), "growx");
-		//buttonPanel.add(new JLabel("Terminal Key"), "newline, split 2");
-		buttonPanel.add(tfTerminalKey, "newline,growx");
-		buttonPanel.add(new JSeparator(), "newline, growx");
-
-		buttonPanel.add(btnOk, "newline,center");
-		contentPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-		add(contentPanel);
+		getContentPane().add(contentPanel);
 	}
 }

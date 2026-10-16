@@ -63,9 +63,8 @@ public class AttendanceHistoryExplorer extends TransparentPanel {
 	private JButton btnAdd = new JButton(Messages.getString("AttendanceHistoryExplorer.0")); //$NON-NLS-1$
 	private JButton btnEdit = new JButton(Messages.getString("AttendanceHistoryExplorer.1")); //$NON-NLS-1$
 	private JButton btnDelete = new JButton(Messages.getString("AttendanceHistoryExplorer.2")); //$NON-NLS-1$
-	private JButton btnPrint = new JButton(Messages.getString("AttendanceHistoryExplorer.3")); //$NON-NLS-1$
 	private JXTable table;
-	private JComboBox cbUserType;
+	private JComboBox<Object> cbUserType;
 
 	public AttendanceHistoryExplorer() {
 		super(new BorderLayout());
@@ -74,16 +73,16 @@ public class AttendanceHistoryExplorer extends TransparentPanel {
 		table.setDefaultRenderer(Object.class, new PosTableRenderer());
 		JPanel topPanel = new JPanel(new MigLayout());
 
-		cbUserType = new JComboBox();
+		cbUserType = new JComboBox<Object>();
 
 		UserDAO dao = new UserDAO();
 		List<User> userTypes = dao.findAll();
 
-		Vector list = new Vector();
+		Vector<Object> list = new Vector<Object>();
 		list.add(POSConstants.ALL);
 		list.addAll(userTypes);
 
-		cbUserType.setModel(new DefaultComboBoxModel(list));
+		cbUserType.setModel(new DefaultComboBoxModel<Object>(list));
 
 		topPanel.add(new JLabel(com.floreantpos.POSConstants.START_DATE), "grow"); //$NON-NLS-1$
 		topPanel.add(fromDatePicker); //$NON-NLS-1$
@@ -261,7 +260,7 @@ public class AttendanceHistoryExplorer extends TransparentPanel {
 		}
 	}
 
-	class AttendenceHistoryTableModel extends ListTableModel {
+	class AttendenceHistoryTableModel extends ListTableModel<AttendenceHistory> {
 		String[] columnNames = { "EMP ID", "EMP NAME", "CLOCK IN TIME", "CLOCK OUT TIME", "CLOCKED OUT", "SHIFT ID", "TERMINAL ID" };/* "CLOCK IN HOUR", "CLOCK OUT HOUR", */ //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 
 		AttendenceHistoryTableModel(List<AttendenceHistory> list) {
@@ -270,7 +269,7 @@ public class AttendanceHistoryExplorer extends TransparentPanel {
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			AttendenceHistory history = (AttendenceHistory) rows.get(rowIndex);
+			AttendenceHistory history = rows.get(rowIndex);
 
 			switch (columnIndex) {
 

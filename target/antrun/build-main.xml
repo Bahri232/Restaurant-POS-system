@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="maven-antrun-" default="main"  >
 <target name="main">
-  <zip basedir="C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\target/floreantpos-bin/floreantpos" destfile="C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\target/floreantpos-1.5.0-build${buildNumber}.zip"></zip>
+  <echo message="prepare phase"/>
+  <unzip src="database/derby-server/posdb.zip" dest="C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\target"/>
 </target>
 </project>

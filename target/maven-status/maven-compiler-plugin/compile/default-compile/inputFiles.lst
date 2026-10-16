@@ -508,6 +508,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\ticket\TicketViewerTableModel.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\TicketListView.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\views\order\ViewPanel.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\actions\HelpAction.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\TicketDiscount.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\dialog\UserListDialog.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BaseTicketCookingInstruction.java
@@ -734,6 +735,7 @@ C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\florean
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BasePurchaseOrder.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\BasePayOutTransactionDAO.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BaseInventoryUnit.java
+C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\ui\dialog\HelpDialog.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\dao\BaseTicketItemDAO.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\model\base\BaseUserPermission.java
 C:\Users\BAHRI\Desktop\Reness POS 1\floreantpos-code-r1966-trunk\src\com\floreantpos\extension\OnlineOrderPlugin.java

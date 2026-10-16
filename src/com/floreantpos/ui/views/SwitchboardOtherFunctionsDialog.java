@@ -39,6 +39,8 @@ import com.floreantpos.model.UserPermission;
 import com.floreantpos.model.UserType;
 import com.floreantpos.swing.PosButton;
 import com.floreantpos.swing.PosUIManager;
+import com.floreantpos.ui.dialog.AboutDialog;
+import com.floreantpos.ui.dialog.HelpDialog;
 import com.floreantpos.ui.dialog.ManagerDialog;
 import com.floreantpos.ui.dialog.POSDialog;
 import com.floreantpos.ui.dialog.PayoutDialog;
@@ -53,8 +55,9 @@ public class SwitchboardOtherFunctionsDialog extends POSDialog implements Action
 	private PosButton btnPayout = new PosButton(POSConstants.PAYOUT_BUTTON_TEXT);
 	private PosButton btnTableManage = new PosButton(POSConstants.TABLE_MANAGE_BUTTON_TEXT);
 	private PosButton btnOnlineTickets = new PosButton(POSConstants.ONLINE_TICKET_BUTTON_TEXT);
- 
-	
+	private PosButton btnHelp = new PosButton("HELP & SUPPORT");
+	private PosButton btnAbout = new PosButton("ABOUT POS");
+ 	
 	private FloorLayoutPlugin floorLayoutPlugin;
 	private TicketImportPlugin ticketImportPlugin;
 	
@@ -82,6 +85,9 @@ public class SwitchboardOtherFunctionsDialog extends POSDialog implements Action
 			contentPane.add(btnOnlineTickets);
 		}
 		
+		contentPane.add(btnHelp);
+		contentPane.add(btnAbout);
+		
 		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		setContentPane(contentPane);
 		
@@ -91,6 +97,8 @@ public class SwitchboardOtherFunctionsDialog extends POSDialog implements Action
 		btnPayout.addActionListener(this);
 		btnTableManage.addActionListener(this);
 		btnOnlineTickets.addActionListener(this);
+		btnHelp.addActionListener(this);
+		btnAbout.addActionListener(this);
 		
 		setupPermission();
 	}
@@ -153,6 +161,18 @@ public class SwitchboardOtherFunctionsDialog extends POSDialog implements Action
 		dialog.open();
 	}
 
+	private void doShowHelp() {
+		HelpDialog dialog = new HelpDialog();
+		dialog.pack();
+		dialog.open();
+	}
+
+	private void doShowAbout() {
+		AboutDialog dialog = new AboutDialog();
+		dialog.pack();
+		dialog.open();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 //		private PosButton btnBackOffice = new PosButton(POSConstants.BACK_OFFICE_BUTTON_TEXT);
@@ -185,6 +205,12 @@ public class SwitchboardOtherFunctionsDialog extends POSDialog implements Action
 		}
 		else if(source == btnOnlineTickets) {
 			doShowTicketImportDialog();
+		}
+		else if(source == btnHelp) {
+			doShowHelp();
+		}
+		else if(source == btnAbout) {
+			doShowAbout();
 		}
 	}
 }

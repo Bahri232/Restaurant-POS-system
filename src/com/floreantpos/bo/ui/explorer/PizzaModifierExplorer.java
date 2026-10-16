@@ -45,19 +45,16 @@ import com.floreantpos.ui.dialog.BeanEditorDialog;
 import com.floreantpos.ui.dialog.ComboItemSelectionDialog;
 import com.floreantpos.ui.dialog.ConfirmDeleteDialog;
 import com.floreantpos.ui.model.PizzaModifierForm;
-import com.floreantpos.util.CurrencyUtil;
 import com.floreantpos.util.POSUtil;
 
 public class PizzaModifierExplorer extends TransparentPanel {
 
-	private String currencySymbol;
 	private JXTable table;
 	private PizzaModifierExplorerModel tableModel;
 
 	public PizzaModifierExplorer() {
 		setLayout(new BorderLayout(5, 5));
 
-		currencySymbol = CurrencyUtil.getCurrencySymbol();
 		tableModel = new PizzaModifierExplorerModel();
 		table = new JXTable(tableModel);
 		table.setDefaultRenderer(Object.class, new CustomCellRenderer());
@@ -259,7 +256,7 @@ public class PizzaModifierExplorer extends TransparentPanel {
 		JLabel groupLabel = new JLabel(Messages.getString("ModifierExplorer.4")); //$NON-NLS-1$
 		final JTextField nameField = new JTextField(15);
 		grpName = ModifierGroupDAO.getInstance().findAll();
-		final JComboBox cbGroup = new JComboBox();
+		final JComboBox<Object> cbGroup = new JComboBox<Object>();
 		cbGroup.addItem(Messages.getString("ModifierExplorer.5")); //$NON-NLS-1$
 		for (ModifierGroup s : grpName) {
 			cbGroup.addItem(s);
@@ -329,12 +326,11 @@ public class PizzaModifierExplorer extends TransparentPanel {
 		return newName;
 	}
 
-	private class PizzaModifierExplorerModel extends ListTableModel {
+	private class PizzaModifierExplorerModel extends ListTableModel<MenuModifier> {
 
 		public PizzaModifierExplorerModel() {
 
 			super(new String[] { com.floreantpos.POSConstants.ID, com.floreantpos.POSConstants.NAME, POSConstants.TRANSLATED_NAME,
-					//com.floreantpos.POSConstants.PRICE + " (" + currencySymbol + ")", com.floreantpos.POSConstants.EXTRA_PRICE, //$NON-NLS-1$ //$NON-NLS-2$
 					com.floreantpos.POSConstants.TAX + "(%)", com.floreantpos.POSConstants.MODIFIER_GROUP, POSConstants.BUTTON_COLOR, POSConstants.SORT_ORDER }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		}
