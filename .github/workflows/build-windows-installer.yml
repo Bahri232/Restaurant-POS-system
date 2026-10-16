@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Java JDK 17 (Eclipse Temurin)
         uses: actions/setup-java@v5
@@ -315,7 +315,7 @@ jobs:
           }
 
       - name: Upload Installer Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: RenessPOS_Setup_v${{ env.APP_VERSION }}
           path: dist/Installer/*
