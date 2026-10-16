@@ -72,9 +72,9 @@ jobs:
           $runNum = "${{ github.run_number }}"
           Write-Host "Compiling Reness POS version $ver (build $runNum)..."
           if (Test-Path "settings.xml") {
-            mvn clean package -DskipTests -B -s settings.xml -Dapp.version=$ver -DbuildNumber=$runNum
+            mvn clean package "-DskipTests" -B -s settings.xml "-Dapp.version=$ver" "-DbuildNumber=$runNum"
           } else {
-            mvn clean package -DskipTests -B -Dapp.version=$ver -DbuildNumber=$runNum
+            mvn clean package "-DskipTests" -B "-Dapp.version=$ver" "-DbuildNumber=$runNum"
           }
 
       - name: Distribution and JRE Packaging
