@@ -21,6 +21,7 @@ jobs:
       contents: write
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+      APP_VERSION: ''
 
     steps:
       - name: Checkout Repository

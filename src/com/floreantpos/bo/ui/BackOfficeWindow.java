@@ -109,7 +109,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 	private static final String WINDOW_WIDTH = "bwwidth";//$NON-NLS-1$
 	private JMenu floorPlanMenu;
 	private static BackOfficeWindow instance;
-	private JMenuBar menuBar;
+	private final JMenuBar menuBar;
 	private User user;
 
 	/** Creates new form BackOfficeWindow */
@@ -127,6 +127,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				close();
 			}
@@ -307,11 +308,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 	 * @param args the command line arguments
 	 */
 	public static void main(String args[]) {
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new BackOfficeWindow().setVisible(true);
-			}
-		});
+		java.awt.EventQueue.invokeLater(() -> new BackOfficeWindow().setVisible(true));
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables

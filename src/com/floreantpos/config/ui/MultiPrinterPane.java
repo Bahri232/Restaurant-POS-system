@@ -48,9 +48,7 @@ import com.floreantpos.ui.dialog.POSMessageDialog;
 
 public class MultiPrinterPane extends JPanel {
 
-	private JList<Printer> list;
-	private List<Printer> printers = new ArrayList<Printer>();;
-	private DefaultListModel<Printer> listModel;
+	private List<Printer> printers = new ArrayList<Printer>();
 
 	private JXTable table;
 	private BeanTableModel<Printer> tableModel;

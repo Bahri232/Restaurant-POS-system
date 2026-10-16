@@ -83,12 +83,10 @@ import com.floreantpos.util.GlobalConfigUtil;
 import com.floreantpos.util.POSUtil;
 import com.floreantpos.util.ShiftUtil;
 import com.floreantpos.util.UserNotFoundException;
-import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
-import com.jgoodies.looks.plastic.theme.ExperienceBlue;
 import com.orocube.common.util.TerminalUtil;
 
 public class Application {
-	private static Log logger = LogFactory.getLog(Application.class);
+	private static final Log logger = LogFactory.getLog(Application.class);
 
 	private boolean developmentMode = false;
 
@@ -105,7 +103,7 @@ public class Application {
 
 	private static Application instance;
 
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy"); //$NON-NLS-1$
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy"); //$NON-NLS-1$
 	private static ImageIcon applicationIcon;
 
 	private boolean systemInitialized;

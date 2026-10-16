@@ -28,7 +28,7 @@ public class ServerExplorerAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		BackOfficeWindow backOfficeWindow = POSUtil.getBackOfficeWindow();
 
-		ServerExplorer explorer = null;
+		ServerExplorer explorer;
 		JTabbedPane tabbedPane = backOfficeWindow.getTabbedPane();
 		int index = tabbedPane.indexOfTab("Servers");
 		if (index == -1) {

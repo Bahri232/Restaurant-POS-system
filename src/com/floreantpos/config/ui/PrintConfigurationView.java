@@ -165,20 +165,8 @@ public class PrintConfigurationView extends ConfigurationView {
 		setLayout(new BorderLayout());
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new MigLayout("", "[][grow,fill]", "[][][][18px,grow][][]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-		JLabel lblReportPrinter = new JLabel(Messages.getString("PrintConfigurationView.4")); //$NON-NLS-1$
-		//add(lblReportPrinter, "cell 0 0,alignx trailing"); //$NON-NLS-1$
-
 		cbReportPrinterName = new JComboBox();
-		//add(cbReportPrinterName, "cell 1 0,growx"); //$NON-NLS-1$
-		javax.swing.JLabel jLabel1 = new javax.swing.JLabel();
-		//add(jLabel1, "cell 0 1,alignx right"); //$NON-NLS-1$
-
-		jLabel1.setText(Messages.getString("PrintConfigurationView.8")); //$NON-NLS-1$
 		cbReceiptPrinterName = new javax.swing.JComboBox();
-		//add(cbReceiptPrinterName, "cell 1 1,growx"); //$NON-NLS-1$
-		javax.swing.JLabel jLabel2 = new javax.swing.JLabel();
-		//add(jLabel2, "cell 0 2,alignx right"); //$NON-NLS-1$
 
 		MultiPrinterPane multiPrinterPane = new MultiPrinterPane("Printers", printers.getKitchenPrinters()); //$NON-NLS-1$
 		contentPanel.add(multiPrinterPane, "cell 0 1 2 1,growx,h 200!"); //$NON-NLS-1$

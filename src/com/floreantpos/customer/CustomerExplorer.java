@@ -106,8 +106,6 @@ public class CustomerExplorer extends TransparentPanel {
 						return;
 
 					Customer customer = customerList.get(index);
-
-					boolean setKeyPad = true;
 					CustomerForm editor = new CustomerForm();
 					editor.enableCustomerFields(true);
 

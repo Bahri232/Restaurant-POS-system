@@ -126,7 +126,7 @@ public class SingleInstanceManager {
 		lockChannel = candidateChannel;
 		fileLock = candidateLock;
 
-		startIpcServer(lockDir);
+		startIpcServer();
 		registerShutdownHook();
 
 		return true;
@@ -187,7 +187,7 @@ public class SingleInstanceManager {
 	/**
 	 * Starts the local loopback IPC server.
 	 */
-	private static void startIpcServer(File lockDir) {
+	private static void startIpcServer() {
 		try {
 			try {
 				serverSocket = new ServerSocket(PREFERRED_PORT, 10, InetAddress.getByName("127.0.0.1")); //$NON-NLS-1$

@@ -47,7 +47,6 @@ import org.apache.commons.lang.StringUtils;
 import com.floreantpos.Database;
 import com.floreantpos.Messages;
 import com.floreantpos.PosLog;
-import com.floreantpos.bo.actions.DataImportAction;
 import com.floreantpos.config.AppConfig;
 import com.floreantpos.config.TerminalConfig;
 import com.floreantpos.model.Terminal;
