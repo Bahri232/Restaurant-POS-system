@@ -1,6 +1,10 @@
 [Setup]
 AppName=Reness POS
-AppVersion=1.0
+AppVersion=1.5.0
+AppPublisher=Abdul Malik Barrie (BAHRI)
+AppPublisherURL=mailto:abdulmalikbarrie@gmail.com
+AppSupportURL=mailto:abdulmalikbarrie@gmail.com
+AppUpdatesURL=mailto:abdulmalikbarrie@gmail.com
 DefaultDirName={pf}\Reness POS
 DefaultGroupName=Reness POS
 OutputDir=target\installer
@@ -9,6 +13,11 @@ Compression=lzma2
 SolidCompression=yes
 ArchitecturesInstallIn64BitMode=x64
 DisableProgramGroupPage=yes
+VersionInfoCompany=Abdul Malik Barrie (BAHRI)
+VersionInfoDescription=Reness POS Setup
+VersionInfoVersion=1.5.0.0
+VersionInfoCopyright=Copyright (C) 2026 Abdul Malik Barrie (BAHRI)
+VersionInfoProductName=Reness POS
 
 [Files]
 Source: "target\floreantpos-bin\floreantpos\floreantpos.exe"; DestDir: "{app}"; Flags: ignoreversion

@@ -12,6 +12,14 @@
 		<buildNumber>1966</buildNumber>
 	</properties>
 
+	<name>Reness POS</name>
+	<description>Reness POS - Professional Restaurant and Retail POS</description>
+	<inceptionYear>2026</inceptionYear>
+	<organization>
+		<name>Abdul Malik Barrie (BAHRI)</name>
+		<url>mailto:abdulmalikbarrie@gmail.com</url>
+	</organization>
+
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<finalName>floreantpos</finalName>
@@ -116,6 +124,18 @@
 								<path>jre</path>
 								<minVersion>1.8.0</minVersion>
 							</jre>
+							<versionInfo>
+								<fileVersion>1.5.0.0</fileVersion>
+								<txtFileVersion>1.5.0</txtFileVersion>
+								<fileDescription>Reness POS</fileDescription>
+								<copyright>Copyright (C) 2026 Abdul Malik Barrie (BAHRI)</copyright>
+								<productVersion>1.5.0.0</productVersion>
+								<txtProductVersion>1.5.0</txtProductVersion>
+								<productName>Reness POS</productName>
+								<companyName>Abdul Malik Barrie (BAHRI)</companyName>
+								<internalName>floreantpos</internalName>
+								<originalFilename>floreantpos.exe</originalFilename>
+							</versionInfo>
 						</configuration>
 					</execution>
 					<execution>
@@ -141,6 +161,18 @@
 								<path>jre</path>
 								<minVersion>1.8.0</minVersion>
 							</jre>
+							<versionInfo>
+								<fileVersion>1.5.0.0</fileVersion>
+								<txtFileVersion>1.5.0</txtFileVersion>
+								<fileDescription>Reness POS</fileDescription>
+								<copyright>Copyright (C) 2026 Abdul Malik Barrie (BAHRI)</copyright>
+								<productVersion>1.5.0.0</productVersion>
+								<txtProductVersion>1.5.0</txtProductVersion>
+								<productName>Reness POS</productName>
+								<companyName>Abdul Malik Barrie (BAHRI)</companyName>
+								<internalName>RenessPOS</internalName>
+								<originalFilename>RenessPOS.exe</originalFilename>
+							</versionInfo>
 						</configuration>
 					</execution>
 				</executions>
