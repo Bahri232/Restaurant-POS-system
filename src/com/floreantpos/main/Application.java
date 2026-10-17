@@ -615,7 +615,7 @@ public class Application {
 	}
 
 	public static String getTitle() {
-		return "Reness POS v1.0"; //$NON-NLS-1$
+		return "Reness POS"; //$NON-NLS-1$
 	}
 
 	public static ImageIcon getApplicationIcon() {
