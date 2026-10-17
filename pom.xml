@@ -191,6 +191,9 @@
 									<opt>--add-opens=java.desktop/sun.awt=ALL-UNNAMED</opt>
 									<opt>--add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED</opt>
 									<opt>--add-opens=java.desktop/javax.swing=ALL-UNNAMED</opt>
+									<opt>--add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED</opt>
+									<opt>--add-opens=java.desktop/sun.swing=ALL-UNNAMED</opt>
+									<opt>--add-opens=java.desktop/com.sun.java.swing.plaf.windows=ALL-UNNAMED</opt>
 								</opts>
 							</jre>
 							<versionInfo>

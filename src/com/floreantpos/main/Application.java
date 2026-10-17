@@ -188,6 +188,14 @@ public class Application {
 			UIManager.put("TabbedPane.tabWidthMode", "preferred");
 			UIManager.put("TabbedPane.scrollButtonsPlacement", "both");
 			UIManager.put("TabbedPane.scrollButtonsPolicy", "asNeeded");
+
+			// Initialize JIDE extensions with VSNet style to avoid IllegalAccessError on Windows L&F in Java 17+
+			try {
+				if (!com.jidesoft.plaf.LookAndFeelFactory.isJideExtensionInstalled()) {
+					com.jidesoft.plaf.LookAndFeelFactory.installJideExtension(com.jidesoft.plaf.LookAndFeelFactory.VSNET_STYLE);
+				}
+			} catch (Throwable ignored) {
+			}
 		} catch (Exception ignored) {
 		}
 	}
