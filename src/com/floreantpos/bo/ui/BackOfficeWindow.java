@@ -111,19 +111,20 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 	private static final String WINDOW_WIDTH = "bwwidth";//$NON-NLS-1$
 	private JMenu floorPlanMenu;
 	private static BackOfficeWindow instance;
-	private final JMenuBar menuBar;
+	private JMenuBar menuBar = new JMenuBar();
 	private User user;
 
 	/** Creates new form BackOfficeWindow */
 	public BackOfficeWindow() {
-		instance = this;
 		if (Application.getApplicationIcon() != null) {
 			setIconImage(Application.getApplicationIcon().getImage());
 		}
 
 		initComponents();
 
-		menuBar = new JMenuBar();
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+		}
 		positionWindow();
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -139,6 +140,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
 
 		//call plugin's initBackoffice
+		instance = this;
 	}
 
 	private void positionWindow() {
@@ -167,6 +169,9 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 			}
 		}
 
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+		}
 		menuBar.removeAll();
 
 		if (newUserType == null) {

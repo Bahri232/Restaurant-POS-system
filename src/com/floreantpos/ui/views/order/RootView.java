@@ -245,7 +245,7 @@ public class RootView extends com.floreantpos.swing.TransparentPanel {
 	public void showBackOffice() {
 
 		BackOfficeWindow window = com.floreantpos.util.POSUtil.getBackOfficeWindow();
-		if (window == null) {
+		if (window == null || !window.isDisplayable()) {
 			window = new BackOfficeWindow();
 		}
 		window.setBackOfficeUser(Application.getCurrentUser());

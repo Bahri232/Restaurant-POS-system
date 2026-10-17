@@ -38,7 +38,7 @@ public class POSUtil {
 	public static BackOfficeWindow getBackOfficeWindow() {
 		Window[] windows = Window.getWindows();
 		for (Window window : windows) {
-			if (window instanceof BackOfficeWindow) {
+			if (window instanceof BackOfficeWindow && window.isDisplayable()) {
 				return (BackOfficeWindow) window;
 			}
 		}

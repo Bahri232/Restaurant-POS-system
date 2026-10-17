@@ -45,7 +45,7 @@ public class ShowBackofficeAction extends PosAction {
 	@Override
 	public void execute() {
 		BackOfficeWindow window = com.floreantpos.util.POSUtil.getBackOfficeWindow();
-		if (window == null) {
+		if (window == null || !window.isDisplayable()) {
 			window = new BackOfficeWindow();
 		}
 		window.setBackOfficeUser(getAuthorizedUser());
