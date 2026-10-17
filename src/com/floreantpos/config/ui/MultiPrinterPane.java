@@ -24,9 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -111,16 +109,6 @@ public class MultiPrinterPane extends JPanel {
 			}
 		});
 		panel.add(btnTest);
-
-		listModel = new DefaultListModel<Printer>();
-		list = new JList<Printer>(listModel);
-		//scrollPane.setViewportView(list);
-
-		if (printers != null) {
-			for (Printer printer : printers) {
-				listModel.addElement(printer);
-			}
-		}
 
 		tableModel = new BeanTableModel<Printer>(Printer.class);
 		tableModel.addColumn("Name", "virtualPrinter"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -262,7 +250,6 @@ public class MultiPrinterPane extends JPanel {
 		TerminalPrintersDAO.getInstance().saveOrUpdate(terminalPrinters);
 
 		printers.add(p);
-		listModel.addElement(p);
 
 		refresh();
 	}
