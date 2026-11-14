@@ -636,7 +636,7 @@ public class PaymentView extends JPanel {
 						clearPreviousAmount = false;
 					}
 
-					double x = NumberUtil.parse(txtTenderedAmount.getText()).doubleValue();//FIXME: what if exception occurs?
+					double x = NumberUtil.parse(txtTenderedAmount.getText()).doubleValue();
 					double y = Double.parseDouble(command);
 					double z = x + y;
 					txtTenderedAmount.setText(String.valueOf(format.format(z)));

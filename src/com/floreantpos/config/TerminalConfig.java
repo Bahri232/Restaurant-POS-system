@@ -536,9 +536,11 @@ public class TerminalConfig {
 			country = st.nextToken();
 		if (st.hasMoreTokens())
 			variant = st.nextToken();
-		Locale disName = new Locale(language, country, variant);
-
-		return disName;
+		try {
+			return new Locale.Builder().setLanguage(language).setRegion(country).setVariant(variant).build();
+		} catch (Exception e) {
+			return Locale.getDefault();
+		}
 	}
 
 	public static void setAllowToDeletePrintedTicketItem(boolean allow) {

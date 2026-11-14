@@ -44,7 +44,7 @@
 	<classpathentry kind="var" path="M2_REPO/org/hibernate/ejb3-persistence/1.0.1.GA/ejb3-persistence-1.0.1.GA.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/miglayout/miglayout/3.7.4/miglayout-3.7.4.jar" sourcepath="M2_REPO/com/miglayout/miglayout/3.7.4/miglayout-3.7.4-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ecs/ecs/1.4.2/ecs-1.4.2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/xerces/xercesImpl/2.11.0/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/jgoodies/forms/1.2.1/forms-1.2.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/swinglabs/swingx-core/1.6.2-2/swingx-core-1.6.2-2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/derby/derby/10.8.1.2/derby-10.8.1.2.jar"/>
@@ -129,12 +129,10 @@
 	<classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.13.3/jackson-core-2.13.3.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/glassfish/jaxb/jaxb-runtime/2.3.8/jaxb-runtime-2.3.8.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/glassfish/jaxb/txw2/2.3.8/txw2-2.3.8.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/sun/istack/istack-commons-runtime/3.0.12/istack-commons-runtime-3.0.12.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

@@ -47,14 +47,8 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
-		<nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
-		<nature>org.maven.ide.eclipse.maven2Nature</nature>
-		<nature>com.genuitec.eclipse.hibernate.hibernatenature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.apache.derby.ui.derbyEngine</nature>
-		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 	</natures>
 	<filteredResources>
 		<filter>

@@ -49,7 +49,7 @@ public class PeripheralConfigurationView extends ConfigurationView {
 	private FixedLengthTextField tfScaleDisplayMessage;
 
 	private JCheckBox chkCallerIdEnable;
-	private JComboBox cbCallerIds;
+	private JComboBox<String> cbCallerIds;
 
 	public PeripheralConfigurationView() {
 		initComponents();
@@ -202,11 +202,11 @@ public class PeripheralConfigurationView extends ConfigurationView {
 
 		chkCallerIdEnable = new JCheckBox(Messages.getString("PeripheralConfigurationView.24")); //$NON-NLS-1$
 
-		Vector callerIds = new Vector();
+		Vector<String> callerIds = new Vector<>();
 		callerIds.add("NONE"); //$NON-NLS-1$
 		callerIds.add("AD101"); //$NON-NLS-1$
 		callerIds.add("Whozz calling"); //$NON-NLS-1$
-		cbCallerIds = new JComboBox(callerIds);
+		cbCallerIds = new JComboBox<>(callerIds);
 
 		callerIdPanel.add(chkCallerIdEnable, "span 2,wrap");//$NON-NLS-1$
 		callerIdPanel.add(new JLabel("Caller Id device:")); //$NON-NLS-1$

@@ -21,7 +21,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,6 @@ import com.floreantpos.util.GlobalIdGenerator;
 import com.floreantpos.util.NumberUtil;
 import com.floreantpos.util.POSUtil;
 
-//TODO: REVISE CODE
 public class GroupSettleTicketDialog extends POSDialog implements CardInputListener {
 	public static final String LOYALTY_DISCOUNT_PERCENTAGE = "loyalty_discount_percentage"; //$NON-NLS-1$
 	public static final String LOYALTY_POINT = "loyalty_point"; //$NON-NLS-1$
@@ -528,7 +527,6 @@ public class GroupSettleTicketDialog extends POSDialog implements CardInputListe
 				printTicket(ticket, transaction);
 			}
 
-			//FIXME
 			showTransactionCompleteMsg(totalDueAmount, totalTenderAmount, tickets, transactionList);
 
 			setCanceled(false);
@@ -580,7 +578,7 @@ public class GroupSettleTicketDialog extends POSDialog implements CardInputListe
 				String url = buildLoyaltyApiURL(ticket, ticket.getProperty(LOYALTY_ID));
 				url += "&paid=1"; //$NON-NLS-1$
 
-				IOUtils.toString(new URL(url).openStream());
+				IOUtils.toString(URI.create(url).toURL().openStream());
 			}
 		} catch (Exception e) {
 			POSMessageDialog.showError(Application.getPosWindow(), e.getMessage(), e);
@@ -773,7 +771,6 @@ public class GroupSettleTicketDialog extends POSDialog implements CardInputListe
 				printTicket(ticket, cardTransaction);
 			}
 
-			//FIXME
 			showTransactionCompleteMsg(totalDueAmount, totalTenderAmount, tickets, transactionList);
 
 			setCanceled(false);

@@ -34,16 +34,10 @@ import com.floreantpos.main.Application;
 public class DrawerUtil {
 	/* fields */
 	private static Log logger = LogFactory.getLog(DrawerUtil.class);
-	private boolean escp24pin; //boolean to indicate whether the printer is a 24 pin esc/p2 epson
-
-	private static int MAX_ADVANCE_9PIN = 216; //for 24/48 pin esc/p2 printers this should be 180
-	private static int MAX_ADVANCE_24PIN = 180;
-	private static int MAX_UNITS = 127; //for vertical positioning range is between 0 - 255 (0 <= n <= 255) according to epson ref. but 255 gives weird errors at 1.5f, 127 as max (0 - 128) seems to be working
 	private static final float CM_PER_INCH = 2.54f;
 
 	/* decimal ascii values for epson ESC/P commands */
 	private static final char ESC = 27; //escape
-	private static final char AT = 64; //@
 	private static final char LINE_FEED = 10; //line feed/new line
 	private static final char PARENTHESIS_LEFT = 40;
 	private static final char BACKSLASH = 92;
@@ -57,35 +51,18 @@ public class DrawerUtil {
 	private static final char x = 120; //used for setting draft or letter quality (LQ) printing
 	private static final char E = 69; //bold font on
 	private static final char F = 70; //bold font off
-	private static final char J = 74; //used for advancing paper vertically
 	private static final char P = 80; //10cpi pitch
 	private static final char Q = 81; //used for setting right margin
 	private static final char $ = 36; //used for absolute horizontal positioning
 	private static final char ARGUMENT_0 = 0;
 	private static final char ARGUMENT_1 = 1;
-	private static final char ARGUMENT_2 = 2;
 	private static final char ARGUMENT_3 = 3;
-	private static final char ARGUMENT_4 = 4;
-	private static final char ARGUMENT_5 = 5;
-	private static final char ARGUMENT_6 = 6;
-	private static final char ARGUMENT_7 = 7;
 	private static final char ARGUMENT_25 = 25;
 	private static final char TEAR = 105;
-	private static final char _0 = 0;
-	private static final char _1 = 1;
-
-	private static final char _25 = 25;
-	private static final char _250 = 250;
-	private static final char _999 = 999;
-	private static final char _48 = 48;
-	private static final char _55 = 55;
-	private static final char _121 = 121;
 
 	/* character sets */
 	public static final char USA = ARGUMENT_1;
 	public static final char BRAZIL = ARGUMENT_25;
-
-	private static char[] controlCodes;
 
 	public void close() {
 	}
@@ -263,7 +240,6 @@ public class DrawerUtil {
 				return;
 			}
 
-			DrawerUtil.controlCodes = codes;
 			byte[] pulseBytes = buildKickBytes(codes);
 
 			String targetName = portName.trim();
