@@ -1,4 +1,4 @@
-package com.floreantpos;
+package test.java.com.floreantpos;
 
 import java.text.ParseException;
 import java.util.Locale;
@@ -14,7 +14,8 @@ import com.floreantpos.util.NumberUtil;
 import com.floreantpos.util.SerialPortUtil;
 
 /**
- * Dependency-free headless smoke tests for critical cash settlement, number parsing,
+ * Dependency-free headless smoke tests for critical cash settlement, number
+ * parsing,
  * terminal configuration, and peripheral safety paths.
  */
 public class PosSmokeTest {
@@ -61,7 +62,8 @@ public class PosSmokeTest {
 	}
 
 	private static void testDrawerAndScaleSafetyGuards() {
-		// Must safely no-op when disabled or port is invalid without calling native jSSC DLLs
+		// Must safely no-op when disabled or port is invalid without calling native
+		// jSSC DLLs
 		DrawerUtil.kickDrawer();
 		DrawerUtil.kickDrawer("", new char[] { 27, 112, 0, 25, 250 });
 		DrawerUtil.kickDrawer("NONE", new char[] { 27, 112, 0, 25, 250 });
@@ -80,7 +82,8 @@ public class PosSmokeTest {
 		} catch (SerialPortException e) {
 			threwForDisabledScale = true;
 		}
-		assertTrue(threwForDisabledScale, "SerialPortUtil.readWeight must reject native openPort when scale display is disabled");
+		assertTrue(threwForDisabledScale,
+				"SerialPortUtil.readWeight must reject native openPort when scale display is disabled");
 	}
 
 	private static void testCashTransactionDefaults() {
