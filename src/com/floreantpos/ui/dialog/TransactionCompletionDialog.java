@@ -17,6 +17,7 @@
  */
 package com.floreantpos.ui.dialog;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -57,7 +58,7 @@ public class TransactionCompletionDialog extends POSDialog {
 
 	public TransactionCompletionDialog(PosTransaction transaction) {
 		this.completedTransaction = transaction;
-		isCard = completedTransaction.isCard();
+		this.isCard = completedTransaction != null && completedTransaction.isCard();
 		initializeComponents();
 		//setResizable(false);
 	}
@@ -122,10 +123,10 @@ public class TransactionCompletionDialog extends POSDialog {
 		btnPrintStoreCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-
-					ReceiptPrintService.printTransaction(completedTransaction, true, false);
-
-				} catch (Exception ee) {
+					if (completedTransaction != null) {
+						ReceiptPrintService.printTransaction(completedTransaction, true, false);
+					}
+				} catch (Throwable ee) {
 					POSMessageDialog.showError(Application.getPosWindow(), Messages.getString("TransactionCompletionDialog.39"), ee); //$NON-NLS-1$
 				}
 				//dispose();
@@ -136,27 +137,27 @@ public class TransactionCompletionDialog extends POSDialog {
 		btnPrintAllCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-
-					ReceiptPrintService.printTransaction(completedTransaction, true, true);
-
-				} catch (Exception ee) {
+					if (completedTransaction != null) {
+						ReceiptPrintService.printTransaction(completedTransaction, true, true);
+					}
+				} catch (Throwable ee) {
 					POSMessageDialog.showError(Application.getPosWindow(), Messages.getString("TransactionCompletionDialog.41"), ee); //$NON-NLS-1$
 				}
 				dispose();
 			}
 		});
 
-		JPanel p = new JPanel();
+		JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
 
 		if (isCard) {
-			p.add(btnPrintAllCopy, "newline,skip, h 50"); //$NON-NLS-1$
-			p.add(btnPrintStoreCopy, "skip, h 50"); //$NON-NLS-1$
-			p.add(btnClose, "skip, h 50"); //$NON-NLS-1$
+			p.add(btnPrintAllCopy);
+			p.add(btnPrintStoreCopy);
+			p.add(btnClose);
 		}
 		else {
 			btnPrintStoreCopy.setText(Messages.getString("TransactionCompletionDialog.0")); //$NON-NLS-1$
-			p.add(btnPrintStoreCopy, "skip, h 50"); //$NON-NLS-1$
-			p.add(btnClose, "skip, h 50"); //$NON-NLS-1$
+			p.add(btnPrintStoreCopy);
+			p.add(btnClose);
 		}
 
 		add(p, "newline, span 2, grow, gaptop 15px"); //$NON-NLS-1$

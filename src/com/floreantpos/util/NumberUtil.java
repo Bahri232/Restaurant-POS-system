@@ -39,19 +39,25 @@ public class NumberUtil {
 	}
 
 	public static double roundToTwoDigit(double value) {
-		BigDecimal bd = new BigDecimal(value);
+		if (Double.isNaN(value) || Double.isInfinite(value)) {
+			return 0.0;
+		}
+		BigDecimal bd = BigDecimal.valueOf(value);
 		bd = bd.setScale(2, RoundingMode.HALF_UP);
 		return bd.doubleValue();
 	}
 
 	public static double roundToThreeDigit(double value) {
-		BigDecimal bd = new BigDecimal(value);
+		if (Double.isNaN(value) || Double.isInfinite(value)) {
+			return 0.0;
+		}
+		BigDecimal bd = BigDecimal.valueOf(value);
 		bd = bd.setScale(3, RoundingMode.HALF_UP);
 		return bd.doubleValue();
 	}
 
 	public static String format3DigitNumber(Double number) {
-		if (number == null) {
+		if (number == null || Double.isNaN(number) || Double.isInfinite(number)) {
 			return numberFormat2.format(0);
 		}
 		String value = numberFormat2.format(number);
@@ -63,7 +69,7 @@ public class NumberUtil {
 	}
 
 	public static String formatNumber(Double number, boolean isAllowedNegative) {
-		if (number == null) {
+		if (number == null || Double.isNaN(number) || Double.isInfinite(number)) {
 			return numberFormat.format(0);
 		}
 
@@ -78,7 +84,7 @@ public class NumberUtil {
 	}
 	
 	public static String formatNumber(Double number) {
-		if (number == null) {
+		if (number == null || Double.isNaN(number) || Double.isInfinite(number)) {
 			return numberFormat.format(0);
 		}
 
@@ -92,11 +98,21 @@ public class NumberUtil {
 	}
 
 	public static Number parse(String number) throws ParseException {
-		if (StringUtils.isEmpty(number)) {
+		if (StringUtils.isBlank(number)) {
 			return 0;
 		}
 
-		return numberFormat.parse(number);
+		String sanitized = number.trim();
+		String currencySymbol = CurrencyUtil.getCurrencySymbol();
+		if (StringUtils.isNotBlank(currencySymbol)) {
+			sanitized = sanitized.replace(currencySymbol.trim(), ""); //$NON-NLS-1$
+		}
+		sanitized = sanitized.replace("Le", "").trim(); //$NON-NLS-1$ //$NON-NLS-2$
+		if (StringUtils.isBlank(sanitized)) {
+			return 0;
+		}
+
+		return numberFormat.parse(sanitized);
 	}
 
 	public static String trimDecilamIfNotNeeded(Double number) {

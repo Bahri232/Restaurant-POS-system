@@ -42,6 +42,7 @@ import com.floreantpos.model.OrderType;
 import com.floreantpos.model.PaymentType;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Ticket;
+import com.floreantpos.model.TransactionType;
 import com.floreantpos.model.User;
 import com.floreantpos.model.UserPermission;
 import com.floreantpos.report.ReceiptPrintService;
@@ -53,6 +54,7 @@ import com.floreantpos.ui.dialog.TransactionCompletionDialog;
 import com.floreantpos.ui.views.order.OrderController;
 import com.floreantpos.ui.views.order.OrderView;
 import com.floreantpos.util.DrawerUtil;
+import com.floreantpos.util.NumberUtil;
 import com.floreantpos.util.POSUtil;
 
 public class SettleTicketProcessor implements CardInputListener {
@@ -97,16 +99,28 @@ public class SettleTicketProcessor implements CardInputListener {
 
 		switch (paymentType) {
 			case CASH:
-				if (!confirmPayment()) {
-					return;
+				try {
+					if (!confirmPayment()) {
+						return;
+					}
+
+					transaction = paymentType.createTransaction();
+					transaction.setTicket(ticket);
+					transaction.setTransactionType(TransactionType.CREDIT.name());
+					transaction.setPaymentType(paymentType.getDisplayString());
+					transaction.setCaptured(true);
+					transaction.setVoided(false);
+					transaction.setAuthorizable(false);
+					transaction.setDrawerResetted(false);
+					transaction.setTipsAmount(0.0);
+					transaction.setTipsExceedAmount(0.0);
+					setTransactionAmounts(transaction);
+
+					settleTicket(transaction);
+				} catch (Throwable t) {
+					String msg = StringUtils.isNotBlank(t.getMessage()) ? t.getMessage() : POSConstants.ERROR_MESSAGE;
+					POSMessageDialog.showError(POSUtil.getFocusedWindow(), msg, t);
 				}
-
-				transaction = paymentType.createTransaction();
-				transaction.setTicket(ticket);
-				transaction.setCaptured(true);
-				setTransactionAmounts(transaction);
-
-				settleTicket(transaction);
 				break;
 
 			case CUSTOM_PAYMENT:
@@ -275,24 +289,35 @@ public class SettleTicketProcessor implements CardInputListener {
 	}
 
 	public static void showTransactionCompleteMsg(final double dueAmount, final double tenderedAmount, Ticket ticket, PosTransaction transaction) {
-		TransactionCompletionDialog dialog = new TransactionCompletionDialog(transaction);
-		dialog.setCompletedTransaction(transaction);
-		dialog.setTenderedAmount(tenderedAmount);
-		dialog.setTotalAmount(dueAmount);
-		dialog.setPaidAmount(transaction.getAmount());
-		dialog.setDueAmount(ticket.getDueAmount());
-		dialog.setGratuityAmount(transaction.getTipsAmount());
-		dialog.setFeeAmount(ticket.getAdjustmentAmount());
-		if (tenderedAmount > transaction.getAmount()) {
-			dialog.setChangeAmount(tenderedAmount - transaction.getAmount());
-		}
-		else {
-			dialog.setChangeAmount(0);
-		}
+		try {
+			TransactionCompletionDialog dialog = new TransactionCompletionDialog(transaction);
+			dialog.setCompletedTransaction(transaction);
 
-		dialog.updateView();
-		dialog.pack();
-		dialog.open();
+			double paidAmount = transaction != null ? POSUtil.getDouble(transaction.getAmount()) : 0.0;
+			double remainingDue = ticket != null ? POSUtil.getDouble(ticket.getDueAmount()) : 0.0;
+			double gratuityAmount = transaction != null ? POSUtil.getDouble(transaction.getTipsAmount()) : 0.0;
+			double feeAmount = ticket != null ? POSUtil.getDouble(ticket.getAdjustmentAmount()) : 0.0;
+
+			dialog.setTenderedAmount(tenderedAmount);
+			dialog.setTotalAmount(dueAmount);
+			dialog.setPaidAmount(paidAmount);
+			dialog.setDueAmount(remainingDue);
+			dialog.setGratuityAmount(gratuityAmount);
+			dialog.setFeeAmount(feeAmount);
+			if (tenderedAmount > paidAmount) {
+				dialog.setChangeAmount(NumberUtil.roundToTwoDigit(tenderedAmount - paidAmount));
+			}
+			else {
+				dialog.setChangeAmount(0);
+			}
+
+			dialog.updateView();
+			dialog.pack();
+			dialog.open();
+		} catch (Throwable t) {
+			String msg = StringUtils.isNotBlank(t.getMessage()) ? t.getMessage() : POSConstants.ERROR_MESSAGE;
+			POSMessageDialog.showError(POSUtil.getFocusedWindow(), msg, t);
+		}
 	}
 
 	public static void printTicket(Ticket ticket, PosTransaction transaction) {
@@ -305,10 +330,14 @@ public class SettleTicketProcessor implements CardInputListener {
 
 			ReceiptPrintService.printTransaction(transaction);
 
-			if (transaction instanceof CashTransaction) {
-				DrawerUtil.kickDrawer();
+			if (transaction instanceof CashTransaction && TerminalConfig.isCashDrawerKickEnabled()) {
+				try {
+					DrawerUtil.kickDrawer();
+				} catch (Throwable t) {
+					org.apache.commons.logging.LogFactory.getLog(SettleTicketProcessor.class).error("Failed to kick cash drawer", t); //$NON-NLS-1$
+				}
 			}
-		} catch (Exception ee) {
+		} catch (Throwable ee) {
 			POSMessageDialog.showError(Application.getPosWindow(), com.floreantpos.POSConstants.PRINT_ERROR, ee);
 		}
 	}
@@ -396,7 +425,7 @@ public class SettleTicketProcessor implements CardInputListener {
 			POSMessageDialog.showMessageDialogWithReloadButton(POSUtil.getFocusedWindow(), refreshableView);
 		} catch (UnknownHostException e) {
 			POSMessageDialog.showError(Application.getPosWindow(), Messages.getString("SettleTicketDialog.12")); //$NON-NLS-1$
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			POSMessageDialog.showError(POSUtil.getFocusedWindow(), POSConstants.ERROR_MESSAGE, e);
 		}
 	}

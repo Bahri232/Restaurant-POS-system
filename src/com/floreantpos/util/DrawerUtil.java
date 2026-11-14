@@ -17,13 +17,19 @@
  */
 package com.floreantpos.util;
 
-import jssc.SerialPort;
-import jssc.SerialPortException;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.floreantpos.config.TerminalConfig;
+import com.floreantpos.main.Application;
 
 public class DrawerUtil {
 	/* fields */
@@ -78,72 +84,18 @@ public class DrawerUtil {
 	/* character sets */
 	public static final char USA = ARGUMENT_1;
 	public static final char BRAZIL = ARGUMENT_25;
-	public static SerialPort serialPort;
 
 	private static char[] controlCodes;
 
 	public void close() {
-		//post: closes the stream, used when printjob ended
-		try {
-			serialPort.closePort();
-		} catch (SerialPortException ex) {
-		}
 	}
 
 	public static boolean initialize() {
-
-		try {
-			serialPort.openPort();//Open serial port
-			serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-			//Set params. Also you can set params by this string: serialPort.setParams(9600, 8, 1, 0);
-			//serialPort.writeBytes( reconstitutedString.getBytes());//
-
-			//reset default settings
-			//print(ESC);
-			//print(AT);
-
-			//select 10-cpi character pitch
-			//select10CPI();
-
-			//select draft quality printing
-			//selectDraftPrinting();
-
-			//set character set
-			setCharacterSet(USA);
-
-		} catch (SerialPortException ex) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	public static boolean printToThePort() {
-
-		try {
-			serialPort.openPort();//Open serial port
-			serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-			//Set params. Also you can set params by this string: serialPort.setParams(9600, 8, 1, 0);
-			//serialPort.writeBytes( reconstitutedString.getBytes());//
-
-			//reset default settings
-			print(ESC);
-			print(AT);
-
-			//select 10-cpi character pitch
-			//select10CPI();
-
-			//select draft quality printing
-			//selectDraftPrinting();
-
-			//set character set
-			setCharacterSet(USA);
-
-		} catch (SerialPortException ex) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	public static void select10CPI() { //10 characters per inch (condensed available)
@@ -211,52 +163,7 @@ public class DrawerUtil {
 	}
 
 	public static void kick() {
-		print("Start kicking drawer\n"); //$NON-NLS-1$
-
-		//print(ESC);
-		//print(AT);
-
-		//		print((char) 27);
-		//		print((char) 112);
-		//		print((char) 0);
-		//		print((char) 100);
-		//		print((char) 250);
-
-		if (controlCodes.length >= 5) {
-			print(controlCodes[0]);
-			print(controlCodes[1]);
-			print(controlCodes[2]);
-			print(controlCodes[3]);
-			print(controlCodes[4]);
-		}
-		else {
-			print((char) 27);
-			print((char) 112);
-			print((char) 0);
-			print((char) 25);
-			print((char) 250);
-		}
-
-		/*	
-		print(ESC);
-		print(p);
-		print((char)1);
-		print(_25);
-		print(_250);
-
-		print(ESC);
-		print(p);
-		print(_0);
-		print((char)64);
-		print((char)240);
-
-		    print(ESC);
-			print(p);
-			print(_48);
-			print(_55);
-			print(_121);
-		*/
-		print("End kicking drawer\n"); //$NON-NLS-1$
+		kickDrawer();
 	}
 
 	public static void proportionalMode(boolean proportional) {
@@ -321,19 +228,9 @@ public class DrawerUtil {
 	}
 
 	public static void print(String text) {
-		try {
-			serialPort.writeBytes(text.getBytes());
-
-		} catch (SerialPortException ex) {
-		}
-
 	}
 
 	public static void print(char text) {
-		try {
-			serialPort.writeByte((byte) text);
-		} catch (SerialPortException ex) {
-		}
 	}
 
 	public static boolean isInitialized() {
@@ -347,84 +244,99 @@ public class DrawerUtil {
 	}
 
 	public static void kickDrawer() {
-		String portName = TerminalConfig.getDrawerPortName();
-		char[] codesArray = TerminalConfig.getDrawerControlCodesArray();
-
-		kickDrawer(portName, codesArray);
-	}
-
-	public static void kickDrawer(String portName, char[] codes) {
-		DrawerUtil.controlCodes = codes;
-		serialPort = new SerialPort(portName);
-
-		initialize();
-
 		try {
-			kick();
-			//tear();
+			if (!TerminalConfig.isCashDrawerKickEnabled()) {
+				return;
+			}
+			String portName = TerminalConfig.getDrawerPortName();
+			char[] codesArray = TerminalConfig.getDrawerControlCodesArray();
 
-			serialPort.closePort();//Close serial port
-		} catch (SerialPortException ex) {
+			kickDrawer(portName, codesArray);
+		} catch (Throwable t) {
+			logger.error("Failed to kick cash drawer", t); //$NON-NLS-1$
 		}
 	}
 
-	public static void setCustomerDisplayMessage(String portName, String customerDisplayMessage) {
-		serialPort = new SerialPort(portName);
-
-		//printToThePort();
-		initialize();
+	public static void kickDrawer(String portName, char[] codes) {
 		try {
-			print((char) 12); //added line feed
-			serialPort.writeBytes(customerDisplayMessage.getBytes());
+			if (StringUtils.isBlank(portName) || "NONE".equalsIgnoreCase(portName.trim())) { //$NON-NLS-1$
+				return;
+			}
 
-			serialPort.closePort();//Close serial port
-		} catch (SerialPortException ex) {
+			DrawerUtil.controlCodes = codes;
+			byte[] pulseBytes = buildKickBytes(codes);
+
+			String targetName = portName.trim();
+			if ("PRINTER".equalsIgnoreCase(targetName) && Application.getPrinters() != null) { //$NON-NLS-1$
+				targetName = Application.getPrinters().getReceiptPrinter();
+			}
+
+			if (StringUtils.isNotBlank(targetName) && sendBytesToPrinter(targetName, pulseBytes)) {
+				return;
+			}
+
+			// Do not invoke jSSC native serial openPort() on Windows/Java 17 because jSSC-2.8_x86_64.dll
+			// causes an unrecoverable EXCEPTION_ACCESS_VIOLATION in native code.
+			logger.warn("Cash drawer kick skipped: port '" + portName + "' is not a configured print service."); //$NON-NLS-1$ //$NON-NLS-2$
+		} catch (Throwable t) {
+			logger.error("Failed to kick cash drawer on port: " + portName, t); //$NON-NLS-1$
+		}
+	}
+
+	private static byte[] buildKickBytes(char[] codes) {
+		if (codes != null && codes.length >= 5) {
+			return new byte[] { (byte) codes[0], (byte) codes[1], (byte) codes[2], (byte) codes[3], (byte) codes[4] };
+		}
+		return new byte[] { (byte) 27, (byte) 112, (byte) 0, (byte) 25, (byte) 250 };
+	}
+
+	private static boolean sendBytesToPrinter(String printerName, byte[] data) {
+		try {
+			PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);
+			if (services == null) {
+				return false;
+			}
+			for (PrintService service : services) {
+				if (service != null && service.getName() != null && service.getName().equalsIgnoreCase(printerName)) {
+					DocPrintJob job = service.createPrintJob();
+					Doc doc = new SimpleDoc(data, DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
+					job.print(doc, null);
+					return true;
+				}
+			}
+		} catch (Throwable t) {
+			logger.error("Printer drawer kick failed for printer: " + printerName, t); //$NON-NLS-1$
+		}
+		return false;
+	}
+
+	public static void setCustomerDisplayMessage(String portName, String customerDisplayMessage) {
+		try {
+			if (!TerminalConfig.isActiveCustomerDisplay()) {
+				return;
+			}
+			logger.debug("Customer display serial output disabled to prevent native jSSC crash."); //$NON-NLS-1$
+		} catch (Throwable t) {
+			logger.error("Failed to update customer display", t); //$NON-NLS-1$
 		}
 	}
 
 	public static void setItemDisplay(String port, String message) {
 		try {
-			serialPort = new SerialPort(port);
-			initialize();
-			print((char) 13); //added line feed
-			print(message);
-		} catch (Exception ex) {
-		} finally {
-			try {
-				serialPort.closePort();
-			} catch (SerialPortException e) {
+			if (!TerminalConfig.isActiveCustomerDisplay()) {
+				return;
 			}
+			logger.debug("Item display serial output disabled to prevent native jSSC crash."); //$NON-NLS-1$
+		} catch (Throwable t) {
+			logger.error("Failed to update item display", t); //$NON-NLS-1$
 		}
 	}
-	
+
 	public static void testWeightInput() {
 		try {
-			SerialPort serialPort = new SerialPort("COM1");
-			serialPort.openPort();//Open serial port
-			serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-			//Set params. Also you can set params by this string: serialPort.setParams(9600, 8, 1, 0);
-			//serialPort.writeBytes( reconstitutedString.getBytes());//
-
-			//reset default settings
-			//print(ESC);
-			//print(AT);
-
-			//select 10-cpi character pitch
-			//select10CPI();
-
-			//select draft quality printing
-			//selectDraftPrinting();
-
-			//set character set
-			setCharacterSet(USA);
-			
-			print((char) 'W'); 
-			print((char) 13); //added line feed
-			
-			byte[] readBytes = serialPort.readBytes();
-			System.out.println("Response: " + new String(readBytes));
-
-		} catch (SerialPortException ex) {
+			logger.debug("Weight input test disabled on DrawerUtil."); //$NON-NLS-1$
+		} catch (Throwable t) {
+			logger.error("Weight input test failed", t); //$NON-NLS-1$
 		}
 	}
 }

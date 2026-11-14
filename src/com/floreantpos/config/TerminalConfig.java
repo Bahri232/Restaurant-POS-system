@@ -104,6 +104,8 @@ public class TerminalConfig {
 
 	private static final String KDS_TICKETS_PER_PAGE = "kds.ticket.per_page";
 
+	private static final String ENABLE_CASH_DRAWER_KICK = "enable_cash_drawer_kick"; //$NON-NLS-1$
+
 	private static PropertiesConfiguration config = AppConfig.getConfig();
 
 	public static int getTerminalId() {
@@ -445,6 +447,14 @@ public class TerminalConfig {
 		return config.getString("scaleDisplayMessage", "1234"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	public static boolean isCashDrawerKickEnabled() {
+		return config.getBoolean(ENABLE_CASH_DRAWER_KICK, false);
+	}
+
+	public static void setCashDrawerKickEnabled(boolean enable) {
+		config.setProperty(ENABLE_CASH_DRAWER_KICK, enable);
+	}
+
 	public static void setDrawerControlCodes(String controlCode) {
 		config.setProperty("controlCode", controlCode); //$NON-NLS-1$
 	}
@@ -474,7 +484,7 @@ public class TerminalConfig {
 	}
 
 	public static char[] getDrawerControlCodesArray() {
-		String drawerControlCodes = getDefaultDrawerControlCodes();
+		String drawerControlCodes = getDrawerControlCodes();
 		if (StringUtils.isEmpty(drawerControlCodes)) {
 			drawerControlCodes = getDefaultDrawerControlCodes();
 		}
@@ -483,7 +493,7 @@ public class TerminalConfig {
 		char[] codes = new char[split.length];
 		for (int i = 0; i < split.length; i++) {
 			try {
-				codes[i] = (char) Integer.parseInt(split[i]);
+				codes[i] = (char) Integer.parseInt(split[i].trim());
 			} catch (Exception x) {
 				codes[i] = '0';
 			}

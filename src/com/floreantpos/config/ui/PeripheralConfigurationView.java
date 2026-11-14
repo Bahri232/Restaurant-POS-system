@@ -36,6 +36,7 @@ import com.floreantpos.util.SerialPortUtil;
 public class PeripheralConfigurationView extends ConfigurationView {
 	public static final String CONFIG_TAB_PERIPHERAL = "Peripherals"; //$NON-NLS-1$
 	private JCheckBox chkHasCashDrawer;
+	private JCheckBox chkEnableCashDrawerKick;
 	private JTextField tfDrawerName = new JTextField(10);
 	private JTextField tfDrawerCodes = new JTextField(15);
 	private DoubleTextField tfDrawerInitialBalance = new DoubleTextField(6);
@@ -65,6 +66,9 @@ public class PeripheralConfigurationView extends ConfigurationView {
 		chkHasCashDrawer = new JCheckBox(Messages.getString("TerminalConfigurationView.15")); //$NON-NLS-1$
 		drawerConfigPanel.add(chkHasCashDrawer, "span 5, wrap"); //$NON-NLS-1$
 
+		chkEnableCashDrawerKick = new JCheckBox("Enable hardware cash drawer kick on cash payment"); //$NON-NLS-1$
+		drawerConfigPanel.add(chkEnableCashDrawerKick, "span 5, wrap"); //$NON-NLS-1$
+
 		drawerConfigPanel.add(new JLabel(Messages.getString("TerminalConfigurationView.25"))); //$NON-NLS-1$
 		drawerConfigPanel.add(tfDrawerName, ""); //$NON-NLS-1$
 
@@ -75,22 +79,27 @@ public class PeripheralConfigurationView extends ConfigurationView {
 		btnDrawerTest.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String text = tfDrawerCodes.getText();
-				if (StringUtils.isEmpty(text)) {
-					text = TerminalConfig.getDefaultDrawerControlCodes();
-				}
-
-				String[] split = text.split(","); //$NON-NLS-1$
-				char[] codes = new char[split.length];
-				for (int i = 0; i < split.length; i++) {
-					try {
-						codes[i] = (char) Integer.parseInt(split[i]);
-					} catch (Exception x) {
-						codes[i] = '0';
+				try {
+					String text = tfDrawerCodes.getText();
+					if (StringUtils.isEmpty(text)) {
+						text = TerminalConfig.getDefaultDrawerControlCodes();
 					}
-				}
 
-				DrawerUtil.kickDrawer(tfDrawerName.getText(), codes);
+					String[] split = text.split(","); //$NON-NLS-1$
+					char[] codes = new char[split.length];
+					for (int i = 0; i < split.length; i++) {
+						try {
+							codes[i] = (char) Integer.parseInt(split[i].trim());
+						} catch (Exception x) {
+							codes[i] = '0';
+						}
+					}
+
+					DrawerUtil.kickDrawer(tfDrawerName.getText(), codes);
+				} catch (Throwable t) {
+					LogFactory.getLog(PeripheralConfigurationView.class).error(t);
+					POSMessageDialog.showError(POSUtil.getFocusedWindow(), "Cash drawer test failed: " + t.getMessage(), t);
+				}
 			}
 		});
 		drawerConfigPanel.add(btnDrawerTest);
@@ -215,6 +224,7 @@ public class PeripheralConfigurationView extends ConfigurationView {
 
 	protected void doEnableDisableDrawerPull() {
 		boolean selected = chkHasCashDrawer.isSelected();
+		chkEnableCashDrawerKick.setEnabled(selected);
 		tfDrawerName.setEnabled(selected);
 		tfDrawerCodes.setEnabled(selected);
 		tfDrawerInitialBalance.setEnabled(selected);
@@ -223,6 +233,7 @@ public class PeripheralConfigurationView extends ConfigurationView {
 	@Override
 	public boolean save() throws Exception {
 
+		TerminalConfig.setCashDrawerKickEnabled(chkEnableCashDrawerKick.isSelected());
 		TerminalConfig.setDrawerPortName(tfDrawerName.getText());
 		TerminalConfig.setDrawerControlCodes(tfDrawerCodes.getText());
 
@@ -258,6 +269,7 @@ public class PeripheralConfigurationView extends ConfigurationView {
 
 		Terminal terminal = Application.getInstance().refreshAndGetTerminal();
 		chkHasCashDrawer.setSelected(terminal.isHasCashDrawer());
+		chkEnableCashDrawerKick.setSelected(TerminalConfig.isCashDrawerKickEnabled());
 		tfDrawerName.setText(TerminalConfig.getDrawerPortName());
 		tfDrawerCodes.setText(TerminalConfig.getDrawerControlCodes());
 		tfDrawerInitialBalance.setText("" + terminal.getOpeningBalance()); //$NON-NLS-1$

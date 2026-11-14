@@ -54,6 +54,7 @@ import com.floreantpos.model.PaymentType;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Restaurant;
 import com.floreantpos.model.Ticket;
+import com.floreantpos.model.TransactionType;
 import com.floreantpos.report.ReceiptPrintService;
 import com.floreantpos.services.PosTransactionService;
 import com.floreantpos.swing.PosScrollPane;
@@ -371,7 +372,14 @@ public class GroupSettleTicketDialog extends POSDialog implements CardInputListe
 					}
 
 					transaction = paymentType.createTransaction();
+					transaction.setTransactionType(TransactionType.CREDIT.name());
+					transaction.setPaymentType(paymentType.getDisplayString());
 					transaction.setCaptured(true);
+					transaction.setVoided(false);
+					transaction.setAuthorizable(false);
+					transaction.setDrawerResetted(false);
+					transaction.setTipsAmount(0.0);
+					transaction.setTipsExceedAmount(0.0);
 
 					settleTicket(transaction);
 					break;
@@ -472,8 +480,10 @@ public class GroupSettleTicketDialog extends POSDialog implements CardInputListe
 					break;
 
 			}
-		} catch (Exception e) {
-			PosLog.error(getClass(), e);
+		} catch (Throwable e) {
+			String msg = StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : POSConstants.ERROR_MESSAGE;
+			PosLog.error(getClass(), e instanceof Exception ? (Exception) e : new Exception(msg, e));
+			POSMessageDialog.showError(POSUtil.getFocusedWindow(), msg, e);
 		}
 	}
 
@@ -526,37 +536,42 @@ public class GroupSettleTicketDialog extends POSDialog implements CardInputListe
 
 		} catch (UnknownHostException e) {
 			POSMessageDialog.showError(Application.getPosWindow(), Messages.getString("SettleTicketDialog.12")); //$NON-NLS-1$
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			POSMessageDialog.showError(this, POSConstants.ERROR_MESSAGE, e);
 		}
 	}
 
 	public void showTransactionCompleteMsg(final double dueAmount, final double tenderedAmount, List<Ticket> ticket, List<PosTransaction> transactions) {
-		TransactionCompletionDialog dialog = new TransactionCompletionDialog(transactions);
+		try {
+			TransactionCompletionDialog dialog = new TransactionCompletionDialog(transactions);
 
-		double paidAmount = 0;
-		double ticketsDueAmount = 0;
-		for (PosTransaction transaction : transactions) {
-			paidAmount += transaction.getAmount();
-			dialog.setCard(transaction.isCard());
-		}
-		dialog.setTenderedAmount(tenderedAmount);
-		dialog.setTotalAmount(dueAmount);
-		dialog.setPaidAmount(paidAmount);
-		for (Ticket tTicket : tickets) {
-			ticketsDueAmount += tTicket.getDueAmount();
-		}
-		dialog.setDueAmount(ticketsDueAmount);
-		if (tenderedAmount > paidAmount) {
-			dialog.setChangeAmount(tenderedAmount - paidAmount);
-		}
-		else {
-			dialog.setChangeAmount(0);
-		}
+			double paidAmount = 0;
+			double ticketsDueAmount = 0;
+			for (PosTransaction transaction : transactions) {
+				paidAmount += POSUtil.getDouble(transaction.getAmount());
+				dialog.setCard(transaction.isCard());
+			}
+			dialog.setTenderedAmount(tenderedAmount);
+			dialog.setTotalAmount(dueAmount);
+			dialog.setPaidAmount(paidAmount);
+			for (Ticket tTicket : tickets) {
+				ticketsDueAmount += POSUtil.getDouble(tTicket.getDueAmount());
+			}
+			dialog.setDueAmount(ticketsDueAmount);
+			if (tenderedAmount > paidAmount) {
+				dialog.setChangeAmount(NumberUtil.roundToTwoDigit(tenderedAmount - paidAmount));
+			}
+			else {
+				dialog.setChangeAmount(0);
+			}
 
-		dialog.updateView();
-		dialog.pack();
-		dialog.open();
+			dialog.updateView();
+			dialog.pack();
+			dialog.open();
+		} catch (Throwable t) {
+			String msg = StringUtils.isNotBlank(t.getMessage()) ? t.getMessage() : POSConstants.ERROR_MESSAGE;
+			POSMessageDialog.showError(POSUtil.getFocusedWindow(), msg, t);
+		}
 	}
 
 	public void confirmLoyaltyDiscount(Ticket ticket) throws IOException, MalformedURLException {
@@ -580,10 +595,14 @@ public class GroupSettleTicketDialog extends POSDialog implements CardInputListe
 
 			ReceiptPrintService.printTransaction(transaction);
 
-			if (transaction instanceof CashTransaction) {
-				DrawerUtil.kickDrawer();
+			if (transaction instanceof CashTransaction && TerminalConfig.isCashDrawerKickEnabled()) {
+				try {
+					DrawerUtil.kickDrawer();
+				} catch (Throwable t) {
+					PosLog.error(GroupSettleTicketDialog.class, t instanceof Exception ? (Exception) t : new Exception(t));
+				}
 			}
-		} catch (Exception ee) {
+		} catch (Throwable ee) {
 			POSMessageDialog.showError(Application.getPosWindow(), com.floreantpos.POSConstants.PRINT_ERROR, ee);
 		}
 	}

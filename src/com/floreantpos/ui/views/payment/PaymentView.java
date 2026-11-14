@@ -622,7 +622,13 @@ public class PaymentView extends JPanel {
 					txtTenderedAmount.setText(String.valueOf(format.format(amount)));
 				}
 				else if (command.equals("noSale")) {
-					DrawerUtil.kickDrawer();
+					try {
+						if (TerminalConfig.isCashDrawerKickEnabled()) {
+							DrawerUtil.kickDrawer();
+						}
+					} catch (Throwable t) {
+						org.apache.commons.logging.LogFactory.getLog(getClass()).error("Failed to kick cash drawer", t); //$NON-NLS-1$
+					}
 				}
 				else {
 					if (clearPreviousAmount) {
@@ -681,8 +687,9 @@ public class PaymentView extends JPanel {
 			ticketProcessor.doSettle(PaymentType.CASH, terderAmount);
 		} catch (StaleStateException x) {
 			POSMessageDialog.showMessageDialogWithReloadButton(POSUtil.getFocusedWindow(), refreshableView);
-		} catch (Exception e) {
-			POSMessageDialog.showError(POSUtil.getFocusedWindow(), e.getMessage().toString());
+		} catch (Throwable e) {
+			String message = StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : POSConstants.ERROR_MESSAGE;
+			POSMessageDialog.showError(POSUtil.getFocusedWindow(), message, e);
 			org.apache.commons.logging.LogFactory.getLog(getClass()).error(e);
 		}
 	}

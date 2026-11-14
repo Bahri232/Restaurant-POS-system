@@ -17,6 +17,7 @@
  */
 package com.floreantpos.actions;
 
+import com.floreantpos.config.TerminalConfig;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.UserPermission;
 import com.floreantpos.ui.dialog.POSMessageDialog;
@@ -43,11 +44,11 @@ public class DrawerKickAction extends PosAction {
 //			if (file.exists()) {
 //				Runtime.getRuntime().exec(file.getAbsolutePath());
 //			}
-			
-			DrawerUtil.kickDrawer();
-			
-		} catch (Exception e) {
-			POSMessageDialog.showError(Application.getPosWindow(),e.getMessage(), e);
+			if (TerminalConfig.isCashDrawerKickEnabled()) {
+				DrawerUtil.kickDrawer();
+			}
+		} catch (Throwable e) {
+			POSMessageDialog.showError(Application.getPosWindow(), e.getMessage(), e);
 		}
 	}
 
