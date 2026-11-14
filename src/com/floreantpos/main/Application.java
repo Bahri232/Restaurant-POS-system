@@ -147,32 +147,8 @@ public class Application {
 			System.setProperty("flatlaf.useWindowDecorations", "false");
 			com.formdev.flatlaf.FlatLightLaf.setup();
 			initializeFont();
-			
-			// Touchscreen UI optimizations: comfortable touch scrollbars & table headers
-			UIManager.put("ScrollBar.width", 16);
-			UIManager.put("ScrollBar.thumbArc", 999);
-			UIManager.put("ScrollBar.thumbInsets", new java.awt.Insets(2, 2, 2, 2));
-			UIManager.put("TableHeader.height", 32);
-			
-			// Custom Primary Canvas Color: Clean Off-White
-			java.awt.Color cleanOffWhite = java.awt.Color.decode("#F5F7FA");
-			UIManager.put("Panel.background", cleanOffWhite);
-			UIManager.put("OptionPane.background", cleanOffWhite);
-			UIManager.put("Viewport.background", cleanOffWhite);
-			UIManager.put("ScrollPane.background", cleanOffWhite);
-			UIManager.put("Table.background", java.awt.Color.WHITE);
-			
-			// Custom Accent Color
-			UIManager.put("Component.accentColor", "#B8731A");
-			UIManager.put("Table.selectionBackground", java.awt.Color.decode("#E5A01E"));
-			UIManager.put("Table.selectionForeground", java.awt.Color.WHITE);
-			
-			// Floating Card UI for buttons
-			UIManager.put("Button.arc", 12);
-			UIManager.put("Component.focusWidth", 1);
-			UIManager.put("Button.hoverBackground", java.awt.Color.decode("#E5A01E"));
+			com.floreantpos.ui.POSTheme.applyFlatLafDefaults();
 			UIManager.put("Button.borderWidth", 1);
-			UIManager.put("Button.borderColor", java.awt.Color.decode("#D1D5DB"));
 
 			// Button & ToggleButton padding to prevent text truncation
 			UIManager.put("Button.margin", new java.awt.Insets(4, 8, 4, 8));
@@ -751,10 +727,16 @@ public class Application {
 
 			if (value != null && value instanceof javax.swing.plaf.FontUIResource) {
 				javax.swing.plaf.FontUIResource f = (FontUIResource) value;
-				String fontName = f.getFontName();
-				//fontName = "Noto Sans";
+				String fontName = com.floreantpos.ui.POSTheme.getFontFamily();
 
-				Font font = new Font(fontName, f.getStyle(), PosUIManager.getDefaultFontSize());
+				Font font = new Font(fontName, f.getStyle(), f.getSize() > 0 ? f.getSize() : PosUIManager.getDefaultFontSize());
+				if ("Label.font".equals(key) || "Button.font".equals(key) || "ToggleButton.font".equals(key)
+						|| "TextField.font".equals(key) || "PasswordField.font".equals(key)
+						|| "ComboBox.font".equals(key) || "Table.font".equals(key)
+						|| "TableHeader.font".equals(key) || "Menu.font".equals(key)
+						|| "MenuItem.font".equals(key) || "TabbedPane.font".equals(key)) {
+					font = new Font(fontName, f.getStyle(), PosUIManager.getDefaultFontSize());
+				}
 				UIManager.put(key, new javax.swing.plaf.FontUIResource(font));
 
 				/*	Font fontBold = new Font(f.getFontName(), Font.BOLD, PosUIManager.getDefaultFontSize());

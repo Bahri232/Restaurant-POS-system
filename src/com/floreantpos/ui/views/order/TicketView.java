@@ -25,7 +25,6 @@ package com.floreantpos.ui.views.order;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,8 +35,6 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -97,8 +94,9 @@ public class TicketView extends JPanel {
 	private com.floreantpos.ui.ticket.TicketViewerTable ticketViewerTable;
 	private JPanel itemSearchPanel;
 	private JTextField txtSearchItem;
+	private javax.swing.JLabel lblTicketTitle = new javax.swing.JLabel("", javax.swing.SwingConstants.CENTER); //$NON-NLS-1$
 	private TitledBorder titledBorder = new TitledBorder(""); //$NON-NLS-1$
-	private Border border = new CompoundBorder(titledBorder, new EmptyBorder(2, 2, 2, 2));
+	private Border border = com.floreantpos.ui.POSTheme.createHairlineBorder(8, 8, 8, 8);
 	private boolean cancelable;
 	private boolean allowToLogOut;
 	public final static String VIEW_NAME = "TICKET_VIEW"; //$NON-NLS-1$
@@ -116,16 +114,24 @@ public class TicketView extends JPanel {
 	// desc=" Generated Code ">//GEN-BEGIN:initComponents
 	private void initComponents() {
 
+		setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		setOpaque(true);
 		titledBorder.setTitleJustification(TitledBorder.CENTER);
 		setBorder(border);
 		setLayout(new java.awt.BorderLayout(5, 5));
 		itemSearchPanel = new JPanel();
+		itemSearchPanel.setOpaque(false);
+
+		lblTicketTitle.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		lblTicketTitle.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
+		lblTicketTitle.setBorder(com.floreantpos.ui.POSTheme.createSectionDividerBorder(2, 4, 6, 4));
 
 		ticketItemActionPanel = new com.floreantpos.swing.TransparentPanel();
 		btnDecreaseAmount = new com.floreantpos.swing.PosButton();
 		btnScrollDown = new com.floreantpos.swing.PosButton();
 		ticketViewerTable = new com.floreantpos.ui.ticket.TicketViewerTable();
 		ticketScrollPane = new PosScrollPane(ticketViewerTable);
+		ticketScrollPane.setBorder(com.floreantpos.ui.POSTheme.createHairlineBorder());
 		ticketScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		ticketScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		ticketScrollPane.setPreferredSize(PosUIManager.getSize(180, 200));
@@ -137,10 +143,16 @@ public class TicketView extends JPanel {
 		createTicketItemControlPanel();
 		createItemSearchPanel();
 
+		JPanel northPanel = new JPanel(new BorderLayout(0, 6));
+		northPanel.setOpaque(false);
+		northPanel.add(lblTicketTitle, BorderLayout.NORTH);
+		northPanel.add(itemSearchPanel, BorderLayout.CENTER);
+
 		JPanel centerPanel = new JPanel(new BorderLayout(5, 5));
+		centerPanel.setOpaque(false);
 		centerPanel.add(ticketScrollPane);
 
-		add(itemSearchPanel, BorderLayout.NORTH);
+		add(northPanel, BorderLayout.NORTH);
 		add(centerPanel);
 		add(ticketItemActionPanel, BorderLayout.EAST);
 		ticketViewerTable.getRenderer().setInTicketScreen(true);
@@ -154,6 +166,7 @@ public class TicketView extends JPanel {
 		PosButton btnSearch = new PosButton("...");
 
 		txtSearchItem = new JTextField();
+		com.floreantpos.ui.POSTheme.styleTextField(txtSearchItem, 13, false);
 
 		txtSearchItem.addActionListener(new ActionListener() {
 			@Override
@@ -277,7 +290,8 @@ public class TicketView extends JPanel {
 
 	private void createPayButton() {
 		btnTotal = new PosButton(POSConstants.TOTAL.toUpperCase());
-		btnTotal.setFont(btnTotal.getFont().deriveFont(Font.BOLD));
+		btnTotal.setFont(com.floreantpos.ui.POSTheme.fontBold(16));
+		com.floreantpos.ui.POSTheme.stylePrimaryButton(btnTotal);
 
 //		if (!Application.getInstance().getTerminal().isHasCashDrawer()) {
 //			btnTotal.setEnabled(false);
@@ -616,7 +630,8 @@ public class TicketView extends JPanel {
 	public void updateView() {
 		if (ticket == null) {
 			btnTotal.setText(POSConstants.TOTAL.toUpperCase() + " " + CurrencyUtil.getCurrencySymbol() + "0.00");
-			titledBorder.setTitle(ticket.getTicketType().toString() + "[New Ticket]"); //$NON-NLS-1$
+			lblTicketTitle.setText("[New Ticket]"); //$NON-NLS-1$
+			titledBorder.setTitle("[New Ticket]"); //$NON-NLS-1$
 			return;
 		}
 		ticket.calculatePrice();
@@ -640,15 +655,15 @@ public class TicketView extends JPanel {
 			btnTotal.setText("<html><b>Total</b></html>");
 		}*/
 
+		String titleText;
 		if (ticket.getId() == null) {
-			titledBorder.setTitle(ticket.getTicketType() + " [New Ticket]"); //$NON-NLS-1$
+			titleText = ticket.getTicketType() + " · New Ticket"; //$NON-NLS-1$
 		}
 		else {
-			titledBorder.setTitle(ticket.getTicketType() + " " + Messages.getString("TicketView.37") + ticket.getId() + " Table# " + getTableNumbers(ticket.getTableNumbers()));
-
-			/*	titledBorder.setTitle(ticket.getTicketType()
-						+ " Ticket ["+ ticket.getId()+"]," + "Table [" + getTableNumbers(ticket.getTableNumbers())+"]"); //$NON-NLS-1$ //$NON-NLS-2$	
-			*/}
+			titleText = ticket.getTicketType() + " " + Messages.getString("TicketView.37") + ticket.getId() + " · Table " + getTableNumbers(ticket.getTableNumbers());
+		}
+		titledBorder.setTitle(titleText);
+		lblTicketTitle.setText(titleText);
 
 		ticketViewerTable.updateView();
 		showCustomerDisplayInfo(ticketViewerTable.getSelected());

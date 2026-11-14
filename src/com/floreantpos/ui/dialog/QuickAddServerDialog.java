@@ -1,20 +1,16 @@
 package com.floreantpos.ui.dialog;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.floreantpos.IconFactory;
 import com.floreantpos.POSConstants;
 import com.floreantpos.model.Server;
 import com.floreantpos.model.dao.ServerDAO;
@@ -36,64 +32,69 @@ public class QuickAddServerDialog extends POSDialog {
 
 	private void initComponents() {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setLayout(new BorderLayout(10, 10));
+		getContentPane().setBackground(com.floreantpos.ui.POSTheme.CANVAS_BG);
+		setLayout(new BorderLayout(0, 0));
 
 		TitlePanel titlePanel = new TitlePanel();
-		titlePanel.setTitle("+ QUICK ADD NEW SERVER");
+		titlePanel.setTitle("Add New Server");
 		add(titlePanel, BorderLayout.NORTH);
 
-		JPanel formPanel = new JPanel(new MigLayout("insets 20 30 15 30, fillx", "[120px][grow,fill]", "[]12[]12[]12[]12[]"));
-
-		JLabel lblInstruction = new JLabel("<html><b>Quickly register a new server for immediate table assignment:</b></html>");
-		formPanel.add(lblInstruction, "span 2, wrap 10");
+		JPanel formPanel = new JPanel(new MigLayout("insets 16 20 16 20, fillx", "[120px][grow,fill]", "[]12[]12[]12[]"));
+		formPanel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		formPanel.setBorder(com.floreantpos.ui.POSTheme.createHairlineBorder(4, 4, 4, 4));
 
 		tfFirstName = new FixedLengthTextField(60);
-		tfFirstName.setFont(tfFirstName.getFont().deriveFont(13f));
+		com.floreantpos.ui.POSTheme.styleTextField(tfFirstName, 14, false);
 		tfLastName = new FixedLengthTextField(60);
-		tfLastName.setFont(tfLastName.getFont().deriveFont(13f));
+		com.floreantpos.ui.POSTheme.styleTextField(tfLastName, 14, false);
 		tfNickname = new FixedLengthTextField(60);
-		tfNickname.setFont(tfNickname.getFont().deriveFont(13f));
+		com.floreantpos.ui.POSTheme.styleTextField(tfNickname, 14, false);
+		tfNickname.putClientProperty(com.formdev.flatlaf.FlatClientProperties.PLACEHOLDER_TEXT, "Optional (e.g. Mohamed K.)"); //$NON-NLS-1$
 		tfPhone = new FixedLengthTextField(30);
-		tfPhone.setFont(tfPhone.getFont().deriveFont(13f));
+		com.floreantpos.ui.POSTheme.styleTextField(tfPhone, 14, false);
+		tfPhone.putClientProperty(com.formdev.flatlaf.FlatClientProperties.PLACEHOLDER_TEXT, "Optional"); //$NON-NLS-1$
 
-		formPanel.add(new JLabel("First Name *:"));
-		formPanel.add(tfFirstName, "height 36!, wrap");
+		JLabel lblFirst = new JLabel("First Name *");
+		lblFirst.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		lblFirst.setForeground(com.floreantpos.ui.POSTheme.TEXT_SECONDARY);
+		formPanel.add(lblFirst);
+		formPanel.add(tfFirstName, "height 40!, wrap");
 
-		formPanel.add(new JLabel("Last Name *:"));
-		formPanel.add(tfLastName, "height 36!, wrap");
+		JLabel lblLast = new JLabel("Last Name *");
+		lblLast.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		lblLast.setForeground(com.floreantpos.ui.POSTheme.TEXT_SECONDARY);
+		formPanel.add(lblLast);
+		formPanel.add(tfLastName, "height 40!, wrap");
 
-		formPanel.add(new JLabel("Nickname / Tag:"));
-		formPanel.add(tfNickname, "height 36!, wrap");
-		formPanel.add(new JLabel(""));
-		formPanel.add(new JLabel("<html><small style='color:gray;'>Optional - e.g. 'Mohamed K.'</small></html>"), "wrap");
+		JLabel lblNick = new JLabel("Nickname");
+		lblNick.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		lblNick.setForeground(com.floreantpos.ui.POSTheme.TEXT_SECONDARY);
+		formPanel.add(lblNick);
+		formPanel.add(tfNickname, "height 40!, wrap");
 
-		formPanel.add(new JLabel("Phone Number:"));
-		formPanel.add(tfPhone, "height 36!, wrap");
+		JLabel lblPhone = new JLabel("Phone");
+		lblPhone.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		lblPhone.setForeground(com.floreantpos.ui.POSTheme.TEXT_SECONDARY);
+		formPanel.add(lblPhone);
+		formPanel.add(tfPhone, "height 40!, wrap");
 
-		add(formPanel, BorderLayout.CENTER);
+		JPanel bodyWrapper = new JPanel(new BorderLayout());
+		bodyWrapper.setOpaque(false);
+		bodyWrapper.setBorder(javax.swing.BorderFactory.createEmptyBorder(14, 16, 14, 16));
+		bodyWrapper.add(formPanel, BorderLayout.CENTER);
+		add(bodyWrapper, BorderLayout.CENTER);
 
 		JPanel bottomPanel = new JPanel(new BorderLayout());
-		bottomPanel.add(new JSeparator(), BorderLayout.NORTH);
+		bottomPanel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		bottomPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, com.floreantpos.ui.POSTheme.BORDER_SUBTLE));
 
-		JPanel actionButtonPanel = new JPanel(new MigLayout("insets 10 20 15 20, align center", "[160px]15[120px]", "[50px]"));
-
-		PosButton btnSave = new PosButton("Save & Assign");
-		btnSave.setIcon(IconFactory.getIcon("/ui_icons/", "finish.png"));
-		btnSave.setBackground(new Color(39, 174, 96));
-		btnSave.setForeground(Color.WHITE);
-		btnSave.setFont(btnSave.getFont().deriveFont(Font.BOLD, 13f));
-		btnSave.setPreferredSize(new Dimension(160, 50));
-		btnSave.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				doSave();
-			}
-		});
-		actionButtonPanel.add(btnSave, "grow");
+		JPanel actionButtonPanel = new JPanel(new MigLayout("insets 12 16 12 16, align right", "[120px]12[160px]", "[46px]"));
+		actionButtonPanel.setOpaque(false);
 
 		PosButton btnCancel = new PosButton(POSConstants.CANCEL);
-		btnCancel.setIcon(IconFactory.getIcon("/ui_icons/", "cancel.png"));
-		btnCancel.setPreferredSize(new Dimension(120, 50));
+		btnCancel.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		btnCancel.setPreferredSize(new Dimension(120, 46));
+		com.floreantpos.ui.POSTheme.styleNeutralButton(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -102,6 +103,18 @@ public class QuickAddServerDialog extends POSDialog {
 			}
 		});
 		actionButtonPanel.add(btnCancel, "grow");
+
+		PosButton btnSave = new PosButton("Save & Assign");
+		btnSave.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		btnSave.setPreferredSize(new Dimension(160, 46));
+		com.floreantpos.ui.POSTheme.styleCashButton(btnSave);
+		btnSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				doSave();
+			}
+		});
+		actionButtonPanel.add(btnSave, "grow");
 
 		bottomPanel.add(actionButtonPanel, BorderLayout.CENTER);
 		add(bottomPanel, BorderLayout.SOUTH);

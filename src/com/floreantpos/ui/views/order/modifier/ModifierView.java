@@ -40,7 +40,6 @@ import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 
 import com.floreantpos.POSConstants;
 import com.floreantpos.PosException;
@@ -235,10 +234,10 @@ public class ModifierView extends SelectionView {
 		}
 
 		if (ModifierSelectionDialog.isRequiredModifiersAdded(ticketItem, modifierGroup.getMenuItemModifierGroup())) {
-			btnDone.setBackground(Color.green);
+			com.floreantpos.ui.POSTheme.styleCashButton(btnDone);
 		}
 		else {
-			btnDone.setBackground(UIManager.getColor("Control"));
+			com.floreantpos.ui.POSTheme.styleSecondaryButton(btnDone);
 		}
 	}
 

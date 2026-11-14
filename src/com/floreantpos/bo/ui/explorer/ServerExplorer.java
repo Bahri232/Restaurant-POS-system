@@ -1,7 +1,6 @@
 package com.floreantpos.bo.ui.explorer;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,9 +44,9 @@ public class ServerExplorer extends TransparentPanel {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				if (!isSelected) {
 					if ("Active".equals(value)) {
-						c.setForeground(new Color(0, 130, 0));
+						c.setForeground(com.floreantpos.ui.POSTheme.CASH_GREEN);
 					} else {
-						c.setForeground(Color.RED);
+						c.setForeground(com.floreantpos.ui.POSTheme.AFRIMONEY_RED);
 					}
 				}
 				return c;

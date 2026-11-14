@@ -24,9 +24,7 @@
 package com.floreantpos.ui.views;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -101,11 +99,14 @@ public class LoginView extends ViewPanel {
 		centerPanel.setLayout(new MigLayout("al center center", "sg fill", String.valueOf(height))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		JLabel titleLabel = new JLabel(IconFactory.getIcon("/ui_icons/", "title.png")); //$NON-NLS-1$ //$NON-NLS-2$
 		titleLabel.setOpaque(true);
-		titleLabel.setBackground(Color.WHITE);
+		titleLabel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+
+		JSeparator headerSep = new JSeparator(JSeparator.HORIZONTAL);
+		headerSep.setForeground(com.floreantpos.ui.POSTheme.BORDER_SUBTLE);
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(titleLabel, BorderLayout.CENTER);
-		panel.add(new JSeparator(JSeparator.HORIZONTAL), BorderLayout.SOUTH);
+		panel.add(headerSep, BorderLayout.SOUTH);
 
 		add(panel, BorderLayout.NORTH);
 		add(createCenterPanel(), BorderLayout.CENTER);
@@ -124,20 +125,22 @@ public class LoginView extends ViewPanel {
 		}
 		lblRestaurantName = new JLabel(restName);
 		lblRestaurantName.setPreferredSize(new Dimension(1000, 100));
-		lblRestaurantName.setForeground(Color.BLACK);
-		lblRestaurantName.setFont(new Font("Dialog", Font.BOLD, PosUIManager.getFontSize(28)));
+		lblRestaurantName.setForeground(com.floreantpos.ui.POSTheme.TEXT_PRIMARY);
+		lblRestaurantName.setFont(com.floreantpos.ui.POSTheme.fontBold(28));
 		lblRestaurantName.setHorizontalAlignment(SwingConstants.CENTER);
 
 		mainPanel = new JPanel(new BorderLayout());
 		mainPanel.add(lblRestaurantName, BorderLayout.NORTH);
 
 		btnSwitchBoard = new PosButton(POSConstants.ORDERS);
+		com.floreantpos.ui.POSTheme.stylePrimaryButton(btnSwitchBoard);
 		btnKitchenDisplay = new PosButton(POSConstants.KITCHEN_DISPLAY_BUTTON_TEXT);
 		btnDriverView = new PosButton("DRIVER VIEW");
 		btnConfigureDatabase = new PosButton(POSConstants.CONFIGURE_DATABASE);
 		btnBackOffice = new PosButton(POSConstants.BACK_OFFICE_BUTTON_TEXT);
 
 		btnShutdown = new PosButton(POSConstants.SHUTDOWN);
+		com.floreantpos.ui.POSTheme.styleNeutralButton(btnShutdown);
 		btnClockOUt = new PosButton(new ClockInOutAction(false, true));
 
 		btnBackOffice.setVisible(false);

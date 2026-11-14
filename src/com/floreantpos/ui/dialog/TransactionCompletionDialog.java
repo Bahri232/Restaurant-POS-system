@@ -17,14 +17,15 @@
  */
 package com.floreantpos.ui.dialog;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -33,6 +34,7 @@ import com.floreantpos.main.Application;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.report.ReceiptPrintService;
 import com.floreantpos.swing.PosButton;
+import com.floreantpos.ui.POSTheme;
 import com.floreantpos.util.NumberUtil;
 
 public class TransactionCompletionDialog extends POSDialog {
@@ -70,47 +72,63 @@ public class TransactionCompletionDialog extends POSDialog {
 
 	private void initializeComponents() {
 		setTitle(com.floreantpos.POSConstants.TRANSACTION_COMPLETED);
+		getContentPane().setBackground(POSTheme.CANVAS_BG);
 
-		setLayout(new MigLayout("align 50% 0%, ins 20", "[]20[]", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(new MigLayout("fillx, align 50% 0%, ins 20", "[grow]", "[]14[]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		add(createLabel(Messages.getString("TransactionCompletionDialog.3") + ":", JLabel.LEFT), "grow"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel summaryCard = POSTheme.createCardPanel(18, 22, 18, 22);
+		summaryCard.setLayout(new MigLayout("fillx, wrap 2, ins 0", "[grow]24[right]", "[]10[]10[]10[]10[]10[]14[]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		JLabel lblHeader = new JLabel(com.floreantpos.POSConstants.TRANSACTION_COMPLETED);
+		lblHeader.setFont(POSTheme.fontBold(16));
+		lblHeader.setForeground(POSTheme.TEXT_PRIMARY);
+		lblHeader.setBorder(POSTheme.createSectionDividerBorder(0, 0, 10, 0));
+		summaryCard.add(lblHeader, "span 2, growx"); //$NON-NLS-1$
+
+		summaryCard.add(createRowTitleLabel(Messages.getString("TransactionCompletionDialog.3") + ":"), "growx"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		lblTotalAmount = createLabel("0.0", JLabel.RIGHT); //$NON-NLS-1$
-		add(lblTotalAmount, "span, grow"); //$NON-NLS-1$
+		summaryCard.add(lblTotalAmount, "growx"); //$NON-NLS-1$
 
-		add(createLabel(Messages.getString("TransactionCompletionDialog.8") + ":", JLabel.LEFT), "newline,grow"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		summaryCard.add(createRowTitleLabel(Messages.getString("TransactionCompletionDialog.8") + ":"), "growx"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		lblTenderedAmount = createLabel("0.0", JLabel.RIGHT); //$NON-NLS-1$
-		add(lblTenderedAmount, "span, grow"); //$NON-NLS-1$
+		summaryCard.add(lblTenderedAmount, "growx"); //$NON-NLS-1$
 
-		add(new JSeparator(), "newline,span, grow"); //$NON-NLS-1$
-
-		add(createLabel(Messages.getString("TransactionCompletionDialog.14") + ":", JLabel.LEFT), "newline,grow"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		summaryCard.add(createRowTitleLabel(Messages.getString("TransactionCompletionDialog.14") + ":"), "growx"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		lblPaidAmount = createLabel("0.0", JLabel.RIGHT); //$NON-NLS-1$
-		add(lblPaidAmount, "span, grow"); //$NON-NLS-1$
+		summaryCard.add(lblPaidAmount, "growx"); //$NON-NLS-1$
 
-		add(createLabel(Messages.getString("TransactionCompletionDialog.19") + ":", JLabel.LEFT), "newline,grow"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		summaryCard.add(createRowTitleLabel(Messages.getString("TransactionCompletionDialog.19") + ":"), "growx"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		lblDueAmount = createLabel("0.0", JLabel.RIGHT); //$NON-NLS-1$
-		add(lblDueAmount, "span, grow"); //$NON-NLS-1$
+		summaryCard.add(lblDueAmount, "growx"); //$NON-NLS-1$
 
-		add(new JSeparator(), "newline,span, grow"); //$NON-NLS-1$
-
-		add(createLabel(Messages.getString("TransactionCompletionDialog.25") + ":", JLabel.LEFT), "newline,grow"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		summaryCard.add(createRowTitleLabel(Messages.getString("TransactionCompletionDialog.25") + ":"), "growx"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		lblGratuityAmount = createLabel("0.0", JLabel.RIGHT); //$NON-NLS-1$
-		add(lblGratuityAmount, "span, grow"); //$NON-NLS-1$
+		summaryCard.add(lblGratuityAmount, "growx"); //$NON-NLS-1$
 
-		add(new JSeparator(), "newline,span, grow"); //$NON-NLS-1$
+		summaryCard.add(createRowTitleLabel(Messages.getString("TransactionCompletionDialog.42") + ":"), "growx"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		lblFeeAmount = createLabel("0.0", JLabel.RIGHT); //$NON-NLS-1$
+		summaryCard.add(lblFeeAmount, "growx"); //$NON-NLS-1$
 
-		add(createLabel(Messages.getString("TransactionCompletionDialog.42") + ":", JLabel.LEFT), "newline,grow"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		lblFeeAmount = createLabel("0.0", JLabel.RIGHT);
-		add(lblFeeAmount, "span,grow");
+		JPanel changeBanner = new JPanel(new BorderLayout(16, 0));
+		changeBanner.setBackground(POSTheme.SUCCESS_SOFT_BG);
+		changeBanner.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(POSTheme.SUCCESS_SOFT_BORDER, 1),
+				BorderFactory.createEmptyBorder(12, 16, 12, 16)));
+		JLabel lblChangeTitle = new JLabel(Messages.getString("TransactionCompletionDialog.31") + ":"); //$NON-NLS-1$ //$NON-NLS-2$
+		lblChangeTitle.setFont(POSTheme.fontBold(16));
+		lblChangeTitle.setForeground(POSTheme.CASH_GREEN);
+		lblChangeDue = new JLabel("0.0", JLabel.RIGHT); //$NON-NLS-1$
+		lblChangeDue.setFont(POSTheme.fontBold(22));
+		lblChangeDue.setForeground(POSTheme.CASH_GREEN);
+		changeBanner.add(lblChangeTitle, BorderLayout.WEST);
+		changeBanner.add(lblChangeDue, BorderLayout.EAST);
+		summaryCard.add(changeBanner, "span 2, growx"); //$NON-NLS-1$
 
-		add(new JSeparator(), "newline,span, grow"); //$NON-NLS-1$
+		add(summaryCard, "growx, wrap"); //$NON-NLS-1$
 
-		add(createLabel(Messages.getString("TransactionCompletionDialog.31") + ":", JLabel.LEFT), "grow"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		lblChangeDue = createLabel("0.0", JLabel.RIGHT); //$NON-NLS-1$
-		add(lblChangeDue, "span, grow"); //$NON-NLS-1$
-
-		add(new JSeparator(), "sg mygroup,newline,span,grow"); //$NON-NLS-1$
 		PosButton btnClose = new PosButton(Messages.getString("TransactionCompletionDialog.37")); //$NON-NLS-1$
+		POSTheme.stylePrimaryButton(btnClose);
+		btnClose.setFont(POSTheme.fontBold(14));
 		btnClose.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -120,6 +138,8 @@ public class TransactionCompletionDialog extends POSDialog {
 		});
 
 		PosButton btnPrintStoreCopy = new PosButton(Messages.getString("TransactionCompletionDialog.38")); //$NON-NLS-1$
+		POSTheme.styleSecondaryButton(btnPrintStoreCopy);
+		btnPrintStoreCopy.setFont(POSTheme.fontBold(14));
 		btnPrintStoreCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -134,6 +154,8 @@ public class TransactionCompletionDialog extends POSDialog {
 		});
 
 		PosButton btnPrintAllCopy = new PosButton(Messages.getString("TransactionCompletionDialog.40")); //$NON-NLS-1$
+		POSTheme.styleSecondaryButton(btnPrintAllCopy);
+		btnPrintAllCopy.setFont(POSTheme.fontBold(14));
 		btnPrintAllCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -147,7 +169,8 @@ public class TransactionCompletionDialog extends POSDialog {
 			}
 		});
 
-		JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+		JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+		p.setOpaque(false);
 
 		if (isCard) {
 			p.add(btnPrintAllCopy);
@@ -160,13 +183,21 @@ public class TransactionCompletionDialog extends POSDialog {
 			p.add(btnClose);
 		}
 
-		add(p, "newline, span 2, grow, gaptop 15px"); //$NON-NLS-1$
+		add(p, "growx"); //$NON-NLS-1$
+	}
+
+	private JLabel createRowTitleLabel(String text) {
+		JLabel label = new JLabel(text);
+		label.setFont(POSTheme.fontPlain(15));
+		label.setForeground(POSTheme.TEXT_MUTED);
+		label.setHorizontalAlignment(JLabel.LEFT);
+		return label;
 	}
 
 	protected JLabel createLabel(String text, int alignment) {
 		JLabel label = new JLabel(text);
-		label.setFont(new java.awt.Font("Tahoma", 1, 24)); //$NON-NLS-1$
-		//label.setForeground(new java.awt.Color(255, 102, 0));
+		label.setFont(POSTheme.fontBold(17));
+		label.setForeground(POSTheme.TEXT_PRIMARY);
 		label.setHorizontalAlignment(alignment);
 		label.setText(text);
 		return label;

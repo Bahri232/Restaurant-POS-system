@@ -91,7 +91,6 @@ public class ShopTableButton extends PosButton {
 
 		if (StringUtils.isNotEmpty(ticketIdAsString) && ticketCreateTime == null) {
 			ticketIdAsString = "<br>Chk#" + ticketIdAsString;
-			setForeground(Color.white);
 		}
 		else if (ticketCreateTime != null) {
 			ticketIdAsString = "<br>" + DateUtil.getElapsedTime(ticketCreateTime, new Date());
@@ -101,19 +100,20 @@ public class ShopTableButton extends PosButton {
 			ticketIdAsString = "";
 		}
 		if (serving) {
-			setBackground(Color.red);
-			setForeground(Color.white);
+			com.floreantpos.ui.POSTheme.styleSolidButton(this, com.floreantpos.ui.POSTheme.AFRIMONEY_RED,
+					com.floreantpos.ui.POSTheme.AFRIMONEY_RED_HOVER, com.floreantpos.ui.POSTheme.AFRIMONEY_RED_PRESSED,
+					Color.WHITE, com.floreantpos.ui.POSTheme.AFRIMONEY_RED);
 		}
 		else if (shopTable != null && shopTable.isBooked()) {
 			setEnabled(false);
 			setOpaque(true);
-			setBackground(Color.orange);
-			setForeground(Color.BLACK);
+			com.floreantpos.ui.POSTheme.styleSolidButton(this, com.floreantpos.ui.POSTheme.ACCENT_PRIMARY,
+					com.floreantpos.ui.POSTheme.ACCENT_HOVER, com.floreantpos.ui.POSTheme.ACCENT_PRESSED,
+					Color.WHITE, com.floreantpos.ui.POSTheme.ACCENT_PRIMARY);
 		}
 		else {
 			setEnabled(true);
-			setBackground(Color.white);
-			setForeground(Color.black);
+			com.floreantpos.ui.POSTheme.styleSecondaryButton(this);
 		}
 		if (StringUtils.isNotEmpty(userName)) {
 			userName = "<br>" + userName;
@@ -123,7 +123,9 @@ public class ShopTableButton extends PosButton {
 		}
 		setText("<html><center><b>" + shopTable.toString() + "<small>" + userName + ticketIdAsString + "</small></center></b></html>"); //$NON-NLS-1$
 		if (shopTable.getUserId() != null && shopTable.getUserId().intValue() != Application.getCurrentUser().getAutoId().intValue()) {
-			setBackground(new Color(139, 0, 139));
+			com.floreantpos.ui.POSTheme.styleSolidButton(this, com.floreantpos.ui.POSTheme.TEXT_SECONDARY,
+					com.floreantpos.ui.POSTheme.TEXT_PRIMARY, com.floreantpos.ui.POSTheme.TEXT_PRIMARY,
+					Color.WHITE, com.floreantpos.ui.POSTheme.TEXT_SECONDARY);
 		}
 	}
 

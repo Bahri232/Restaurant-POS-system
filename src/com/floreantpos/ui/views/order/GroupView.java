@@ -204,12 +204,9 @@ public class GroupView extends SelectionView {
 			else
 				setText("<html><body><center>" + foodGroup.getDisplayName() + "</center></body></html>"); //$NON-NLS-1$ //$NON-NLS-2$
 
-			if (menuGroup.getButtonColorCode() != null) {
-				setBackground(menuGroup.getButtonColor());
-			}
-			if (menuGroup.getTextColorCode() != null) {
-				setForeground(menuGroup.getTextColor());
-			}
+			java.awt.Color customBg = menuGroup.getButtonColorCode() != null ? menuGroup.getButtonColor() : null;
+			java.awt.Color customFg = menuGroup.getTextColorCode() != null ? menuGroup.getTextColor() : null;
+			com.floreantpos.ui.POSTheme.styleTileButton(this, customBg, customFg);
 
 		}
 

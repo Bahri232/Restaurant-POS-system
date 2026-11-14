@@ -316,7 +316,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		tabbedPane.setTabShape(JideTabbedPane.SHAPE_WINDOWS);
 		tabbedPane.setShowCloseButtonOnTab(true);
 		tabbedPane.setTabInsets(new Insets(6, 12, 6, 12));
-		Font font = new Font(tabbedPane.getFont().getName(), Font.PLAIN, PosUIManager.getDefaultFontSize());
+		Font font = com.floreantpos.ui.POSTheme.fontPlain(PosUIManager.getDefaultFontSize());
 		tabbedPane.setFont(font);
 
 		getContentPane().setLayout(new java.awt.BorderLayout(5, 0));

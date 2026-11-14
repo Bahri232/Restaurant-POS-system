@@ -20,7 +20,6 @@ package com.floreantpos.ui.views.payment;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -36,15 +35,16 @@ import javax.swing.SwingConstants;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.floreantpos.main.Application;
 import com.floreantpos.model.PaymentType;
 import com.floreantpos.swing.PosButton;
 import com.floreantpos.swing.PosUIManager;
+import com.floreantpos.ui.POSTheme;
 import com.floreantpos.ui.dialog.POSDialog;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.util.CurrencyUtil;
 import com.floreantpos.util.NumberUtil;
 import com.floreantpos.util.POSUtil;
+import com.formdev.flatlaf.FlatClientProperties;
 
 public class MobilePaymentPhoneDialog extends POSDialog implements ActionListener {
 
@@ -70,46 +70,63 @@ public class MobilePaymentPhoneDialog extends POSDialog implements ActionListene
 
 	private void createUI() {
 		setLayout(new BorderLayout(0, 0));
+		getContentPane().setBackground(POSTheme.CANVAS_BG);
 
 		boolean isOrange = (paymentType == PaymentType.ORANGE_MONEY);
-		Color brandColor = isOrange ? new Color(234, 88, 12) : new Color(185, 28, 28);
+		Color brandColor = isOrange ? POSTheme.ORANGE_MONEY : POSTheme.AFRIMONEY_RED;
 		String brandTitle = isOrange ? "Orange Money Payment" : "Afrimoney Payment";
 		String brandSub = isOrange ? "Customer Orange Money Checkout" : "Customer Afrimoney Checkout";
 
-		// 1. Top Header Banner
-		JPanel headerPanel = new JPanel(new BorderLayout());
-		headerPanel.setBackground(brandColor);
-		headerPanel.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
+		// 1. Clean Elevated Header with restrained brand accent stripe
+		JPanel headerPanel = new JPanel(new BorderLayout(12, 0));
+		headerPanel.setBackground(POSTheme.CARD_BG);
+		headerPanel.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createMatteBorder(0, 0, 1, 0, POSTheme.BORDER_SUBTLE),
+				BorderFactory.createCompoundBorder(
+						BorderFactory.createMatteBorder(0, 4, 0, 0, brandColor),
+						BorderFactory.createEmptyBorder(14, 14, 14, 18))));
 
-		JLabel lblTitle = new JLabel("<html><b style='color:#ffffff; font-size:16px;'>" + brandTitle + "</b><br/>"
-				+ "<span style='color:#fef08a; font-size:11px;'>" + brandSub + "</span></html>");
-		lblTitle.setForeground(Color.WHITE);
-		headerPanel.add(lblTitle, BorderLayout.WEST);
+		JPanel titleStack = new JPanel(new BorderLayout(0, 2));
+		titleStack.setOpaque(false);
+		JLabel lblTitle = new JLabel(brandTitle);
+		lblTitle.setFont(POSTheme.fontBold(16));
+		lblTitle.setForeground(POSTheme.TEXT_PRIMARY);
+		JLabel lblSubtitle = new JLabel(brandSub);
+		lblSubtitle.setFont(POSTheme.fontPlain(12));
+		lblSubtitle.setForeground(POSTheme.TEXT_MUTED);
+		titleStack.add(lblTitle, BorderLayout.NORTH);
+		titleStack.add(lblSubtitle, BorderLayout.SOUTH);
+		headerPanel.add(titleStack, BorderLayout.WEST);
 
-		JLabel lblAmount = new JLabel("<html><div style='text-align:right;'><span style='color:#ffffff; font-size:11px;'>Amount to Pay</span><br/>"
-				+ "<b style='color:#ffffff; font-size:18px;'>" + CurrencyUtil.getCurrencySymbol() + " " + NumberUtil.formatNumber(amount) + "</b></div></html>");
-		lblAmount.setHorizontalAlignment(SwingConstants.RIGHT);
-		headerPanel.add(lblAmount, BorderLayout.EAST);
+		JPanel amountStack = new JPanel(new BorderLayout(0, 2));
+		amountStack.setOpaque(false);
+		JLabel lblAmountHint = new JLabel("Amount Due", SwingConstants.RIGHT);
+		lblAmountHint.setFont(POSTheme.fontPlain(11));
+		lblAmountHint.setForeground(POSTheme.TEXT_MUTED);
+		JLabel lblAmount = new JLabel(CurrencyUtil.getCurrencySymbol() + " " + NumberUtil.formatNumber(amount), SwingConstants.RIGHT);
+		lblAmount.setFont(POSTheme.fontBold(18));
+		lblAmount.setForeground(brandColor);
+		amountStack.add(lblAmountHint, BorderLayout.NORTH);
+		amountStack.add(lblAmount, BorderLayout.SOUTH);
+		headerPanel.add(amountStack, BorderLayout.EAST);
 
 		add(headerPanel, BorderLayout.NORTH);
 
 		// 2. Center Content Panel (Input + Touch Keypad)
-		JPanel centerPanel = new JPanel(new MigLayout("fillx, insets 15", "[grow]", "[]8[]12[]10[]"));
-		centerPanel.setBackground(Color.WHITE);
+		JPanel centerPanel = new JPanel(new MigLayout("fillx, insets 16", "[grow]", "[]8[]12[]10[]"));
+		centerPanel.setBackground(POSTheme.CANVAS_BG);
 
-		JLabel lblPrompt = new JLabel("Enter Customer's Payment Phone Number:");
-		lblPrompt.setFont(lblPrompt.getFont().deriveFont(Font.BOLD, 13f));
-		lblPrompt.setForeground(new Color(30, 41, 59));
+		JLabel lblPrompt = new JLabel("Customer Phone Number");
+		lblPrompt.setFont(POSTheme.fontBold(13));
+		lblPrompt.setForeground(POSTheme.TEXT_MUTED);
 		centerPanel.add(lblPrompt, "wrap");
 
 		tfPhone = new JTextField();
-		tfPhone.setFont(new Font("Monospaced", Font.BOLD, 22));
+		POSTheme.styleTextField(tfPhone, 22, true);
+		tfPhone.setFont(POSTheme.monoBold(22));
 		tfPhone.setHorizontalAlignment(JTextField.CENTER);
-		tfPhone.setPreferredSize(new Dimension(0, 48));
-		tfPhone.setBackground(new Color(254, 252, 232));
-		tfPhone.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(brandColor, 2),
-				BorderFactory.createEmptyBorder(4, 8, 4, 8)));
+		tfPhone.setPreferredSize(new Dimension(0, 50));
+		tfPhone.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter customer phone number");
 
 		tfPhone.addKeyListener(new KeyAdapter() {
 			@Override
@@ -125,7 +142,7 @@ public class MobilePaymentPhoneDialog extends POSDialog implements ActionListene
 		centerPanel.add(tfPhone, "growx, wrap");
 
 		// Touchscreen Number Keypad (1-9, +, 0, Backspace)
-		JPanel keypadPanel = new JPanel(new GridLayout(4, 3, 6, 6));
+		JPanel keypadPanel = new JPanel(new GridLayout(4, 3, 8, 8));
 		keypadPanel.setOpaque(false);
 
 		String[] keys = {
@@ -137,7 +154,8 @@ public class MobilePaymentPhoneDialog extends POSDialog implements ActionListene
 
 		for (String key : keys) {
 			PosButton btnKey = new PosButton(key);
-			btnKey.setFont(btnKey.getFont().deriveFont(Font.BOLD, 18f));
+			POSTheme.styleKeypadButton(btnKey);
+			btnKey.setFont(POSTheme.fontBold(19));
 			btnKey.setPreferredSize(new Dimension(80, 48));
 			btnKey.setActionCommand(key);
 			btnKey.addActionListener(this);
@@ -147,8 +165,9 @@ public class MobilePaymentPhoneDialog extends POSDialog implements ActionListene
 
 		// Quick Clear Button
 		btnClear = new PosButton("CLEAR NUMBER");
-		btnClear.setFont(btnClear.getFont().deriveFont(Font.BOLD, 12f));
-		btnClear.setPreferredSize(new Dimension(0, 36));
+		POSTheme.styleNeutralButton(btnClear);
+		btnClear.setFont(POSTheme.fontBold(12));
+		btnClear.setPreferredSize(new Dimension(0, 38));
 		btnClear.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -163,14 +182,13 @@ public class MobilePaymentPhoneDialog extends POSDialog implements ActionListene
 		// 3. Bottom Action Buttons (Confirm & Cancel)
 		JPanel footerPanel = new JPanel(new GridLayout(1, 2, 10, 0));
 		footerPanel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(226, 232, 240)),
-				BorderFactory.createEmptyBorder(12, 15, 12, 15)));
-		footerPanel.setBackground(new Color(248, 250, 252));
+				BorderFactory.createMatteBorder(1, 0, 0, 0, POSTheme.BORDER_SUBTLE),
+				BorderFactory.createEmptyBorder(12, 16, 12, 16)));
+		footerPanel.setBackground(POSTheme.CARD_BG);
 
 		btnConfirm = new PosButton("CONFIRM PAYMENT");
-		btnConfirm.setFont(btnConfirm.getFont().deriveFont(Font.BOLD, 14f));
-		btnConfirm.setBackground(new Color(22, 163, 74));
-		btnConfirm.setForeground(Color.WHITE);
+		POSTheme.styleCashButton(btnConfirm);
+		btnConfirm.setFont(POSTheme.fontBold(14));
 		btnConfirm.setPreferredSize(new Dimension(0, 48));
 		btnConfirm.addActionListener(new ActionListener() {
 			@Override
@@ -181,7 +199,8 @@ public class MobilePaymentPhoneDialog extends POSDialog implements ActionListene
 		footerPanel.add(btnConfirm);
 
 		btnCancel = new PosButton("CANCEL");
-		btnCancel.setFont(btnCancel.getFont().deriveFont(Font.BOLD, 14f));
+		POSTheme.styleNeutralButton(btnCancel);
+		btnCancel.setFont(POSTheme.fontBold(14));
 		btnCancel.setPreferredSize(new Dimension(0, 48));
 		btnCancel.addActionListener(new ActionListener() {
 			@Override

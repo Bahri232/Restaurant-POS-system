@@ -19,8 +19,6 @@ package com.floreantpos.ui;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
@@ -92,10 +90,10 @@ public class HeaderPanel extends JPanel {
 		//	super(new MigLayout("ins 2 2 0 2,hidemode 3", "[][fill, grow][]", "")); //$NON-NLS-1$  //$NON-NLS-2$  //$NON-NLS-3$
 		super(new BorderLayout());
 		setOpaque(true);
-		setBackground(Color.white);
+		setBackground(POSTheme.CARD_BG);
 
 		buttonPanel = new JPanel(new MigLayout("hidemode 3", "", ""));
-		buttonPanel.setBackground(Color.white);
+		buttonPanel.setBackground(POSTheme.CARD_BG);
 
 		JLabel logoLabel = new JLabel(IconFactory.getIcon("/ui_icons/", "header-logo.png")); //$NON-NLS-1$ //$NON-NLS-2$
 		//	add(logoLabel);
@@ -104,11 +102,13 @@ public class HeaderPanel extends JPanel {
 		TransparentPanel statusPanel = new TransparentPanel(new MigLayout("hidemode 3, fill, ins 0, gap 10")); //$NON-NLS-1$
 		
 		userProfileLabel = new JLabel();
-		userProfileLabel.setFont(userProfileLabel.getFont().deriveFont(Font.BOLD, 18f));
+		userProfileLabel.setFont(POSTheme.fontBold(16));
+		userProfileLabel.setForeground(POSTheme.TEXT_PRIMARY);
 		statusPanel.add(userProfileLabel, "gapleft 20");
 		
 		logoffLabel = new JLabel();
-		logoffLabel.setFont(logoffLabel.getFont().deriveFont(Font.BOLD));
+		logoffLabel.setFont(POSTheme.fontBold(12));
+		logoffLabel.setForeground(POSTheme.TEXT_MUTED);
 		logoffLabel.setHorizontalAlignment(JLabel.CENTER);
 		logoffLabel.setVerticalAlignment(JLabel.TOP);
 		statusPanel.add(logoffLabel, "newline, growx"); //$NON-NLS-1$

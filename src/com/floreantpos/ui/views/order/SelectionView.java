@@ -32,7 +32,6 @@ import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
@@ -57,6 +56,7 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 	protected JPanel buttonPanelContainer = new JPanel(new BorderLayout());
 
 	protected TitledBorder border;
+	private JLabel titleLabel;
 
 	protected JPanel actionButtonPanel = new JPanel(new MigLayout("fill,hidemode 3, ins 2", "sg, fill", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -74,12 +74,24 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 
 		border = new TitledBorder(title);
 		border.setTitleJustification(TitledBorder.CENTER);
-		setBorder(new CompoundBorder(border, new EmptyBorder(2, 2, 2, 2)));
+		setOpaque(false);
+		setBorder(new EmptyBorder(4, 4, 4, 4));
 
 		setLayout(new BorderLayout(HORIZONTAL_GAP, VERTICAL_GAP));
 
+		titleLabel = new JLabel(title != null ? title : "", JLabel.CENTER); //$NON-NLS-1$
+		titleLabel.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		titleLabel.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
+		titleLabel.setBorder(com.floreantpos.ui.POSTheme.createSectionDividerBorder(4, 8, 6, 8));
+		titleLabel.setVisible(title != null && !title.trim().isEmpty());
+		add(titleLabel, BorderLayout.NORTH);
+
+		buttonPanelContainer.setOpaque(false);
+		cardLayoutContainer.setOpaque(false);
+		actionButtonPanel.setOpaque(false);
+
 		buttonPanelContainer.add(cardLayoutContainer);
-		add(buttonPanelContainer);
+		add(buttonPanelContainer, BorderLayout.CENTER);
 
 		btnPrev = new PosButton();
 		btnPrev.setText(POSConstants.CAPITAL_PREV);
@@ -108,7 +120,12 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 	}
 
 	public void setTitle(String title) {
+		this.title = title;
 		border.setTitle(title);
+		if (titleLabel != null) {
+			titleLabel.setText(title != null ? title : ""); //$NON-NLS-1$
+			titleLabel.setVisible(title != null && !title.trim().isEmpty());
+		}
 	}
 
 	public void setItems(List items) {

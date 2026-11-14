@@ -24,7 +24,6 @@
 package com.floreantpos.ui.views.order;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -88,7 +87,6 @@ import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.ui.dialog.PasswordEntryDialog;
 import com.floreantpos.ui.dialog.SeatSelectionDialog;
 import com.floreantpos.ui.dialog.ServerSelectionDialog;
-import com.floreantpos.ui.dialog.UserListDialog;
 import com.floreantpos.ui.tableselection.TableSelectorDialog;
 import com.floreantpos.ui.tableselection.TableSelectorFactory;
 import com.floreantpos.ui.views.CookingInstructionSelectionView;
@@ -176,7 +174,10 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 		setOpaque(false);
 		setLayout(new java.awt.BorderLayout(2, 1));
 
-		JPanel ticketViewInnerCon = new JPanel(new BorderLayout());
+		JPanel ticketViewInnerCon = new JPanel(new BorderLayout(0, 6));
+		ticketViewInnerCon.setOpaque(false);
+		ticketViewContainer.setOpaque(false);
+		ticketViewContainer.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4));
 		ticketViewInnerCon.add(ticketView);
 		ticketViewInnerCon.add(ticketSummaryView, BorderLayout.SOUTH);
 		ticketViewContainer.add(ticketViewInnerCon);
@@ -449,6 +450,7 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 			}
 		});
 
+		actionButtonPanel.setOpaque(false);
 		actionButtonPanel.add(btnOrderType, "grow, shrink 100");
 		actionButtonPanel.add(btnCustomer, "grow, shrink 100");
 		actionButtonPanel.add(btnDeliveryInfo, "grow, shrink 100");
@@ -464,6 +466,10 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 		actionButtonPanel.add(btnCancel, "grow, shrink 100");
 		actionButtonPanel.add(btnDone, "grow, shrink 100");
 
+		com.floreantpos.ui.POSTheme.stylePrimaryButton(btnDone);
+		com.floreantpos.ui.POSTheme.styleNeutralButton(btnCancel);
+		com.floreantpos.ui.POSTheme.styleAccentOutlineButton(btnServer);
+
 		btnCookingInstruction.setEnabled(false);
 		//		btnAddOn.setEnabled(false);
 		btnDeliveryInfo.setVisible(false);
@@ -472,58 +478,68 @@ public class OrderView extends ViewPanel implements PaymentListener, TicketEditL
 	private JPanel createTicketSummeryPanel() {
 		JLabel lblSubtotal = new javax.swing.JLabel();
 		lblSubtotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+		lblSubtotal.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
+		lblSubtotal.setFont(com.floreantpos.ui.POSTheme.fontPlain(13));
 		lblSubtotal.setText(com.floreantpos.POSConstants.SUBTOTAL + ":" + " " + CurrencyUtil.getCurrencySymbol()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		tfSubtotal = new javax.swing.JTextField(10);
 		tfSubtotal.setHorizontalAlignment(SwingConstants.TRAILING);
-		tfSubtotal.setEditable(false);
+		com.floreantpos.ui.POSTheme.styleReadOnlySummaryField(tfSubtotal, 13, false);
 
 		JLabel lblDiscount = new javax.swing.JLabel();
 		lblDiscount.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+		lblDiscount.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
+		lblDiscount.setFont(com.floreantpos.ui.POSTheme.fontPlain(13));
 		lblDiscount.setText(Messages.getString("TicketView.9") + " " + CurrencyUtil.getCurrencySymbol()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		tfDiscount = new javax.swing.JTextField(10);
-		//	tfDiscount.setFont(tfDiscount.getFont().deriveFont(Font.PLAIN, 16));
 		tfDiscount.setHorizontalAlignment(SwingConstants.TRAILING);
-		tfDiscount.setEditable(false);
-		//		tfDiscount.setText(ticket.getDiscountAmount().toString());
+		com.floreantpos.ui.POSTheme.styleReadOnlySummaryField(tfDiscount, 13, false);
 
 		JLabel lblDeliveryCharge = new javax.swing.JLabel();
 		lblDeliveryCharge.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+		lblDeliveryCharge.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
+		lblDeliveryCharge.setFont(com.floreantpos.ui.POSTheme.fontPlain(13));
 		lblDeliveryCharge.setText("Delivery Charge:" + " " + CurrencyUtil.getCurrencySymbol()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		tfDeliveryCharge = new javax.swing.JTextField(10);
 		tfDeliveryCharge.setHorizontalAlignment(SwingConstants.TRAILING);
-		tfDeliveryCharge.setEditable(false);
+		com.floreantpos.ui.POSTheme.styleReadOnlySummaryField(tfDeliveryCharge, 13, false);
 
 		JLabel lblTax = new javax.swing.JLabel();
 		lblTax.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+		lblTax.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
+		lblTax.setFont(com.floreantpos.ui.POSTheme.fontPlain(13));
 		lblTax.setText(com.floreantpos.POSConstants.TAX + ":" + " " + CurrencyUtil.getCurrencySymbol()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		tfTax = new javax.swing.JTextField(10);
-		//	tfTax.setFont(tfTax.getFont().deriveFont(Font.PLAIN, 16));
-		tfTax.setEditable(false);
 		tfTax.setHorizontalAlignment(SwingConstants.TRAILING);
+		com.floreantpos.ui.POSTheme.styleReadOnlySummaryField(tfTax, 13, false);
 
 		JLabel lblGratuity = new javax.swing.JLabel();
 		lblGratuity.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+		lblGratuity.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
+		lblGratuity.setFont(com.floreantpos.ui.POSTheme.fontPlain(13));
 		lblGratuity.setText(Messages.getString("SettleTicketDialog.5") + ":" + " " + CurrencyUtil.getCurrencySymbol()); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
 		tfGratuity = new javax.swing.JTextField(10);
-		tfGratuity.setEditable(false);
 		tfGratuity.setHorizontalAlignment(SwingConstants.TRAILING);
+		com.floreantpos.ui.POSTheme.styleReadOnlySummaryField(tfGratuity, 13, false);
 
 		JLabel lblTotal = new javax.swing.JLabel();
-		lblTotal.setFont(lblTotal.getFont().deriveFont(Font.BOLD, PosUIManager.getFontSize(18)));
+		lblTotal.setFont(com.floreantpos.ui.POSTheme.fontBold(16));
+		lblTotal.setForeground(com.floreantpos.ui.POSTheme.TEXT_PRIMARY);
 		lblTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 		lblTotal.setText(com.floreantpos.POSConstants.TOTAL + ":" + " " + CurrencyUtil.getCurrencySymbol()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		tfTotal = new javax.swing.JTextField(10);
-		tfTotal.setFont(tfTotal.getFont().deriveFont(Font.BOLD, PosUIManager.getFontSize(18)));
 		tfTotal.setHorizontalAlignment(SwingConstants.TRAILING);
-		tfTotal.setEditable(false);
+		com.floreantpos.ui.POSTheme.styleReadOnlySummaryField(tfTotal, 16, true);
 
-		JPanel ticketAmountPanel = new com.floreantpos.swing.TransparentPanel(new MigLayout("hidemode 3,ins 2 2 3 2,alignx trailing,fill", "[grow]2[]", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel ticketAmountPanel = new JPanel(new MigLayout("hidemode 3,ins 8 10 8 10,alignx trailing,fill", "[grow]8[]", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		ticketAmountPanel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		ticketAmountPanel.setOpaque(true);
+		ticketAmountPanel.setBorder(com.floreantpos.ui.POSTheme.createHairlineBorder());
 
 		ticketAmountPanel.add(lblSubtotal, "growx,aligny center"); //$NON-NLS-1$
 		ticketAmountPanel.add(tfSubtotal, "growx,aligny center"); //$NON-NLS-1$

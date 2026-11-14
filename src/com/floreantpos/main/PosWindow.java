@@ -46,7 +46,6 @@ import com.floreantpos.config.AppConfig;
 import com.floreantpos.config.TerminalConfig;
 import com.floreantpos.model.User;
 import com.floreantpos.swing.GlassPane;
-import com.floreantpos.swing.PosUIManager;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -80,19 +79,24 @@ public class PosWindow extends JFrame implements WindowListener {
 		setGlassPane(glassPane);
 
 		JPanel infoPanel = new JPanel(new MigLayout("fillx", "[]", ""));
-		infoPanel.setBackground(Color.WHITE);
+		infoPanel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
 
 		statusLabel = new JLabel(""); //$NON-NLS-1$
 		lblUser = new JLabel();
 		lblTaxInculed = new JLabel();
 		lblTerminal = new JLabel();
 		lblTime = new JLabel("");
-		Font f = statusLabel.getFont().deriveFont(Font.BOLD, (float) PosUIManager.getFontSize(10));
-		statusLabel.setFont(f.deriveFont(Font.BOLD, (float) PosUIManager.getFontSize(12)));
+		Font f = com.floreantpos.ui.POSTheme.fontBold(11);
+		statusLabel.setFont(com.floreantpos.ui.POSTheme.fontBold(12));
+		statusLabel.setForeground(com.floreantpos.ui.POSTheme.TEXT_PRIMARY);
 		lblTerminal.setFont(f);
+		lblTerminal.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
 		lblUser.setFont(f);
+		lblUser.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
 		lblTaxInculed.setFont(f);
+		lblTaxInculed.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
 		lblTime.setFont(f);
+		lblTime.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
 
 		infoPanel.add(statusLabel, "split 4");
 		infoPanel.add(lblTerminal, "gapleft 20");
@@ -101,8 +105,10 @@ public class PosWindow extends JFrame implements WindowListener {
 		infoPanel.add(lblTime, "right");
 
 		JPanel statusBarContainer = new JPanel(new BorderLayout());
-		statusBarContainer.setBackground(Color.WHITE);
-		statusBarContainer.add(new JSeparator(JSeparator.HORIZONTAL), BorderLayout.NORTH);
+		statusBarContainer.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		JSeparator footerSeparator = new JSeparator(JSeparator.HORIZONTAL);
+		footerSeparator.setForeground(com.floreantpos.ui.POSTheme.BORDER_SUBTLE);
+		statusBarContainer.add(footerSeparator, BorderLayout.NORTH);
 		//		ImageIcon icon = IconFactory.getIcon("/ui_icons/", "footer-logo.png");
 		//		statusLabel.setIcon(icon);
 

@@ -1,13 +1,10 @@
 package com.floreantpos.ui.forms;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -35,39 +32,44 @@ public class ServerForm extends BeanEditor<Server> {
 
 	private void initComponents() {
 		setLayout(new BorderLayout());
+		setBackground(com.floreantpos.ui.POSTheme.CANVAS_BG);
 
-		JPanel mainPanel = new JPanel(new MigLayout("insets 20, fillx", "[140px][grow,fill]", "[]12[]12[]12[]12[]"));
+		JPanel mainPanel = new JPanel(new MigLayout("insets 18 20 18 20, fillx", "[120px][grow,fill]", "[]12[]12[]12[]12[]"));
+		mainPanel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		mainPanel.setBorder(com.floreantpos.ui.POSTheme.createHairlineBorder());
 
-		JLabel lblInstruction = new JLabel("Enter restaurant server details:");
-		lblInstruction.setFont(lblInstruction.getFont().deriveFont(Font.BOLD, 13f));
-		mainPanel.add(lblInstruction, "span 2, wrap 15");
+		JLabel lblInstruction = com.floreantpos.ui.POSTheme.createSectionHeader("Server Details");
+		mainPanel.add(lblInstruction, "span 2, wrap 12");
 
 		tfFirstName = new FixedLengthTextField(60);
+		com.floreantpos.ui.POSTheme.styleTextField(tfFirstName, 13, false);
 		tfLastName = new FixedLengthTextField(60);
+		com.floreantpos.ui.POSTheme.styleTextField(tfLastName, 13, false);
 		tfNickname = new FixedLengthTextField(60);
+		com.floreantpos.ui.POSTheme.styleTextField(tfNickname, 13, false);
+		tfNickname.putClientProperty(com.formdev.flatlaf.FlatClientProperties.PLACEHOLDER_TEXT, "Optional (e.g. Mohamed K.)"); //$NON-NLS-1$
 		tfPhone = new FixedLengthTextField(30);
-		chkActive = new JCheckBox("Active (Server is currently working and appears on cashier order screen)");
+		com.floreantpos.ui.POSTheme.styleTextField(tfPhone, 13, false);
+		tfPhone.putClientProperty(com.formdev.flatlaf.FlatClientProperties.PLACEHOLDER_TEXT, "Optional"); //$NON-NLS-1$
+		chkActive = new JCheckBox("Active (Appears on cashier server list)");
+		chkActive.setOpaque(false);
+		chkActive.setFont(com.floreantpos.ui.POSTheme.fontPlain(13));
+		chkActive.setForeground(com.floreantpos.ui.POSTheme.TEXT_PRIMARY);
 		chkActive.setSelected(true);
 
-		mainPanel.add(new JLabel("First Name *:"));
-		mainPanel.add(tfFirstName, "wrap");
+		mainPanel.add(new JLabel("First Name *"));
+		mainPanel.add(tfFirstName, "height 36!, wrap");
 
-		mainPanel.add(new JLabel("Last Name *:"));
-		mainPanel.add(tfLastName, "wrap");
+		mainPanel.add(new JLabel("Last Name *"));
+		mainPanel.add(tfLastName, "height 36!, wrap");
 
-		mainPanel.add(new JLabel("Nickname / Tag:"));
-		mainPanel.add(tfNickname, "wrap");
-		JLabel lblNickHint = new JLabel("<html><small style='color:gray;'>Optional - e.g., 'Mohamed K.' to tell apart servers with the same name</small></html>");
-		mainPanel.add(new JLabel(""));
-		mainPanel.add(lblNickHint, "wrap");
+		mainPanel.add(new JLabel("Nickname"));
+		mainPanel.add(tfNickname, "height 36!, wrap");
 
-		mainPanel.add(new JLabel("Phone Number:"));
-		mainPanel.add(tfPhone, "wrap");
-		JLabel lblPhoneHint = new JLabel("<html><small style='color:gray;'>Optional - for shift contact or payment discrepancy follow-up</small></html>");
-		mainPanel.add(new JLabel(""));
-		mainPanel.add(lblPhoneHint, "wrap");
+		mainPanel.add(new JLabel("Phone"));
+		mainPanel.add(tfPhone, "height 36!, wrap");
 
-		mainPanel.add(new JLabel("Status:"));
+		mainPanel.add(new JLabel("Status"));
 		mainPanel.add(chkActive, "wrap");
 
 		add(mainPanel, BorderLayout.CENTER);

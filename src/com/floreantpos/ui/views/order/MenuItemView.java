@@ -28,8 +28,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -173,61 +171,22 @@ public class MenuItemView extends SelectionView {
 		}
 	}
 
-	public class ItemButton extends PosButton implements ActionListener, MouseListener {
+	public class ItemButton extends PosButton implements ActionListener {
 		private int BUTTON_SIZE = 100;
 		MenuItem foodItem;
-		private boolean isHovered = false;
 
 		ItemButton(MenuItem menuItem) {
 			setFocusable(false);
 			setVerticalTextPosition(SwingConstants.BOTTOM);
 			setHorizontalTextPosition(SwingConstants.CENTER);
 			BUTTON_SIZE = PosUIManager.getSize(100);
-			
+
 			setMargin(new java.awt.Insets(8, 8, 8, 8));
-			setOpaque(false);
-			setContentAreaFilled(false);
-			setFocusPainted(false);
-			setBorderPainted(false);
 
 			updateView(menuItem);
 
 			setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
 			addActionListener(this);
-			addMouseListener(this);
-		}
-		
-		@Override
-		protected void paintComponent(java.awt.Graphics g) {
-			java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-			g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-			
-			// Shadow
-			g2.setColor(new java.awt.Color(0, 0, 0, 35));
-			g2.fillRoundRect(3, 3, getWidth() - 4, getHeight() - 4, 10, 10);
-			
-			// Background
-			if (isSelected() || isHovered) {
-				g2.setColor(java.awt.Color.decode("#B8731A")); // Warm Amber
-			} else {
-				g2.setColor(getBackground() != null ? getBackground() : java.awt.Color.WHITE);
-			}
-			g2.fillRoundRect(0, 0, getWidth() - 4, getHeight() - 4, 10, 10);
-			
-			super.paintComponent(g);
-			g2.dispose();
-		}
-		
-		@Override
-		protected void paintBorder(java.awt.Graphics g) {
-			if (isSelected() || isHovered) {
-				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setColor(java.awt.Color.decode("#E5A01E")); // Gold border
-				g2.setStroke(new java.awt.BasicStroke(1.5f));
-				g2.drawRoundRect(0, 0, getWidth() - 5, getHeight() - 5, 10, 10);
-				g2.dispose();
-			}
 		}
 
 		private void updateView(MenuItem menuItem) {
@@ -255,23 +214,18 @@ public class MenuItemView extends SelectionView {
 				else
 					setText("<html><body><center>" + menuItem.getName()
 							+ (!showPrice ? ""
-									: "<br><h4>" + "<span style='color:white;background-color:green;margin:1;'>" + "&nbsp;" + "&nbsp;" + "&nbsp;"
-											+ CurrencyUtil.getCurrencySymbol() + menuItem.getPrice() + "&nbsp;" + "&nbsp;" + "&nbsp;" + "</span>")
+									: "<br><h4>" + "<span style='color:white;background-color:" + com.floreantpos.ui.POSTheme.HEX_CASH_GREEN + ";margin:1;'>" + "&nbsp;" + "&nbsp;"
+											+ CurrencyUtil.getCurrencySymbol() + menuItem.getPrice() + "&nbsp;" + "&nbsp;" + "</span>")
 							+ "&nbsp;"
 							+ (!showStockCount ? ""
-									: "<span style='color:white;background-color:red;margin:1;'>" + "&nbsp;" + "&nbsp;" + "&nbsp;" + menuItem.getStockAmount()
-											+ "&nbsp;" + "&nbsp;" + "&nbsp;" + "</span>") //$NON-NLS-1$//$NON-NLS-2$
+									: "<span style='color:white;background-color:" + com.floreantpos.ui.POSTheme.HEX_AFRIMONEY_RED + ";margin:1;'>" + "&nbsp;" + "&nbsp;" + menuItem.getStockAmount()
+											+ "&nbsp;" + "&nbsp;" + "</span>") //$NON-NLS-1$//$NON-NLS-2$
 							+ "</h4>" + "</center></body></html>");
 			}
 
 			Color buttonColor = menuItem.getButtonColor();
-			if (buttonColor != null) {
-				setBackground(buttonColor);
-			}
 			Color textColor = menuItem.getTextColor();
-			if (textColor != null) {
-				setForeground(textColor);
-			}
+			com.floreantpos.ui.POSTheme.styleTileButton(this, buttonColor, textColor);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -282,30 +236,6 @@ public class MenuItemView extends SelectionView {
 				QuickMaintenanceExplorer.quickMaintain(foodItem);
 			}
 			fireItemSelected(foodItem);
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			isHovered = true;
-			repaint();
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			isHovered = false;
-			repaint();
 		}
 	}
 

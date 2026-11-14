@@ -24,10 +24,8 @@
 package com.floreantpos.ui.views;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -94,8 +92,8 @@ class LoginPasswordEntryView extends JPanel {
 		buttonPanel.setLayout(new MigLayout("", "[111px][111px][111px,grow]", "[60px][60px][60px][60px]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		lblTerminalId = new JLabel("TERMINAL ID:"); //$NON-NLS-1$
-		lblTerminalId.setForeground(Color.BLACK);
-		lblTerminalId.setFont(new Font("Dialog", Font.BOLD, 18)); //$NON-NLS-1$
+		lblTerminalId.setForeground(com.floreantpos.ui.POSTheme.TEXT_PRIMARY);
+		lblTerminalId.setFont(com.floreantpos.ui.POSTheme.fontBold(16));
 		lblTerminalId.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblTerminalId, BorderLayout.NORTH);
 
@@ -124,12 +122,13 @@ class LoginPasswordEntryView extends JPanel {
 			btnRegularMode.setSelected(true);
 		}
 		
-		JPanel modePanel = new JPanel(new GridLayout(1, 0, 2, 2));
+		JPanel modePanel = new JPanel(new GridLayout(1, 0, 4, 4));
+		modePanel.setOpaque(false);
 		modePanel.add(btnRegularMode);
 //		modePanel.add(btnCashierMode);
 		modePanel.add(btnKitchenMode);
 		
-		bottomPanel.add(modePanel, "h 60!, grow, wrap"); //$NON-NLS-1$
+		bottomPanel.add(modePanel, "h 56!, grow, wrap"); //$NON-NLS-1$
 
 		psbtnLogin = new PosButton();
 		psbtnLogin.addActionListener(new ActionListener() {
@@ -138,10 +137,12 @@ class LoginPasswordEntryView extends JPanel {
 			}
 		});
 		psbtnLogin.setText("LOGIN"); //$NON-NLS-1$
-		bottomPanel.add(psbtnLogin, "grow, wrap, gapbottom 20px"); //$NON-NLS-1$
+		psbtnLogin.setFont(com.floreantpos.ui.POSTheme.fontBold(15));
+		com.floreantpos.ui.POSTheme.stylePrimaryButton(psbtnLogin);
+		bottomPanel.add(psbtnLogin, "grow, wrap, gapbottom 16px, h 56!"); //$NON-NLS-1$
 		
 		PosButton btnClockOUt = new PosButton(new ClockInOutAction(false, true));
-		bottomPanel.add(btnClockOUt, "grow, wrap, h 60!"); //$NON-NLS-1$
+		bottomPanel.add(btnClockOUt, "grow, wrap, h 56!"); //$NON-NLS-1$
 		
 		if (TerminalConfig.isShowDbConfigureButton()) {
 			btnConfigureDatabase = new com.floreantpos.swing.PosButton();
@@ -149,12 +150,13 @@ class LoginPasswordEntryView extends JPanel {
 			btnConfigureDatabase.setText(com.floreantpos.POSConstants.CONFIGURE_DATABASE);
 			btnConfigureDatabase.setFocusable(false);
 			btnConfigureDatabase.setActionCommand("DBCONFIG"); //$NON-NLS-1$
-			bottomPanel.add(btnConfigureDatabase, "grow, wrap, h 60!"); //$NON-NLS-1$
+			bottomPanel.add(btnConfigureDatabase, "grow, wrap, h 56!"); //$NON-NLS-1$
 		}
 
 		btnShutdown.setAction(goAction);
 		btnShutdown.setText(com.floreantpos.POSConstants.SHUTDOWN);
 		btnShutdown.setFocusable(false);
+		com.floreantpos.ui.POSTheme.styleNeutralButton(btnShutdown);
 
 		if (TerminalConfig.isFullscreenMode()) {
 			if(btnConfigureDatabase != null) {
@@ -165,7 +167,7 @@ class LoginPasswordEntryView extends JPanel {
 			}
 		}
 		
-		bottomPanel.add(btnShutdown, "grow, wrap, h 60!"); //$NON-NLS-1$
+		bottomPanel.add(btnShutdown, "grow, wrap, h 56!"); //$NON-NLS-1$
 		add(bottomPanel, BorderLayout.SOUTH);
 
 		lblTerminalId.setText(""); //$NON-NLS-1$

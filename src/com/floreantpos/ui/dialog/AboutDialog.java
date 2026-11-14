@@ -18,9 +18,7 @@
 package com.floreantpos.ui.dialog;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -32,7 +30,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
@@ -59,8 +56,8 @@ public class AboutDialog extends POSDialog {
 	protected void initUI() {
 		setLayout(new BorderLayout());
 
-		JPanel mainPanel = new JPanel(new MigLayout("fillx, insets 14 18 10 18", "[grow, fill]", "[]8[]8[]8[]"));
-		mainPanel.setBackground(Color.WHITE);
+		JPanel mainPanel = new JPanel(new MigLayout("fillx, insets 16 18 14 18", "[grow, fill]", "[]10[]10[]"));
+		mainPanel.setBackground(com.floreantpos.ui.POSTheme.CANVAS_BG);
 
 		// Header: Logo & Reness POS title
 		JPanel headerPanel = new JPanel(new MigLayout("insets 0, fillx", "[][grow]", "[]"));
@@ -73,21 +70,18 @@ public class AboutDialog extends POSDialog {
 		}
 		headerPanel.add(logoLabel, "cell 0 0, aligny center");
 
-		JLabel titleLabel = new JLabel("<html><div style='font-family:sans-serif;'>"
-				+ "<div style='font-size:18px; font-weight:bold; color:#1a365d;'>Reness POS</div>"
-				+ "<div style='font-size:11px; color:#4a5568; margin-top:2px;'>Professional Restaurant &amp; Retail POS &bull; <b style='color:#2b6cb0;'>Version " + Application.VERSION + "</b></div>"
+		String ff = com.floreantpos.ui.POSTheme.getFontFamily();
+		JLabel titleLabel = new JLabel("<html><div style='font-family:" + ff + ";'>"
+				+ "<div style='font-size:18px; font-weight:bold; color:" + com.floreantpos.ui.POSTheme.HEX_TEXT_PRIMARY + ";'>Reness POS</div>"
+				+ "<div style='font-size:11px; color:" + com.floreantpos.ui.POSTheme.HEX_TEXT_MUTED + "; margin-top:2px;'>Professional Restaurant &amp; Retail POS &bull; <b style='color:" + com.floreantpos.ui.POSTheme.HEX_ACCENT_PRESSED + ";'>Version " + Application.VERSION + "</b></div>"
 				+ "</div></html>");
 		headerPanel.add(titleLabel, "cell 1 0, gapleft 12, aligny center");
 		mainPanel.add(headerPanel, "wrap, growx");
 
-		mainPanel.add(new JSeparator(), "wrap, growx, gaptop 2, gapbottom 2");
-
 		// Developer Card Panel
-		JPanel devCard = new JPanel(new MigLayout("insets 10, fillx", "[][grow]", "[]"));
-		devCard.setBackground(new Color(248, 249, 250));
-		devCard.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(new Color(226, 232, 240), 1),
-				BorderFactory.createEmptyBorder(6, 8, 6, 8)));
+		JPanel devCard = new JPanel(new MigLayout("insets 12 14 12 14, fillx", "[][grow]", "[]"));
+		devCard.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		devCard.setBorder(com.floreantpos.ui.POSTheme.createHairlineBorder());
 
 		// Developer Photo (Crisp 75x75)
 		JLabel photoLabel = new JLabel();
@@ -96,36 +90,42 @@ public class AboutDialog extends POSDialog {
 			Image scaled = devIcon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
 			photoLabel.setIcon(new ImageIcon(scaled));
 		}
-		photoLabel.setBorder(BorderFactory.createLineBorder(new Color(203, 213, 225), 1));
+		photoLabel.setBorder(com.floreantpos.ui.POSTheme.createHairlineBorder());
 		devCard.add(photoLabel, "cell 0 0, aligny top");
 
 		// Developer Details
-		String devHtml = "<html><div style='font-family:sans-serif; font-size:11px; color:#334155;'>"
-				+ "<div style='font-size:13px; margin-bottom:3px;'><b style='color:#0f172a;'>Software Developer:</b> <span style='color:#1d4ed8; font-weight:bold;'>Abdul Malik Barrie (BAHRI)</span></div>"
-				+ "<div style='margin-bottom:2px;'><b>Direct Line:</b> <b style='color:#2563eb;'>+232 80 020097</b> / <b style='color:#2563eb;'>+232 76 159189</b></div>"
-				+ "<div style='margin-bottom:3px;'><b>WhatsApp:</b> <b style='color:#16a34a;'>+232 80 020097</b> &nbsp;&bull;&nbsp; <b>Email:</b> <span style='color:#2563eb;'>abdulmalikbarrie@gmail.com</span></div>"
-				+ "<div style='color:#059669; font-weight:bold;'>&#10004; 24/7 Technical Support &amp; System Maintenance Available</div>"
+		String devHtml = "<html><div style='font-family:" + ff + "; font-size:11px; color:" + com.floreantpos.ui.POSTheme.HEX_TEXT_SECONDARY + ";'>"
+				+ "<div style='font-size:13px; margin-bottom:4px;'><b style='color:" + com.floreantpos.ui.POSTheme.HEX_TEXT_PRIMARY + ";'>Software Developer:</b> <span style='color:" + com.floreantpos.ui.POSTheme.HEX_ACCENT_PRESSED + "; font-weight:bold;'>Abdul Malik Barrie (BAHRI)</span></div>"
+				+ "<div style='margin-bottom:2px;'><b>Direct Line:</b> <b style='color:" + com.floreantpos.ui.POSTheme.HEX_TEXT_PRIMARY + ";'>+232 80 020097</b> / <b style='color:" + com.floreantpos.ui.POSTheme.HEX_TEXT_PRIMARY + ";'>+232 76 159189</b></div>"
+				+ "<div style='margin-bottom:4px;'><b>WhatsApp:</b> <b style='color:" + com.floreantpos.ui.POSTheme.HEX_CASH_GREEN + ";'>+232 80 020097</b> &nbsp;&bull;&nbsp; <b>Email:</b> <span style='color:" + com.floreantpos.ui.POSTheme.HEX_TEXT_PRIMARY + ";'>abdulmalikbarrie@gmail.com</span></div>"
+				+ "<div style='color:" + com.floreantpos.ui.POSTheme.HEX_CASH_GREEN + "; font-weight:bold;'>24/7 Technical Support &amp; System Maintenance Available</div>"
 				+ "</div></html>";
 		JLabel devDetails = new JLabel(devHtml);
-		devCard.add(devDetails, "cell 1 0, gapleft 12, growx");
+		devCard.add(devDetails, "cell 1 0, gapleft 14, growx");
 		mainPanel.add(devCard, "wrap, growx");
 
 		// System Terminal UID Section
-		JPanel terminalPanel = new JPanel(new MigLayout("insets 6 10 6 10, fillx", "[][grow][]", "[]"));
-		terminalPanel.setBackground(new Color(241, 245, 249));
-		terminalPanel.setBorder(BorderFactory.createLineBorder(new Color(226, 232, 240), 1));
-		terminalPanel.add(new JLabel("<html><b style='font-size:11px;'>Terminal Key (System UID):</b></html>"), "cell 0 0");
+		JPanel terminalPanel = new JPanel(new MigLayout("insets 10 14 10 14, fillx", "[][grow][]", "[]"));
+		terminalPanel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		terminalPanel.setBorder(com.floreantpos.ui.POSTheme.createHairlineBorder());
+		JLabel lblUid = new JLabel("Terminal Key (System UID):");
+		lblUid.setFont(com.floreantpos.ui.POSTheme.fontBold(12));
+		lblUid.setForeground(com.floreantpos.ui.POSTheme.TEXT_SECONDARY);
+		terminalPanel.add(lblUid, "cell 0 0");
 
 		final JTextField tfTerminalKey = new JTextField(TerminalUtil.getSystemUID());
 		tfTerminalKey.setEditable(false);
 		tfTerminalKey.setHorizontalAlignment(JTextField.CENTER);
-		tfTerminalKey.setFont(new Font("Monospaced", Font.BOLD, 12));
-		tfTerminalKey.setBackground(Color.WHITE);
-		tfTerminalKey.setPreferredSize(new Dimension(220, 26));
+		tfTerminalKey.setFont(com.floreantpos.ui.POSTheme.monoBold(12));
+		tfTerminalKey.setBackground(com.floreantpos.ui.POSTheme.SUBTLE_SURFACE);
+		tfTerminalKey.setForeground(com.floreantpos.ui.POSTheme.TEXT_PRIMARY);
+		tfTerminalKey.setPreferredSize(new Dimension(220, 32));
 		terminalPanel.add(tfTerminalKey, "cell 1 0, growx, gapleft 8, gapright 8");
 
 		final JButton btnCopy = new JButton("Copy");
-		btnCopy.setPreferredSize(new Dimension(75, 26));
+		btnCopy.setFont(com.floreantpos.ui.POSTheme.fontBold(12));
+		btnCopy.setPreferredSize(new Dimension(80, 32));
+		com.floreantpos.ui.POSTheme.styleSecondaryButton(btnCopy);
 		btnCopy.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -140,12 +140,13 @@ public class AboutDialog extends POSDialog {
 		add(mainPanel, BorderLayout.CENTER);
 
 		// Fixed Footer Panel with OK/Close Button
-		JPanel footerPanel = new JPanel(new MigLayout("fillx, insets 8 15 8 15", "[grow]", "[]"));
-		footerPanel.setBackground(new Color(248, 250, 252));
-		footerPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(226, 232, 240)));
+		JPanel footerPanel = new JPanel(new MigLayout("fillx, insets 10 16 12 16", "[grow]", "[]"));
+		footerPanel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		footerPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, com.floreantpos.ui.POSTheme.BORDER_SUBTLE));
 		JButton btnOk = new JButton(Messages.getString("AboutDialog.5"));
-		btnOk.setFont(btnOk.getFont().deriveFont(Font.BOLD, 12f));
-		btnOk.setPreferredSize(PosUIManager.getSize(110, 32));
+		btnOk.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		btnOk.setPreferredSize(PosUIManager.getSize(120, 38));
+		com.floreantpos.ui.POSTheme.stylePrimaryButton(btnOk);
 		btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

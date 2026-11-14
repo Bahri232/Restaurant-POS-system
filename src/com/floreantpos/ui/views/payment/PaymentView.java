@@ -18,7 +18,6 @@
 package com.floreantpos.ui.views.payment;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -132,30 +131,33 @@ public class PaymentView extends JPanel {
 		txtDueAmount = new JTextField();
 		txtTenderedAmount = new JTextField();
 
-		Font font1 = new java.awt.Font("Tahoma", 1, PosUIManager.getFontSize(20)); // NOI18N //$NON-NLS-1$
-		Font font2 = new java.awt.Font("Arial", Font.PLAIN, PosUIManager.getFontSize(34)); // NOI18N //$NON-NLS-1$
+		Font font1 = com.floreantpos.ui.POSTheme.fontBold(18);
+		Font font2 = com.floreantpos.ui.POSTheme.fontBold(28);
+		Font quickBillFont = com.floreantpos.ui.POSTheme.fontBold(22);
 
 		labelTenderedAmount.setFont(font1);
 		labelTenderedAmount.setText(Messages.getString("PaymentView.54") + " " + CurrencyUtil.getCurrencySymbol()); //$NON-NLS-1$ //$NON-NLS-2$
-		labelTenderedAmount.setForeground(Color.gray);
+		labelTenderedAmount.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
 
 		txtTenderedAmount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-		txtTenderedAmount.setFont(font1);
+		com.floreantpos.ui.POSTheme.styleTextField(txtTenderedAmount, 22, true);
 
 		labelDueAmount.setFont(font1);
 		labelDueAmount.setText(Messages.getString("PaymentView.52") + " " + CurrencyUtil.getCurrencySymbol()); //$NON-NLS-1$ //$NON-NLS-2$
-		labelDueAmount.setForeground(Color.gray);
+		labelDueAmount.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
 
-		txtDueAmount.setFont(font1);
-		txtDueAmount.setEditable(false);
 		txtDueAmount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+		com.floreantpos.ui.POSTheme.styleReadOnlySummaryField(txtDueAmount, 22, true);
 
-		transparentPanel1.setLayout(new MigLayout("ins 8 0 0 0", "[][grow,fill]", "[grow][][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		transparentPanel1.setOpaque(true);
+		transparentPanel1.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		transparentPanel1.setBorder(com.floreantpos.ui.POSTheme.createHairlineBorder(10, 12, 10, 12));
+		transparentPanel1.setLayout(new MigLayout("ins 0", "[][grow,fill]", "[]8[]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		transparentPanel1.add(labelDueAmount, "cell 0 0,alignx right,aligny center"); //$NON-NLS-1$
 
-		transparentPanel1.add(labelTenderedAmount, "cell 0 2,alignx left,aligny center"); //$NON-NLS-1$
-		transparentPanel1.add(txtDueAmount, "cell 1 0,growx,aligny top"); //$NON-NLS-1$
-		transparentPanel1.add(txtTenderedAmount, "cell 1 2,growx,aligny top"); //$NON-NLS-1$
+		transparentPanel1.add(labelTenderedAmount, "cell 0 1,alignx left,aligny center"); //$NON-NLS-1$
+		transparentPanel1.add(txtDueAmount, "cell 1 0,growx,height 42!,aligny center"); //$NON-NLS-1$
+		transparentPanel1.add(txtTenderedAmount, "cell 1 1,growx,height 42!,aligny center"); //$NON-NLS-1$
 
 		leftPanel.add(transparentPanel1, BorderLayout.NORTH);
 
@@ -202,40 +204,46 @@ public class PaymentView extends JPanel {
 		btnClear = new com.floreantpos.swing.PosButton();
 		btn00 = new com.floreantpos.swing.PosButton();
 
-		btnAmount1.setForeground(Color.blue);
+		com.floreantpos.ui.POSTheme.styleSolidButton(btnAmount1, com.floreantpos.ui.POSTheme.CARD_BG,
+				com.floreantpos.ui.POSTheme.SURFACE_HOVER, com.floreantpos.ui.POSTheme.SURFACE_PRESSED,
+				com.floreantpos.ui.POSTheme.ACCENT_PRESSED, com.floreantpos.ui.POSTheme.BORDER_STRONG);
 		btnAmount1.setAction(nextButtonAction);
 		btnAmount1.setText(Messages.getString("PaymentView.1")); //$NON-NLS-1$
+		btnAmount1.setFont(quickBillFont);
 		btnAmount1.setActionCommand("1"); //$NON-NLS-1$
 		btnAmount1.setFocusable(false);
 		calcButtonPanel.add(btnAmount1);
 
 		btn7.setAction(calAction);
 		btn7.setText("7");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn7);
 		btn7.setFont(font2);
-		//btn7.setIcon(IconFactory.getIcon("/ui_icons/", "7.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn7.setActionCommand("7"); //$NON-NLS-1$
 		btn7.setFocusable(false);
 		calcButtonPanel.add(btn7);
 
 		btn8.setAction(calAction);
 		btn8.setText("8");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn8);
 		btn8.setFont(font2);
-		//btn8.setIcon(IconFactory.getIcon("/ui_icons/", "8.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn8.setActionCommand("8"); //$NON-NLS-1$
 		btn8.setFocusable(false);
 		calcButtonPanel.add(btn8);
 
 		btn9.setAction(calAction);
 		btn9.setText("9");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn9);
 		btn9.setFont(font2);
-		//btn9.setIcon(IconFactory.getIcon("/ui_icons/", "9.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn9.setActionCommand("9"); //$NON-NLS-1$
 		btn9.setFocusable(false);
 		calcButtonPanel.add(btn9);
 
-		btnAmount2.setForeground(Color.blue);
+		com.floreantpos.ui.POSTheme.styleSolidButton(btnAmount2, com.floreantpos.ui.POSTheme.CARD_BG,
+				com.floreantpos.ui.POSTheme.SURFACE_HOVER, com.floreantpos.ui.POSTheme.SURFACE_PRESSED,
+				com.floreantpos.ui.POSTheme.ACCENT_PRESSED, com.floreantpos.ui.POSTheme.BORDER_STRONG);
 		btnAmount2.setAction(nextButtonAction);
 		btnAmount2.setText(Messages.getString("PaymentView.10")); //$NON-NLS-1$
+		btnAmount2.setFont(quickBillFont);
 		btnAmount2.setActionCommand("2"); //$NON-NLS-1$
 		btnAmount2.setFocusable(false);
 
@@ -243,31 +251,34 @@ public class PaymentView extends JPanel {
 
 		btn4.setAction(calAction);
 		btn4.setText("4");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn4);
 		btn4.setFont(font2);
-		//btn4.setIcon(IconFactory.getIcon("/ui_icons/", "4.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn4.setActionCommand("4"); //$NON-NLS-1$
 		btn4.setFocusable(false);
 		calcButtonPanel.add(btn4);
 
 		btn5.setAction(calAction);
 		btn5.setText("5");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn5);
 		btn5.setFont(font2);
-		//btn5.setIcon(IconFactory.getIcon("/ui_icons/", "5.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn5.setActionCommand("5"); //$NON-NLS-1$
 		btn5.setFocusable(false);
 		calcButtonPanel.add(btn5);
 
 		btn6.setAction(calAction);
 		btn6.setText("6");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn6);
 		btn6.setFont(font2);
-		//btn6.setIcon(IconFactory.getIcon("/ui_icons/", "6.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn6.setActionCommand("6"); //$NON-NLS-1$
 		btn6.setFocusable(false);
 		calcButtonPanel.add(btn6);
 
-		btnAmount5.setForeground(Color.blue);
+		com.floreantpos.ui.POSTheme.styleSolidButton(btnAmount5, com.floreantpos.ui.POSTheme.CARD_BG,
+				com.floreantpos.ui.POSTheme.SURFACE_HOVER, com.floreantpos.ui.POSTheme.SURFACE_PRESSED,
+				com.floreantpos.ui.POSTheme.ACCENT_PRESSED, com.floreantpos.ui.POSTheme.BORDER_STRONG);
 		btnAmount5.setAction(nextButtonAction);
 		btnAmount5.setText(Messages.getString("PaymentView.12")); //$NON-NLS-1$
+		btnAmount5.setFont(quickBillFont);
 		btnAmount5.setActionCommand("5"); //$NON-NLS-1$
 		btnAmount5.setFocusable(false);
 
@@ -275,44 +286,48 @@ public class PaymentView extends JPanel {
 
 		btn1.setAction(calAction);
 		btn1.setText("1");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn1);
 		btn1.setFont(font2);
-		//btn1.setIcon(IconFactory.getIcon("/ui_icons/", "1.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn1.setActionCommand(REMOVE);
 		btn1.setFocusable(false);
 		calcButtonPanel.add(btn1);
 
 		btn2.setAction(calAction);
 		btn2.setText("2");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn2);
 		btn2.setFont(font2);
-		//btn2.setIcon(IconFactory.getIcon("/ui_icons/", "2.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn2.setActionCommand("2"); //$NON-NLS-1$
 		btn2.setFocusable(false);
 		calcButtonPanel.add(btn2);
 
 		btn3.setAction(calAction);
 		btn3.setText("3");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn3);
 		btn3.setFont(font2);
-		//btn3.setIcon(IconFactory.getIcon("/ui_icons/", "3.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn3.setActionCommand("3"); //$NON-NLS-1$
 		btn3.setFocusable(false);
 		calcButtonPanel.add(btn3);
 
-		btnAmount10.setForeground(Color.blue);
+		com.floreantpos.ui.POSTheme.styleSolidButton(btnAmount10, com.floreantpos.ui.POSTheme.CARD_BG,
+				com.floreantpos.ui.POSTheme.SURFACE_HOVER, com.floreantpos.ui.POSTheme.SURFACE_PRESSED,
+				com.floreantpos.ui.POSTheme.ACCENT_PRESSED, com.floreantpos.ui.POSTheme.BORDER_STRONG);
 		btnAmount10.setAction(nextButtonAction);
 		btnAmount10.setText(Messages.getString("PaymentView.14")); //$NON-NLS-1$
+		btnAmount10.setFont(quickBillFont);
 		btnAmount10.setActionCommand("10"); //$NON-NLS-1$
 		btnAmount10.setFocusable(false);
 		calcButtonPanel.add(btnAmount10, "grow"); //$NON-NLS-1$
 
 		btn0.setAction(calAction);
 		btn0.setText("0");
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn0);
 		btn0.setFont(font2);
-		//btn0.setIcon(IconFactory.getIcon("/ui_icons/", "0.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btn0.setActionCommand(ZERO);
 		btn0.setFocusable(false);
 		calcButtonPanel.add(btn0);
 
-		btn00.setFont(new Font("Arial", Font.PLAIN, 30)); //$NON-NLS-1$
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btn00);
+		btn00.setFont(com.floreantpos.ui.POSTheme.fontBold(24));
 		btn00.setAction(calAction);
 		btn00.setText(Messages.getString("PaymentView.18")); //$NON-NLS-1$
 		btn00.setActionCommand("00"); //$NON-NLS-1$
@@ -321,27 +336,37 @@ public class PaymentView extends JPanel {
 
 		btnDot.setAction(calAction);
 		btnDot.setIcon(IconFactory.getIcon("/ui_icons/", "dot.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
+		com.floreantpos.ui.POSTheme.styleKeypadButton(btnDot);
 		btnDot.setActionCommand("."); //$NON-NLS-1$
 		btnDot.setFocusable(false);
 		calcButtonPanel.add(btnDot);
 
-		btnAmount20.setForeground(Color.BLUE);
+		com.floreantpos.ui.POSTheme.styleSolidButton(btnAmount20, com.floreantpos.ui.POSTheme.CARD_BG,
+				com.floreantpos.ui.POSTheme.SURFACE_HOVER, com.floreantpos.ui.POSTheme.SURFACE_PRESSED,
+				com.floreantpos.ui.POSTheme.ACCENT_PRESSED, com.floreantpos.ui.POSTheme.BORDER_STRONG);
 		btnAmount20.setAction(nextButtonAction);
 		btnAmount20.setText("20"); //$NON-NLS-1$
+		btnAmount20.setFont(quickBillFont);
 		btnAmount20.setActionCommand("20"); //$NON-NLS-1$
 		btnAmount20.setFocusable(false);
 		calcButtonPanel.add(btnAmount20, "grow"); //$NON-NLS-1$
 
-		btnAmount50.setForeground(Color.blue);
+		com.floreantpos.ui.POSTheme.styleSolidButton(btnAmount50, com.floreantpos.ui.POSTheme.CARD_BG,
+				com.floreantpos.ui.POSTheme.SURFACE_HOVER, com.floreantpos.ui.POSTheme.SURFACE_PRESSED,
+				com.floreantpos.ui.POSTheme.ACCENT_PRESSED, com.floreantpos.ui.POSTheme.BORDER_STRONG);
 		btnAmount50.setAction(nextButtonAction);
 		btnAmount50.setText("50"); //$NON-NLS-1$
+		btnAmount50.setFont(quickBillFont);
 		btnAmount50.setActionCommand("50"); //$NON-NLS-1$
 		btnAmount50.setFocusable(false);
 		calcButtonPanel.add(btnAmount50, "grow"); //$NON-NLS-1$
 
-		btnAmount100.setForeground(Color.blue);
+		com.floreantpos.ui.POSTheme.styleSolidButton(btnAmount100, com.floreantpos.ui.POSTheme.CARD_BG,
+				com.floreantpos.ui.POSTheme.SURFACE_HOVER, com.floreantpos.ui.POSTheme.SURFACE_PRESSED,
+				com.floreantpos.ui.POSTheme.ACCENT_PRESSED, com.floreantpos.ui.POSTheme.BORDER_STRONG);
 		btnAmount100.setAction(nextButtonAction);
 		btnAmount100.setText("100"); //$NON-NLS-1$
+		btnAmount100.setFont(quickBillFont);
 		btnAmount100.setActionCommand("100"); //$NON-NLS-1$
 		btnAmount100.setFocusable(false);
 		calcButtonPanel.add(btnAmount100, "grow"); //$NON-NLS-1$
@@ -349,25 +374,34 @@ public class PaymentView extends JPanel {
 		btnClear.setAction(calAction);
 		btnClear.setIcon(IconFactory.getIcon("/ui_icons/", "clear.png")); // NOI18N //$NON-NLS-1$ //$NON-NLS-2$
 		btnClear.setText(Messages.getString("PaymentView.38")); //$NON-NLS-1$
+		com.floreantpos.ui.POSTheme.styleNeutralButton(btnClear);
+		btnClear.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
 		btnClear.setFocusable(false);
 		calcButtonPanel.add(btnClear, "wrap");
 
 		btnExactAmount.setAction(nextButtonAction);
 		btnExactAmount.setText(Messages.getString("PaymentView.20")); //$NON-NLS-1$
+		btnExactAmount.setFont(com.floreantpos.ui.POSTheme.fontBold(14));
+		com.floreantpos.ui.POSTheme.styleAccentOutlineButton(btnExactAmount);
 		btnExactAmount.setActionCommand("exactAmount"); //$NON-NLS-1$
 		btnExactAmount.setFocusable(false);
 
 		btnNoSale.setAction(nextButtonAction);
 		btnNoSale.setText("NO SALE");
+		btnNoSale.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		com.floreantpos.ui.POSTheme.styleSecondaryButton(btnNoSale);
 		btnNoSale.setActionCommand("noSale");
 		btnNoSale.setFocusable(false);
 
 		btnNextAmount.setAction(nextButtonAction);
 		btnNextAmount.setText(Messages.getString("PaymentView.23")); //$NON-NLS-1$
+		btnNextAmount.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		com.floreantpos.ui.POSTheme.styleSecondaryButton(btnNextAmount);
 		btnNextAmount.setActionCommand("nextAmount"); //$NON-NLS-1$
 		btnNextAmount.setFocusable(false);
 
-		JPanel centerPanel = new JPanel(new GridLayout(1, 0, 5, 5));
+		JPanel centerPanel = new JPanel(new GridLayout(1, 0, 6, 6));
+		centerPanel.setOpaque(false);
 		centerPanel.add(btnExactAmount);
 		centerPanel.add(btnNoSale);
 		centerPanel.add(btnNextAmount);
@@ -375,6 +409,7 @@ public class PaymentView extends JPanel {
 		calcButtonPanel.add(centerPanel, "span 4,growx"); //$NON-NLS-1$
 
 		btnGratuity = new PosButton(com.floreantpos.POSConstants.ADD_GRATUITY_TEXT);
+		com.floreantpos.ui.POSTheme.styleSecondaryButton(btnGratuity);
 		btnGratuity.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				doSetGratuity();
@@ -382,6 +417,7 @@ public class PaymentView extends JPanel {
 		});
 
 		btnDiscount = new PosButton(com.floreantpos.POSConstants.COUPON_DISCOUNT);
+		com.floreantpos.ui.POSTheme.styleSecondaryButton(btnDiscount);
 		btnDiscount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ticketProcessor.doApplyCoupon();
@@ -389,6 +425,7 @@ public class PaymentView extends JPanel {
 		});
 
 		btnPrint = new com.floreantpos.swing.PosButton(POSConstants.PRINT_TICKET);
+		com.floreantpos.ui.POSTheme.styleSecondaryButton(btnPrint);
 		btnPrint.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				try {
@@ -408,13 +445,14 @@ public class PaymentView extends JPanel {
 		leftPanel.add(calcButtonPanel, BorderLayout.CENTER);
 
 		actionButtonPanel = new com.floreantpos.swing.TransparentPanel();
-		actionButtonPanel.setOpaque(true);
-		actionButtonPanel.setLayout(new MigLayout("hidemode 3,wrap 1, ins 8 0 4 5, fill", "sg, fill", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		//actionButtonPanel.setPreferredSize(PosUIManager.getSize(120, 0));
+		actionButtonPanel.setOpaque(false);
+		actionButtonPanel.setLayout(new MigLayout("hidemode 3,wrap 1, ins 0 8 0 0, fill", "sg, fill", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		int width = PosUIManager.getSize(100);
+		int width = PosUIManager.getSize(145);
 
 		btnCash = new com.floreantpos.swing.PosButton(Messages.getString("PaymentView.31")); //$NON-NLS-1$
+		btnCash.setFont(com.floreantpos.ui.POSTheme.fontBold(15));
+		com.floreantpos.ui.POSTheme.styleCashButton(btnCash);
 		actionButtonPanel.add(btnCash, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$
 		btnCash.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -423,6 +461,8 @@ public class PaymentView extends JPanel {
 		});
 
 		PosButton btnMultiCurrencyCash = new com.floreantpos.swing.PosButton("MULTI CURRENCY CASH"); //$NON-NLS-1$
+		btnMultiCurrencyCash.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		com.floreantpos.ui.POSTheme.styleCashButton(btnMultiCurrencyCash);
 		actionButtonPanel.add(btnMultiCurrencyCash, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$
 		btnMultiCurrencyCash.setVisible(TerminalConfig.isEnabledMultiCurrency());
 		btnMultiCurrencyCash.addActionListener(new java.awt.event.ActionListener() {
@@ -448,6 +488,8 @@ public class PaymentView extends JPanel {
 		});
 
 		btnOrangeMoney = new PosButton("ORANGE MONEY"); //$NON-NLS-1$
+		btnOrangeMoney.setFont(com.floreantpos.ui.POSTheme.fontBold(14));
+		com.floreantpos.ui.POSTheme.styleOrangeMoneyButton(btnOrangeMoney);
 		actionButtonPanel.add(btnOrangeMoney, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$
 		btnOrangeMoney.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -463,6 +505,8 @@ public class PaymentView extends JPanel {
 		});
 
 		btnAfriMoney = new PosButton("AFRIMONEY");
+		btnAfriMoney.setFont(com.floreantpos.ui.POSTheme.fontBold(14));
+		com.floreantpos.ui.POSTheme.styleAfrimoneyButton(btnAfriMoney);
 		actionButtonPanel.add(btnAfriMoney, "grow, w " + width + "!");
 		btnAfriMoney.addActionListener(new ActionListener() {
 			@Override
@@ -478,6 +522,8 @@ public class PaymentView extends JPanel {
 		});
 
 		btnOther = new PosButton("OTHER"); //$NON-NLS-1$
+		btnOther.setFont(com.floreantpos.ui.POSTheme.fontBold(14));
+		com.floreantpos.ui.POSTheme.styleSecondaryButton(btnOther);
 		actionButtonPanel.add(btnOther, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$
 		btnOther.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -490,6 +536,8 @@ public class PaymentView extends JPanel {
 		});
 
 		btnCancel = new com.floreantpos.swing.PosButton(POSConstants.CANCEL.toUpperCase());
+		btnCancel.setFont(com.floreantpos.ui.POSTheme.fontBold(14));
+		com.floreantpos.ui.POSTheme.styleNeutralButton(btnCancel);
 		actionButtonPanel.add(btnCancel, "grow,w " + width + "!"); //$NON-NLS-1$ //$NON-NLS-2$
 		btnCancel.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {

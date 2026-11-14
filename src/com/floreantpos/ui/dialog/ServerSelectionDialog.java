@@ -1,11 +1,8 @@
 package com.floreantpos.ui.dialog;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -16,14 +13,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.floreantpos.IconFactory;
 import com.floreantpos.POSConstants;
-import com.floreantpos.main.Application;
 import com.floreantpos.model.Server;
 import com.floreantpos.model.dao.ServerDAO;
 import com.floreantpos.swing.PosButton;
@@ -50,22 +43,26 @@ public class ServerSelectionDialog extends POSDialog {
 
 	private void initComponents() {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setLayout(new BorderLayout(10, 10));
+		getContentPane().setBackground(com.floreantpos.ui.POSTheme.CANVAS_BG);
+		setLayout(new BorderLayout(0, 0));
 
 		TitlePanel titlePanel = new TitlePanel();
-		titlePanel.setTitle("SELECT SERVER FOR TABLE");
+		titlePanel.setTitle("Select Server");
 		add(titlePanel, BorderLayout.NORTH);
 
-		JPanel contentPanel = new JPanel(new MigLayout("insets 25 30 20 30, fillx", "[grow][]", "[]15[]20[]"));
+		JPanel contentPanel = new JPanel(new MigLayout("insets 16 18 16 18, fillx", "[grow][]", "[]10[]"));
+		contentPanel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		contentPanel.setBorder(com.floreantpos.ui.POSTheme.createHairlineBorder(4, 4, 4, 4));
 
-		JLabel lblPrompt = new JLabel("Choose the server handling this order:");
-		lblPrompt.setFont(lblPrompt.getFont().deriveFont(Font.BOLD, 14f));
+		JLabel lblPrompt = new JLabel("Server assigned to this table");
+		lblPrompt.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		lblPrompt.setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
 		contentPanel.add(lblPrompt, "span 2, wrap");
 
 		serverComboBoxModel = new DefaultComboBoxModel<>();
 		cbServers = new JComboBox<>(serverComboBoxModel);
-		cbServers.setPreferredSize(new Dimension(320, 48));
-		cbServers.setFont(cbServers.getFont().deriveFont(14f));
+		cbServers.setPreferredSize(new Dimension(320, 44));
+		cbServers.setFont(com.floreantpos.ui.POSTheme.fontPlain(14));
 		cbServers.setRenderer(new DefaultListCellRenderer() {
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -75,51 +72,43 @@ public class ServerSelectionDialog extends POSDialog {
 					setText(s.getDisplayName());
 				} else if (value == null) {
 					setText("-- Select Server --");
-					setForeground(Color.GRAY);
+					setForeground(com.floreantpos.ui.POSTheme.TEXT_MUTED);
 				}
 				return this;
 			}
 		});
-		contentPanel.add(cbServers, "growx, height 48!");
+		contentPanel.add(cbServers, "growx, height 44!");
 
-		btnAddServer = new PosButton("+ Add New Server");
-		btnAddServer.setPreferredSize(new Dimension(160, 48));
-		btnAddServer.setBackground(new Color(41, 128, 185));
-		btnAddServer.setForeground(Color.WHITE);
-		btnAddServer.setFont(btnAddServer.getFont().deriveFont(Font.BOLD, 13f));
+		btnAddServer = new PosButton("+ New Server");
+		btnAddServer.setPreferredSize(new Dimension(145, 44));
+		btnAddServer.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		com.floreantpos.ui.POSTheme.styleAccentOutlineButton(btnAddServer);
 		btnAddServer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				doQuickAddServer();
 			}
 		});
-		contentPanel.add(btnAddServer, "height 48!, wrap");
+		contentPanel.add(btnAddServer, "height 44!, wrap");
 
-		JLabel lblNote = new JLabel("<html><small style='color:gray;'>Only Active servers appear here. If a waiter/waitress is not listed, click <b>+ Add New Server</b> above.</small></html>");
-		contentPanel.add(lblNote, "span 2, wrap");
-
-		add(contentPanel, BorderLayout.CENTER);
+		JPanel bodyWrapper = new JPanel(new BorderLayout());
+		bodyWrapper.setOpaque(false);
+		bodyWrapper.setBorder(javax.swing.BorderFactory.createEmptyBorder(14, 16, 14, 16));
+		bodyWrapper.add(contentPanel, BorderLayout.CENTER);
+		add(bodyWrapper, BorderLayout.CENTER);
 
 		// Button Bar
 		JPanel bottomPanel = new JPanel(new BorderLayout());
-		bottomPanel.add(new JSeparator(), BorderLayout.NORTH);
+		bottomPanel.setBackground(com.floreantpos.ui.POSTheme.CARD_BG);
+		bottomPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, com.floreantpos.ui.POSTheme.BORDER_SUBTLE));
 
-		JPanel actionButtonPanel = new JPanel(new MigLayout("insets 10 20 15 20, align center", "[130px]15[130px]", "[50px]"));
-
-		btnOk = new PosButton(POSConstants.OK);
-		btnOk.setIcon(IconFactory.getIcon("/ui_icons/", "finish.png"));
-		btnOk.setPreferredSize(new Dimension(130, 50));
-		btnOk.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				doOk();
-			}
-		});
-		actionButtonPanel.add(btnOk, "grow");
+		JPanel actionButtonPanel = new JPanel(new MigLayout("insets 12 16 12 16, align right", "[120px]12[140px]", "[46px]"));
+		actionButtonPanel.setOpaque(false);
 
 		btnCancel = new PosButton(POSConstants.CANCEL);
-		btnCancel.setIcon(IconFactory.getIcon("/ui_icons/", "cancel.png"));
-		btnCancel.setPreferredSize(new Dimension(130, 50));
+		btnCancel.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		btnCancel.setPreferredSize(new Dimension(120, 46));
+		com.floreantpos.ui.POSTheme.styleNeutralButton(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -128,6 +117,18 @@ public class ServerSelectionDialog extends POSDialog {
 			}
 		});
 		actionButtonPanel.add(btnCancel, "grow");
+
+		btnOk = new PosButton(POSConstants.OK);
+		btnOk.setFont(com.floreantpos.ui.POSTheme.fontBold(13));
+		btnOk.setPreferredSize(new Dimension(140, 46));
+		com.floreantpos.ui.POSTheme.stylePrimaryButton(btnOk);
+		btnOk.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				doOk();
+			}
+		});
+		actionButtonPanel.add(btnOk, "grow");
 
 		bottomPanel.add(actionButtonPanel, BorderLayout.CENTER);
 		add(bottomPanel, BorderLayout.SOUTH);

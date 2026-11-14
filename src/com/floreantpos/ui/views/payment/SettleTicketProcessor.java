@@ -479,6 +479,9 @@ public class SettleTicketProcessor implements CardInputListener {
 		if (!TerminalConfig.isUseSettlementPrompt()) {
 			return true;
 		}
+		if (ticket != null && tenderAmount <= ticket.getDueAmount() + 0.001) {
+			return true;
+		}
 
 		ConfirmPayDialog confirmPayDialog = new ConfirmPayDialog();
 		confirmPayDialog.setAmount(tenderAmount);
