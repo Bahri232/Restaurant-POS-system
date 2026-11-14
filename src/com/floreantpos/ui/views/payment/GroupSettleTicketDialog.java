@@ -144,7 +144,7 @@ public class GroupSettleTicketDialog extends POSDialog implements CardInputListe
 	}
 
 	public void updateView() {
-		if (tickets == null && !tickets.isEmpty()) {
+		if (tickets == null || tickets.isEmpty()) {
 			tfSubtotal.setText(""); //$NON-NLS-1$
 			tfDiscount.setText(""); //$NON-NLS-1$
 			tfDeliveryCharge.setText(""); //$NON-NLS-1$

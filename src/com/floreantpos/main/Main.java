@@ -17,18 +17,27 @@
  */
 package com.floreantpos.main;
 
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
+import org.apache.commons.lang.StringUtils;
 
+import com.floreantpos.POSConstants;
+import com.floreantpos.PosLog;
 import com.floreantpos.config.TerminalConfig;
+import com.floreantpos.ui.dialog.POSMessageDialog;
+import com.floreantpos.util.POSUtil;
 
 public class Main {
 
@@ -45,6 +54,8 @@ public class Main {
 			System.exit(0);
 			return;
 		}
+
+		installUncaughtExceptionHandler();
 
 		Options options = new Options();
 		options.addOption(DEVELOPMENT_MODE, true, "State if this is developmentMode"); //$NON-NLS-1$
@@ -100,5 +111,42 @@ public class Main {
 		final ProcessBuilder builder = new ProcessBuilder(command);
 		builder.start();
 		System.exit(0);
+	}
+
+	private static void installUncaughtExceptionHandler() {
+		final AtomicBoolean showingErrorDialog = new AtomicBoolean(false);
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				if (e instanceof ThreadDeath) {
+					return;
+				}
+				String msg = StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : POSConstants.ERROR_MESSAGE;
+				PosLog.error(Main.class, "Uncaught exception on thread " + t.getName(), e instanceof Exception ? (Exception) e : new Exception(e)); //$NON-NLS-1$
+
+				if (GraphicsEnvironment.isHeadless()) {
+					return;
+				}
+				if (!showingErrorDialog.compareAndSet(false, true)) {
+					return;
+				}
+				Runnable showTask = new Runnable() {
+					@Override
+					public void run() {
+						try {
+							POSMessageDialog.showError(POSUtil.getFocusedWindow(), msg, e);
+						} finally {
+							showingErrorDialog.set(false);
+						}
+					}
+				};
+				if (SwingUtilities.isEventDispatchThread()) {
+					showTask.run();
+				}
+				else {
+					SwingUtilities.invokeLater(showTask);
+				}
+			}
+		});
 	}
 }

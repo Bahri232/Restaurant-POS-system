@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -1007,23 +1010,40 @@ public class ReceiptPrintService {
 		}
 	}
 
-	public static void printQuitely(JasperPrint jasperPrint) throws JRException {
-		try {
-			JRPrintServiceExporter exporter = new JRPrintServiceExporter();
-			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-			exporter.setParameter(JRPrintServiceExporterParameter.PRINT_SERVICE,
-					PrintServiceUtil.getPrintServiceForPrinter(jasperPrint.getProperty(PROP_PRINTER_NAME)));
-			exporter.exportReport();
-		} catch (Exception x) {
-			String msg = "No print selected\n";
-			String message = x.getMessage();
-			if (message != null && message.contains("PrinterAbortException")) {//$NON-NLS-1$
-				//do nothing
-			}
-			else {
-				logger.error(msg + x);
-			}
+	private static final ExecutorService PRINT_EXECUTOR = Executors.newSingleThreadExecutor(new ThreadFactory() {
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread t = new Thread(r, "pos-print-worker"); //$NON-NLS-1$
+			t.setDaemon(true);
+			return t;
 		}
+	});
+
+	public static void printQuitely(final JasperPrint jasperPrint) throws JRException {
+		if (jasperPrint == null) {
+			return;
+		}
+		PRINT_EXECUTOR.submit(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					JRPrintServiceExporter exporter = new JRPrintServiceExporter();
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+					exporter.setParameter(JRPrintServiceExporterParameter.PRINT_SERVICE,
+							PrintServiceUtil.getPrintServiceForPrinter(jasperPrint.getProperty(PROP_PRINTER_NAME)));
+					exporter.exportReport();
+				} catch (Exception x) {
+					String msg = "No print selected\n";
+					String message = x.getMessage();
+					if (message != null && message.contains("PrinterAbortException")) {//$NON-NLS-1$
+						//do nothing
+					}
+					else {
+						logger.error(msg + x);
+					}
+				}
+			}
+		});
 	}
 
 	private static String getCardNumber(BankCardMagneticTrack track) {

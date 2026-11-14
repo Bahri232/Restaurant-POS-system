@@ -17,6 +17,10 @@
  */
 package com.floreantpos.util;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -34,6 +38,14 @@ import com.floreantpos.main.Application;
 public class DrawerUtil {
 	/* fields */
 	private static Log logger = LogFactory.getLog(DrawerUtil.class);
+	private static final ExecutorService DRAWER_EXECUTOR = Executors.newSingleThreadExecutor(new ThreadFactory() {
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread t = new Thread(r, "pos-drawer-worker"); //$NON-NLS-1$
+			t.setDaemon(true);
+			return t;
+		}
+	});
 	private static final float CM_PER_INCH = 2.54f;
 
 	/* decimal ascii values for epson ESC/P commands */
@@ -234,26 +246,35 @@ public class DrawerUtil {
 		}
 	}
 
-	public static void kickDrawer(String portName, char[] codes) {
+	public static void kickDrawer(final String portName, char[] codes) {
 		try {
 			if (StringUtils.isBlank(portName) || "NONE".equalsIgnoreCase(portName.trim())) { //$NON-NLS-1$
 				return;
 			}
 
-			byte[] pulseBytes = buildKickBytes(codes);
+			final byte[] pulseBytes = buildKickBytes(codes);
 
-			String targetName = portName.trim();
-			if ("PRINTER".equalsIgnoreCase(targetName) && Application.getPrinters() != null) { //$NON-NLS-1$
-				targetName = Application.getPrinters().getReceiptPrinter();
+			String resolvedName = portName.trim();
+			if ("PRINTER".equalsIgnoreCase(resolvedName) && Application.getPrinters() != null) { //$NON-NLS-1$
+				resolvedName = Application.getPrinters().getReceiptPrinter();
 			}
 
-			if (StringUtils.isNotBlank(targetName) && sendBytesToPrinter(targetName, pulseBytes)) {
+			if (StringUtils.isBlank(resolvedName)) {
+				logger.warn("Cash drawer kick skipped: port '" + portName + "' is not a configured print service."); //$NON-NLS-1$ //$NON-NLS-2$
 				return;
 			}
 
+			final String targetName = resolvedName;
 			// Do not invoke jSSC native serial openPort() on Windows/Java 17 because jSSC-2.8_x86_64.dll
 			// causes an unrecoverable EXCEPTION_ACCESS_VIOLATION in native code.
-			logger.warn("Cash drawer kick skipped: port '" + portName + "' is not a configured print service."); //$NON-NLS-1$ //$NON-NLS-2$
+			DRAWER_EXECUTOR.submit(new Runnable() {
+				@Override
+				public void run() {
+					if (!sendBytesToPrinter(targetName, pulseBytes)) {
+						logger.warn("Cash drawer kick skipped: port '" + portName + "' is not a configured print service."); //$NON-NLS-1$ //$NON-NLS-2$
+					}
+				}
+			});
 		} catch (Throwable t) {
 			logger.error("Failed to kick cash drawer on port: " + portName, t); //$NON-NLS-1$
 		}
